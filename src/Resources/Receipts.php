@@ -99,19 +99,15 @@ class Receipts {
 	/**
 	 * Generates an invoice PDF preview for multiple receipts without stamping or saving it
 	 *
-	 * @param $data Array of properties and property values for generating an invoice PDF preview
+	 * @param array $data Array of properties and property values for generating an invoice PDF preview
 	 *
 	 * @return string PDF file contents
 	 *
-	 * @throws Facturapi_Exception
+	 * @throws FacturapiException
 	 */
-	public function previewToInvoicePdf($data)
+	public function previewToInvoicePdf(array $data): string
 	{
-		try {
-			return $this->client->download('receipts' . "/to-invoice/preview");
-		} catch (FacturapiException $e) {
-			throw new FacturapiException('Unable to generate invoice PDF preview: ' . $e->getMessage());
-		}
+		return $this->client->postRaw('receipts' . "/to-invoice/preview", $data);
 	}
 
 	/**

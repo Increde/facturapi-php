@@ -143,7 +143,7 @@ class Retentions {
 	 */
 	public function sendByEmail($id, ?array $email = null): mixed
 	{
-		return $this->client->post('retentions/' . $id . "/email", ["email" => $email]);
+		return $this->client->post('retentions/' . $id . "/email", $email === null ? [] : ["email" => $email]);
 	}
 
 	/**
