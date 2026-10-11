@@ -13,4 +13,3 @@ composer.lock
 /tmp/
 /.agents/
 /build/
-phpstan-baseline.neon
