@@ -44,7 +44,7 @@ final class ErrorHandlingTest extends TestCase
             ], json_encode($errorBody))
         );
 
-        $invoices = new Invoices('sk_test_abc123', ['httpClient' => $httpClient]);
+        $invoices = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->invoices();
 
         try {
             $invoices->create(['customer' => []]);
@@ -77,7 +77,7 @@ final class ErrorHandlingTest extends TestCase
             new Response(502, ['Content-Type' => 'text/html'], $rawBody)
         );
 
-        $invoices = new Invoices('sk_test_abc123', ['httpClient' => $httpClient]);
+        $invoices = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->invoices();
 
         try {
             $invoices->create(['customer' => []]);
@@ -96,7 +96,7 @@ final class ErrorHandlingTest extends TestCase
             new Response(400, ['Content-Type' => 'application/json'], '{"code": 400}')
         );
 
-        $invoices = new Invoices('sk_test_abc123', ['httpClient' => $httpClient]);
+        $invoices = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->invoices();
 
         try {
             $invoices->create(['customer' => []]);

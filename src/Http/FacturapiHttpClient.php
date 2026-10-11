@@ -56,36 +56,39 @@ class FacturapiHttpClient
     /**
      * @throws FacturapiException
      */
-    public function post(string $endpoint, array $data = []): mixed
+    public function post(string $endpoint, array $data = [], ?array $query = null): mixed
     {
-        $url = $this->buildUrl($endpoint);
-        $body = json_encode($data, JSON_THROW_ON_ERROR);
+        $url = $this->buildUrl($endpoint, $query);
+        $body = empty($data) ? '' : json_encode($data, JSON_THROW_ON_ERROR);
         return $this->executeRequest('POST', $url, ['Content-Type' => 'application/json'], $body);
     }
 
     /**
      * @throws FacturapiException
      */
-    public function put(string $endpoint, array $data = []): mixed
+    public function put(string $endpoint, array $data = [], ?array $query = null): mixed
     {
-        $url = $this->buildUrl($endpoint);
-        $body = json_encode($data, JSON_THROW_ON_ERROR);
+        $url = $this->buildUrl($endpoint, $query);
+        $body = empty($data) ? '' : json_encode($data, JSON_THROW_ON_ERROR);
         return $this->executeRequest('PUT', $url, ['Content-Type' => 'application/json'], $body);
     }
 
     /**
      * @throws FacturapiException
      */
-    public function delete(string $endpoint): mixed
+    public function delete(string $endpoint, ?array $query = null): mixed
     {
-        $url = $this->buildUrl($endpoint);
+        $url = $this->buildUrl($endpoint, $query);
         return $this->executeRequest('DELETE', $url);
     }
 
     /**
      * @throws FacturapiException
      */
-    public function multipartPost(string $endpoint, array $files, array $data = []): mixed
+        /**
+     * @throws FacturapiException
+     */
+    public function multipartRequest(string $method, string $endpoint, array $files, array $data = []): mixed
     {
         $url = $this->buildUrl($endpoint);
         $builder = new MultipartStreamBuilder($this->streamFactory);
@@ -106,11 +109,19 @@ class FacturapiHttpClient
         $boundary = $builder->getBoundary();
 
         return $this->executeRequest(
-            'POST',
+            $method,
             $url,
             ['Content-Type' => 'multipart/form-data; boundary=' . $boundary],
             (string)$multipartStream
         );
+    }
+
+    /**
+     * @throws FacturapiException
+     */
+    public function multipartPost(string $endpoint, array $files, array $data = []): mixed
+    {
+        return $this->multipartRequest('POST', $endpoint, $files, $data);
     }
     
     /**
@@ -125,10 +136,10 @@ class FacturapiHttpClient
     /**
      * @throws FacturapiException
      */
-    public function postRaw(string $endpoint, array $data = []): string
+    public function postRaw(string $endpoint, array $data = [], ?array $query = null): string
     {
-        $url = $this->buildUrl($endpoint);
-        $body = json_encode($data, JSON_THROW_ON_ERROR);
+        $url = $this->buildUrl($endpoint, $query);
+        $body = empty($data) ? '' : json_encode($data, JSON_THROW_ON_ERROR);
         return $this->executeRawRequest('POST', $url, ['Content-Type' => 'application/json'], $body);
     }
 
@@ -136,7 +147,8 @@ class FacturapiHttpClient
     {
         $url = $this->baseUrl . $this->apiVersion . '/' . $endpoint;
         if ($params !== null && !empty($params)) {
-            $url .= '?' . http_build_query($params);
+            foreach($params as $k => $v) { if (is_bool($v)) $params[$k] = $v ? 'true' : 'false'; }
+        $url .= '?' . preg_replace('/%5B[0-9]+%5D/simU', '', http_build_query($params));
         }
         return $url;
     }

@@ -57,7 +57,7 @@ class Invoices {
 	 * @throws FacturapiException
 	 */
 	public function create($body, ?array $query = null): mixed {
-		return $this->client->post('invoices', $body);
+		return $this->client->post('invoices', $body, $query);
 	}
 
 

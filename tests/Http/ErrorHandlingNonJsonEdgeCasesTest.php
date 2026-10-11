@@ -20,7 +20,7 @@ final class ErrorHandlingNonJsonEdgeCasesTest extends TestCase
             new Response(500, ['Content-Type' => 'application/json'], $rawBody)
         );
 
-        $invoices = new Invoices('sk_test_abc123', ['httpClient' => $httpClient]);
+        $invoices = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->invoices();
 
         try {
             $invoices->create(['customer' => []]);
@@ -39,7 +39,7 @@ final class ErrorHandlingNonJsonEdgeCasesTest extends TestCase
             new Response(500, ['Content-Type' => 'text/plain'], '')
         );
 
-        $invoices = new Invoices('sk_test_abc123', ['httpClient' => $httpClient]);
+        $invoices = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->invoices();
 
         try {
             $invoices->create(['customer' => []]);
@@ -60,7 +60,7 @@ final class ErrorHandlingNonJsonEdgeCasesTest extends TestCase
             new Response(503, ['Content-Type' => 'text/plain'], $rawBody)
         );
 
-        $invoices = new Invoices('sk_test_abc123', ['httpClient' => $httpClient]);
+        $invoices = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->invoices();
 
         try {
             $invoices->create(['customer' => []]);

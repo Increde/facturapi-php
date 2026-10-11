@@ -94,14 +94,14 @@ class Webhooks {
 			try {
 				$localResult = $this->verifySignatureLocallyFromPayload($data);
 				if ($localResult !== null) {
-					return (object) array('valid' => $localResult);
+					return ['valid' => $localResult];
 				}
 			} catch (\Throwable $ignored) {
 				// Fallback to server-side verification.
 			}
 		}
 
-		return $this->client->post('webhooks', []);
+		return $this->client->post('webhooks/validate-signature', $data);
 	}
 
 	/**

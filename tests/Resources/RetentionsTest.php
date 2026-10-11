@@ -14,7 +14,7 @@ final class RetentionsTest extends TestCase
     public function testCreateCanSendDraftRetentionPayload(): void
     {
         $httpClient = new FakeHttpClient(new Response(200, [], '{"id":"ret_draft","status":"draft"}'));
-        $retentions = new Retentions('sk_test_abc123', ['httpClient' => $httpClient]);
+        $retentions = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->retentions();
 
         $retentions->create([
             'status' => 'draft',
@@ -33,7 +33,7 @@ final class RetentionsTest extends TestCase
     public function testUpdateDraftUsesPutOnRetentionId(): void
     {
         $httpClient = new FakeHttpClient(new Response(200, [], '{"id":"ret_123"}'));
-        $retentions = new Retentions('sk_test_abc123', ['httpClient' => $httpClient]);
+        $retentions = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->retentions();
 
         $retentions->updateDraft('ret_123', [
             'folio_int' => 'R-2026-001',
@@ -51,7 +51,7 @@ final class RetentionsTest extends TestCase
     public function testCopyToDraftUsesCopyEndpoint(): void
     {
         $httpClient = new FakeHttpClient(new Response(200, [], '{"id":"ret_draft"}'));
-        $retentions = new Retentions('sk_test_abc123', ['httpClient' => $httpClient]);
+        $retentions = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->retentions();
 
         $retentions->copyToDraft('ret_123');
 
@@ -64,7 +64,7 @@ final class RetentionsTest extends TestCase
     public function testStampDraftUsesStampEndpoint(): void
     {
         $httpClient = new FakeHttpClient(new Response(200, [], '{"id":"ret_123","status":"valid"}'));
-        $retentions = new Retentions('sk_test_abc123', ['httpClient' => $httpClient]);
+        $retentions = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->retentions();
 
         $retentions->stampDraft('ret_123');
 
@@ -77,7 +77,7 @@ final class RetentionsTest extends TestCase
     public function testCancelCanDeleteDraftWithoutQueryParameters(): void
     {
         $httpClient = new FakeHttpClient(new Response(200, [], '{"id":"ret_123","deleted":true}'));
-        $retentions = new Retentions('sk_test_abc123', ['httpClient' => $httpClient]);
+        $retentions = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->retentions();
 
         $retentions->cancel('ret_123');
 
@@ -89,7 +89,7 @@ final class RetentionsTest extends TestCase
     public function testAllCanFilterByDraftStatus(): void
     {
         $httpClient = new FakeHttpClient(new Response(200, [], '{"data":[]}'));
-        $retentions = new Retentions('sk_test_abc123', ['httpClient' => $httpClient]);
+        $retentions = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->retentions();
 
         $retentions->all([
             'status' => 'draft',

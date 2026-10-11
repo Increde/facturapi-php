@@ -14,7 +14,7 @@ final class WebhooksTest extends TestCase
     public function testValidateSignatureUsesLocalVerificationByDefault(): void
     {
         $httpClient = new FakeHttpClient();
-        $webhooks = new Webhooks('sk_test_abc123', ['httpClient' => $httpClient]);
+        $webhooks = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->webhooks();
 
         $rawPayload = '{"id":"evt_123"}';
         $secret = 'whsec_test_secret';
@@ -26,14 +26,14 @@ final class WebhooksTest extends TestCase
             'webhookSecret' => $secret,
         ]);
 
-        self::assertTrue($result->valid);
+        self::assertTrue($result['valid']);
         self::assertCount(0, $httpClient->requests());
     }
 
     public function testValidateSignatureFallsBackToApiEndpointWhenLocalCannotRun(): void
     {
         $httpClient = new FakeHttpClient(new Response(200, [], '{"valid":true}'));
-        $webhooks = new Webhooks('sk_test_abc123', ['httpClient' => $httpClient]);
+        $webhooks = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->webhooks();
 
         $payload = [
             'body' => '{"id":"evt_123"}',
@@ -43,7 +43,7 @@ final class WebhooksTest extends TestCase
 
         $result = $webhooks->validateSignature($payload);
 
-        self::assertTrue($result->valid);
+        self::assertTrue($result['valid']);
 
         $request = $httpClient->requests()[0];
         self::assertSame('POST', $request->getMethod());
@@ -55,7 +55,7 @@ final class WebhooksTest extends TestCase
     public function testValidateSignatureLocalSupportsRawHexAndRejectsInvalidSignatures(): void
     {
         $httpClient = new FakeHttpClient();
-        $webhooks = new Webhooks('sk_test_abc123', ['httpClient' => $httpClient]);
+        $webhooks = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->webhooks();
 
         $rawPayload = '{"id":"evt_456"}';
         $secret = 'whsec_test_secret';
@@ -72,8 +72,8 @@ final class WebhooksTest extends TestCase
             'secret' => $secret,
         ]);
 
-        self::assertTrue($valid->valid);
-        self::assertFalse($invalid->valid);
+        self::assertTrue($valid['valid']);
+        self::assertFalse($invalid['valid']);
         self::assertCount(0, $httpClient->requests());
     }
 }

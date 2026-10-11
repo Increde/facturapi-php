@@ -19,11 +19,11 @@ final class OrganizationsMultipartTest extends TestCase
 
         try {
             $httpClient = new FakeHttpClient(new Response(200, [], '{"ok":true}'));
-            $organizations = new Organizations('sk_test_abc123', ['httpClient' => $httpClient]);
+            $organizations = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->organizations();
 
             $result = $organizations->uploadLogo('org_123', $tmpLogo);
 
-            self::assertTrue($result->ok);
+            self::assertTrue($result['ok']);
 
             $request = $httpClient->requests()[0];
             self::assertSame('PUT', $request->getMethod());
@@ -48,7 +48,7 @@ final class OrganizationsMultipartTest extends TestCase
 
         try {
             $httpClient = new FakeHttpClient(new Response(200, [], '{"ok":true}'));
-            $organizations = new Organizations('sk_test_abc123', ['httpClient' => $httpClient]);
+            $organizations = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->organizations();
 
             $result = $organizations->uploadCertificate('org_123', [
                 'cerFile' => $tmpCer,
@@ -56,7 +56,7 @@ final class OrganizationsMultipartTest extends TestCase
                 'password' => 'secret_password',
             ]);
 
-            self::assertTrue($result->ok);
+            self::assertTrue($result['ok']);
 
             $request = $httpClient->requests()[0];
             self::assertSame('PUT', $request->getMethod());
@@ -78,7 +78,7 @@ final class OrganizationsMultipartTest extends TestCase
     public function testUploadCertificateFailsWhenRequiredFieldsAreMissing(): void
     {
         $httpClient = new FakeHttpClient(new Response(200, [], '{"ok":true}'));
-        $organizations = new Organizations('sk_test_abc123', ['httpClient' => $httpClient]);
+        $organizations = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->organizations();
 
         $this->expectException(FacturapiException::class);
         $this->expectExceptionMessage('Invalid certificate payload. Expected cerFile, keyFile and password.');
@@ -91,7 +91,7 @@ final class OrganizationsMultipartTest extends TestCase
     public function testUploadLogoFailsWhenFileCannotBeOpened(): void
     {
         $httpClient = new FakeHttpClient(new Response(200, [], '{"ok":true}'));
-        $organizations = new Organizations('sk_test_abc123', ['httpClient' => $httpClient]);
+        $organizations = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->organizations();
 
         $this->expectException(FacturapiException::class);
         $this->expectExceptionMessage('Unable to open file: /tmp/file_that_does_not_exist.pdf');
@@ -115,7 +115,7 @@ final class OrganizationsMultipartTest extends TestCase
         $httpClient = new FakeHttpClient(
             new Response(422, ['Content-Type' => 'application/json'], json_encode($errorBody))
         );
-        $organizations = new Organizations('sk_test_abc123', ['httpClient' => $httpClient]);
+        $organizations = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->organizations();
 
         try {
             $organizations->uploadLogo('org_123', $tmpLogo);

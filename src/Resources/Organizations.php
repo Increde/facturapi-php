@@ -120,7 +120,7 @@ class Organizations {
       throw new FacturapiException('checkDomainAvailability expects $query to be an array.');
     }
 
-    return $this->client->get('organizations/' . "domain-check");
+    return $this->client->get('organizations/' . "domain-check", $query);
   }
 
   /**
@@ -161,9 +161,9 @@ class Organizations {
    *
    * @throws FacturapiException
    */
-  public function uploadLogo($id, $params): mixed
+  public function uploadLogo($id, $file): mixed
   {
-    return $this->client->dataput('organizations/' . $id . "/logo", $params);
+    return $this->client->multipartRequest('PUT', 'organizations/' . $id . "/logo", ['file' => $file]);
   }
 
   /**
@@ -175,9 +175,18 @@ class Organizations {
    *
    * @throws FacturapiException
    */
-  public function uploadCertificate($id, $params): mixed
+  public function uploadCertificate($id, array $params): mixed
   {
-    return $this->client->dataput('organizations/' . $id . "/certificate", $params);
+    $files = [];
+    $data = [];
+    if (!isset($params['cerFile']) || !isset($params['keyFile']) || !isset($params['password'])) {
+      throw new \Facturapi\Exceptions\FacturapiException('Invalid certificate payload. Expected cerFile, keyFile and password.');
+    }
+    if (isset($params['cerFile'])) $files['cer'] = $params['cerFile'];
+    if (isset($params['keyFile'])) $files['key'] = $params['keyFile'];
+    if (isset($params['password'])) $data['password'] = $params['password'];
+
+    return $this->client->multipartRequest('PUT', 'organizations/' . $id . "/certificate", $files, $data);
   }
 
   /**
@@ -380,7 +389,7 @@ class Organizations {
    */
   public function listTeamAccess($organizationId): mixed
   {
-    return $this->client->get('organizations' . "/team");
+    return $this->client->get('organizations/' . $organizationId . "/team");
   }
 
   /**
@@ -394,7 +403,7 @@ class Organizations {
    */
   public function retrieveTeamAccess($organizationId, $accessId): mixed
   {
-    return $this->client->get('organizations' . "/team/");
+    return $this->client->get('organizations/' . $organizationId . '/team/' . $accessId);
   }
 
   /**
@@ -423,7 +432,7 @@ class Organizations {
    */
   public function removeTeamAccess($organizationId, $accessId): mixed
   {
-    return $this->client->delete('organizations/' . $organizationId . '/team/');
+    return $this->client->delete('organizations/' . $organizationId . '/team/' . $accessId);
   }
 
   /**
@@ -436,7 +445,7 @@ class Organizations {
    */
   public function listSentTeamInvites($organizationId): mixed
   {
-    return $this->client->get('organizations' . "/team/invites");
+    return $this->client->get('organizations/' . $organizationId . '/team/invites');
   }
 
   /**
@@ -464,7 +473,7 @@ class Organizations {
    */
   public function cancelTeamInvite($organizationId, $inviteKey): mixed
   {
-    return $this->client->delete('organizations/' . $organizationId . '/team/invites/');
+    return $this->client->delete('organizations/' . $organizationId . '/team/invites/' . $inviteKey);
   }
 
   /**
@@ -503,7 +512,7 @@ class Organizations {
    */
   public function listTeamRoles($organizationId): mixed
   {
-    return $this->client->get('organizations' . "/team/roles");
+    return $this->client->get('organizations/' . $organizationId . '/team/roles');
   }
 
   /**
@@ -516,7 +525,7 @@ class Organizations {
    */
   public function listTeamRoleTemplates($organizationId): mixed
   {
-    return $this->client->get('organizations' . "/team/roles/templates");
+    return $this->client->get('organizations/' . $organizationId . '/team/roles/templates');
   }
 
   /**
@@ -529,7 +538,7 @@ class Organizations {
    */
   public function listTeamRoleOperations($organizationId): mixed
   {
-    return $this->client->get('organizations' . "/team/roles/operations");
+    return $this->client->get('organizations/' . $organizationId . '/team/roles/operations');
   }
 
   /**
@@ -543,7 +552,7 @@ class Organizations {
    */
   public function retrieveTeamRole($organizationId, $roleId): mixed
   {
-    return $this->client->get('organizations' . "/team/roles/");
+    return $this->client->get('organizations/' . $organizationId . '/team/roles/' . $roleId);
   }
 
   /**
@@ -586,6 +595,6 @@ class Organizations {
    */
   public function deleteTeamRole($organizationId, $roleId): mixed
   {
-    return $this->client->delete('organizations/' . $organizationId . '/team/roles/');
+    return $this->client->delete('organizations/' . $organizationId . '/team/roles/' . $roleId);
   }
 }

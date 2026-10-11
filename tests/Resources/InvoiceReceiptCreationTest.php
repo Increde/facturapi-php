@@ -16,7 +16,7 @@ final class InvoiceReceiptCreationTest extends TestCase
     public function testInvoicesCreateSendsJsonBodyAndQueryParams(): void
     {
         $httpClient = new FakeHttpClient(new Response(201, [], '{"id":"inv_123"}'));
-        $invoices = new Invoices('sk_test_abc123', ['httpClient' => $httpClient]);
+        $invoices = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->invoices();
 
         $payload = [
             'customer' => 'cus_123',
@@ -25,7 +25,7 @@ final class InvoiceReceiptCreationTest extends TestCase
 
         $result = $invoices->create($payload, ['as' => 'draft', 'validate' => true]);
 
-        self::assertSame('inv_123', $result->id);
+        self::assertSame('inv_123', $result['id']);
 
         $request = $httpClient->requests()[0];
         self::assertSame('POST', $request->getMethod());
@@ -37,7 +37,7 @@ final class InvoiceReceiptCreationTest extends TestCase
     public function testReceiptsCreateSendsJsonBodyToExpectedEndpoint(): void
     {
         $httpClient = new FakeHttpClient(new Response(201, [], '{"id":"rec_123"}'));
-        $receipts = new Receipts('sk_test_abc123', ['httpClient' => $httpClient]);
+        $receipts = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->receipts();
 
         $payload = [
             'customer' => 'cus_123',
@@ -46,7 +46,7 @@ final class InvoiceReceiptCreationTest extends TestCase
 
         $result = $receipts->create($payload);
 
-        self::assertSame('rec_123', $result->id);
+        self::assertSame('rec_123', $result['id']);
 
         $request = $httpClient->requests()[0];
         self::assertSame('POST', $request->getMethod());
@@ -58,7 +58,7 @@ final class InvoiceReceiptCreationTest extends TestCase
     public function testInvoicesCancelSerializesQueryParamsWithoutExtraSlash(): void
     {
         $httpClient = new FakeHttpClient(new Response(200, [], '{"status":"canceled"}'));
-        $invoices = new Invoices('sk_test_abc123', ['httpClient' => $httpClient]);
+        $invoices = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->invoices();
 
         $invoices->cancel('inv_123', ['motive' => '01', 'substitution' => 'inv_456']);
 
@@ -82,7 +82,7 @@ final class InvoiceReceiptCreationTest extends TestCase
         $httpClient = new FakeHttpClient(
             new Response(409, ['Content-Type' => 'application/json'], json_encode($errorBody))
         );
-        $invoices = new Invoices('sk_test_abc123', ['httpClient' => $httpClient]);
+        $invoices = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->invoices();
 
         try {
             $invoices->cancel('inv_123', ['motive' => '99']);
