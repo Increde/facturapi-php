@@ -1,20 +1,13 @@
 <?php
 
 declare(strict_types=1);
-
-namespace Facturapi\Tests\Resources;
-
 use Facturapi\Resources\Webhooks;
 use Facturapi\Tests\Support\FakeHttpClient;
 use GuzzleHttp\Psr7\Response;
-use PHPUnit\Framework\TestCase;
-
-final class WebhooksTest extends TestCase
-{
-    public function testValidateSignatureUsesLocalVerificationByDefault(): void
-    {
-        $httpClient = new FakeHttpClient();
-        $webhooks = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->webhooks();
+describe('Webhooks', function () {
+    test('validate signature uses local verification by default', function () {
+        
+        $webhooks = test()->facturapi->webhooks();
 
         $rawPayload = '{"id":"evt_123"}';
         $secret = 'whsec_test_secret';
@@ -27,13 +20,11 @@ final class WebhooksTest extends TestCase
         ]);
 
         self::assertTrue($result['valid']);
-        self::assertCount(0, $httpClient->requests());
-    }
-
-    public function testValidateSignatureFallsBackToApiEndpointWhenLocalCannotRun(): void
-    {
-        $httpClient = new FakeHttpClient(new Response(200, [], '{"valid":true}'));
-        $webhooks = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->webhooks();
+        self::assertCount(0, test()->httpClient->requests());
+    });
+    test('validate signature falls back to api endpoint when local cannot run', function () {
+        mockResponse('{"valid":true}', 200);
+        $webhooks = test()->facturapi->webhooks();
 
         $payload = [
             'body' => '{"id":"evt_123"}',
@@ -45,17 +36,15 @@ final class WebhooksTest extends TestCase
 
         self::assertTrue($result['valid']);
 
-        $request = $httpClient->requests()[0];
+        $request = test()->httpClient->requests()[0];
         self::assertSame('POST', $request->getMethod());
         self::assertSame('https://www.facturapi.io/v2/webhooks/validate-signature', (string) $request->getUri());
         self::assertSame('application/json', $request->getHeaderLine('Content-Type'));
         self::assertSame(json_encode($payload), (string) $request->getBody());
-    }
-
-    public function testValidateSignatureLocalSupportsRawHexAndRejectsInvalidSignatures(): void
-    {
-        $httpClient = new FakeHttpClient();
-        $webhooks = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->webhooks();
+    });
+    test('validate signature local supports raw hex and rejects invalid signatures', function () {
+        
+        $webhooks = test()->facturapi->webhooks();
 
         $rawPayload = '{"id":"evt_456"}';
         $secret = 'whsec_test_secret';
@@ -74,6 +63,7 @@ final class WebhooksTest extends TestCase
 
         self::assertTrue($valid['valid']);
         self::assertFalse($invalid['valid']);
-        self::assertCount(0, $httpClient->requests());
-    }
-}
+        self::assertCount(0, test()->httpClient->requests());
+    });
+
+});

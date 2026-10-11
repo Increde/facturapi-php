@@ -1,19 +1,12 @@
 <?php
 
 declare(strict_types=1);
-
-namespace Facturapi\Tests\Http;
-
 use Facturapi\Exceptions\FacturapiException;
 use Facturapi\Resources\Invoices;
 use Facturapi\Tests\Support\FakeHttpClient;
 use GuzzleHttp\Psr7\Response;
-use PHPUnit\Framework\TestCase;
-
-final class ErrorHandlingTest extends TestCase
-{
-    public function testApiErrorShapeIsFullyAvailableOnException(): void
-    {
+describe('ErrorHandling', function () {
+    test('api error shape is fully available on exception', function () {
         $errorBody = [
             'message' => 'Request validation failed',
             'code' => 'validation_error',
@@ -36,15 +29,13 @@ final class ErrorHandlingTest extends TestCase
             ],
         ];
 
-        $httpClient = new FakeHttpClient(
-            new Response(422, [
+        mockResponse(json_encode($errorBody), 422, [
                 'Content-Type' => 'application/json',
                 'Retry-After' => '3',
                 'x-facturapi-log-id' => 'log_123',
-            ], json_encode($errorBody))
-        );
+            ]);
 
-        $invoices = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->invoices();
+        $invoices = test()->facturapi->invoices();
 
         try {
             $invoices->create(['customer' => []]);
@@ -67,17 +58,13 @@ final class ErrorHandlingTest extends TestCase
             self::assertSame('customer.tax_id', $exception->getErrorData()['details'][0]['path']);
             self::assertSame('invalid_rfc', $exception->getErrorData()['details'][0]['code']);
         }
-    }
-
-    public function testNonJsonErrorsStillExposeRawBody(): void
-    {
+    });
+    test('non json errors still expose raw body', function () {
         $rawBody = '<html><body>502 Bad Gateway</body></html>';
 
-        $httpClient = new FakeHttpClient(
-            new Response(502, ['Content-Type' => 'text/html'], $rawBody)
-        );
+        mockResponse($rawBody, 502, ['Content-Type' => 'text/html']);
 
-        $invoices = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->invoices();
+        $invoices = test()->facturapi->invoices();
 
         try {
             $invoices->create(['customer' => []]);
@@ -88,15 +75,11 @@ final class ErrorHandlingTest extends TestCase
             self::assertNull($exception->getErrorData());
             self::assertSame($rawBody, $exception->getRawBody());
         }
-    }
+    });
+    test('numeric api error codes are converted to strings', function () {
+        mockResponse('{"code": 400}', 400, ['Content-Type' => 'application/json']);
 
-    public function testNumericApiErrorCodesAreConvertedToStrings(): void
-    {
-        $httpClient = new FakeHttpClient(
-            new Response(400, ['Content-Type' => 'application/json'], '{"code": 400}')
-        );
-
-        $invoices = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->invoices();
+        $invoices = test()->facturapi->invoices();
 
         try {
             $invoices->create(['customer' => []]);
@@ -104,5 +87,6 @@ final class ErrorHandlingTest extends TestCase
         } catch (FacturapiException $exception) {
             self::assertSame('400', $exception->getErrorCode());
         }
-    }
-}
+    });
+
+});

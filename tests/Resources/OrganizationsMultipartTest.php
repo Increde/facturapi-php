@@ -1,31 +1,24 @@
 <?php
 
 declare(strict_types=1);
-
-namespace Facturapi\Tests\Resources;
-
 use Facturapi\Exceptions\FacturapiException;
 use Facturapi\Resources\Organizations;
 use Facturapi\Tests\Support\FakeHttpClient;
 use GuzzleHttp\Psr7\Response;
-use PHPUnit\Framework\TestCase;
-
-final class OrganizationsMultipartTest extends TestCase
-{
-    public function testUploadLogoBuildsMultipartRequest(): void
-    {
+describe('OrganizationsMultipart', function () {
+    test('upload logo builds multipart request', function () {
         $tmpLogo = tempnam(sys_get_temp_dir(), 'logo_');
         file_put_contents($tmpLogo, 'LOGO_BYTES');
 
         try {
-            $httpClient = new FakeHttpClient(new Response(200, [], '{"ok":true}'));
-            $organizations = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->organizations();
+            mockResponse('{"ok":true}', 200);
+            $organizations = test()->facturapi->organizations();
 
             $result = $organizations->uploadLogo('org_123', $tmpLogo);
 
             self::assertTrue($result['ok']);
 
-            $request = $httpClient->requests()[0];
+            $request = test()->httpClient->requests()[0];
             self::assertSame('PUT', $request->getMethod());
             self::assertSame('https://www.facturapi.io/v2/organizations/org_123/logo', (string) $request->getUri());
             self::assertStringStartsWith('multipart/form-data; boundary=', $request->getHeaderLine('Content-Type'));
@@ -37,18 +30,16 @@ final class OrganizationsMultipartTest extends TestCase
         } finally {
             @unlink($tmpLogo);
         }
-    }
-
-    public function testUploadCertificateBuildsMultipartRequestWithCerKeyAndPassword(): void
-    {
+    });
+    test('upload certificate builds multipart request with cer key and password', function () {
         $tmpCer = tempnam(sys_get_temp_dir(), 'cer_');
         $tmpKey = tempnam(sys_get_temp_dir(), 'key_');
         file_put_contents($tmpCer, 'CER_BYTES');
         file_put_contents($tmpKey, 'KEY_BYTES');
 
         try {
-            $httpClient = new FakeHttpClient(new Response(200, [], '{"ok":true}'));
-            $organizations = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->organizations();
+            mockResponse('{"ok":true}', 200);
+            $organizations = test()->facturapi->organizations();
 
             $result = $organizations->uploadCertificate('org_123', [
                 'cerFile' => $tmpCer,
@@ -58,7 +49,7 @@ final class OrganizationsMultipartTest extends TestCase
 
             self::assertTrue($result['ok']);
 
-            $request = $httpClient->requests()[0];
+            $request = test()->httpClient->requests()[0];
             self::assertSame('PUT', $request->getMethod());
             self::assertSame('https://www.facturapi.io/v2/organizations/org_123/certificate', (string) $request->getUri());
 
@@ -73,12 +64,10 @@ final class OrganizationsMultipartTest extends TestCase
             @unlink($tmpCer);
             @unlink($tmpKey);
         }
-    }
-
-    public function testUploadCertificateFailsWhenRequiredFieldsAreMissing(): void
-    {
-        $httpClient = new FakeHttpClient(new Response(200, [], '{"ok":true}'));
-        $organizations = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->organizations();
+    });
+    test('upload certificate fails when required fields are missing', function () {
+        mockResponse('{"ok":true}', 200);
+        $organizations = test()->facturapi->organizations();
 
         $this->expectException(FacturapiException::class);
         $this->expectExceptionMessage('Invalid certificate payload. Expected cerFile, keyFile and password.');
@@ -86,21 +75,17 @@ final class OrganizationsMultipartTest extends TestCase
         $organizations->uploadCertificate('org_123', [
             'cerFile' => '/tmp/cert.cer',
         ]);
-    }
-
-    public function testUploadLogoFailsWhenFileCannotBeOpened(): void
-    {
-        $httpClient = new FakeHttpClient(new Response(200, [], '{"ok":true}'));
-        $organizations = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->organizations();
+    });
+    test('upload logo fails when file cannot be opened', function () {
+        mockResponse('{"ok":true}', 200);
+        $organizations = test()->facturapi->organizations();
 
         $this->expectException(FacturapiException::class);
         $this->expectExceptionMessage('Unable to open file: /tmp/file_that_does_not_exist.pdf');
 
         $organizations->uploadLogo('org_123', '/tmp/file_that_does_not_exist.pdf');
-    }
-
-    public function testUploadLogoThrowsOnNon2xxAndPreservesErrorShape(): void
-    {
+    });
+    test('upload logo throws on non2xx and preserves error shape', function () {
         $tmpLogo = tempnam(sys_get_temp_dir(), 'logo_');
         file_put_contents($tmpLogo, 'LOGO_BYTES');
 
@@ -112,10 +97,8 @@ final class OrganizationsMultipartTest extends TestCase
             ],
         ];
 
-        $httpClient = new FakeHttpClient(
-            new Response(422, ['Content-Type' => 'application/json'], json_encode($errorBody))
-        );
-        $organizations = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->organizations();
+        mockResponse(json_encode($errorBody), 422, ['Content-Type' => 'application/json']);
+        $organizations = test()->facturapi->organizations();
 
         try {
             $organizations->uploadLogo('org_123', $tmpLogo);
@@ -127,5 +110,6 @@ final class OrganizationsMultipartTest extends TestCase
         } finally {
             @unlink($tmpLogo);
         }
-    }
-}
+    });
+
+});

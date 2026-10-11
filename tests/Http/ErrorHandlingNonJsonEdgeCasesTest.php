@@ -1,26 +1,17 @@
 <?php
 
 declare(strict_types=1);
-
-namespace Facturapi\Tests\Http;
-
 use Facturapi\Exceptions\FacturapiException;
 use Facturapi\Resources\Invoices;
 use Facturapi\Tests\Support\FakeHttpClient;
 use GuzzleHttp\Psr7\Response;
-use PHPUnit\Framework\TestCase;
-
-final class ErrorHandlingNonJsonEdgeCasesTest extends TestCase
-{
-    public function testInvalidJsonErrorBodyPreservesRawBody(): void
-    {
+describe('ErrorHandlingNonJsonEdgeCases', function () {
+    test('invalid json error body preserves raw body', function () {
         $rawBody = '{"message": "broken"';
 
-        $httpClient = new FakeHttpClient(
-            new Response(500, ['Content-Type' => 'application/json'], $rawBody)
-        );
+        mockResponse($rawBody, 500, ['Content-Type' => 'application/json']);
 
-        $invoices = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->invoices();
+        $invoices = test()->facturapi->invoices();
 
         try {
             $invoices->create(['customer' => []]);
@@ -31,15 +22,11 @@ final class ErrorHandlingNonJsonEdgeCasesTest extends TestCase
             self::assertNull($exception->getErrorData());
             self::assertSame($rawBody, $exception->getRawBody());
         }
-    }
+    });
+    test('empty error body is exposed as empty string', function () {
+        mockResponse('', 500, ['Content-Type' => 'text/plain']);
 
-    public function testEmptyErrorBodyIsExposedAsEmptyString(): void
-    {
-        $httpClient = new FakeHttpClient(
-            new Response(500, ['Content-Type' => 'text/plain'], '')
-        );
-
-        $invoices = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->invoices();
+        $invoices = test()->facturapi->invoices();
 
         try {
             $invoices->create(['customer' => []]);
@@ -50,17 +37,13 @@ final class ErrorHandlingNonJsonEdgeCasesTest extends TestCase
             self::assertNull($exception->getErrorData());
             self::assertSame('', $exception->getRawBody());
         }
-    }
-
-    public function testPlainTextErrorBodyIsPreserved(): void
-    {
+    });
+    test('plain text error body is preserved', function () {
         $rawBody = 'gateway overloaded, retry later';
 
-        $httpClient = new FakeHttpClient(
-            new Response(503, ['Content-Type' => 'text/plain'], $rawBody)
-        );
+        mockResponse($rawBody, 503, ['Content-Type' => 'text/plain']);
 
-        $invoices = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->invoices();
+        $invoices = test()->facturapi->invoices();
 
         try {
             $invoices->create(['customer' => []]);
@@ -71,5 +54,6 @@ final class ErrorHandlingNonJsonEdgeCasesTest extends TestCase
             self::assertNull($exception->getErrorData());
             self::assertSame($rawBody, $exception->getRawBody());
         }
-    }
-}
+    });
+
+});

@@ -1,46 +1,35 @@
 <?php
 
 declare(strict_types=1);
-
-namespace Facturapi\Tests\Resources;
-
 use Facturapi\Resources\Organizations;
 use Facturapi\Tests\Support\FakeHttpClient;
 use GuzzleHttp\Psr7\Response;
-use PHPUnit\Framework\TestCase;
-
-final class OrganizationsTeamManagementTest extends TestCase
-{
-    public function testListTeamAccessUsesExpectedEndpoint(): void
-    {
-        $httpClient = new FakeHttpClient(new Response(200, [], '[]'));
-        $organizations = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->organizations();
+describe('OrganizationsTeamManagement', function () {
+    test('list team access uses expected endpoint', function () {
+        mockResponse('[]', 200);
+        $organizations = test()->facturapi->organizations();
 
         $result = $organizations->listTeamAccess('org_123');
 
         self::assertIsArray($result);
-        $request = $httpClient->requests()[0];
+        $request = test()->httpClient->requests()[0];
         self::assertSame('GET', $request->getMethod());
         self::assertSame('https://www.facturapi.io/v2/organizations/org_123/team', (string) $request->getUri());
-    }
-
-    public function testRetrieveTeamAccessUsesExpectedEndpoint(): void
-    {
-        $httpClient = new FakeHttpClient(new Response(200, [], '{"id":"acc_123"}'));
-        $organizations = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->organizations();
+    });
+    test('retrieve team access uses expected endpoint', function () {
+        mockResponse('{"id":"acc_123"}', 200);
+        $organizations = test()->facturapi->organizations();
 
         $result = $organizations->retrieveTeamAccess('org_123', 'acc_123');
 
         self::assertSame('acc_123', $result['id']);
-        $request = $httpClient->requests()[0];
+        $request = test()->httpClient->requests()[0];
         self::assertSame('GET', $request->getMethod());
         self::assertSame('https://www.facturapi.io/v2/organizations/org_123/team/acc_123', (string) $request->getUri());
-    }
-
-    public function testInviteUserToTeamUsesExpectedEndpointAndJsonBody(): void
-    {
-        $httpClient = new FakeHttpClient(new Response(200, [], '{"id":"inv_123"}'));
-        $organizations = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->organizations();
+    });
+    test('invite user to team uses expected endpoint and json body', function () {
+        mockResponse('{"id":"inv_123"}', 200);
+        $organizations = test()->facturapi->organizations();
 
         $result = $organizations->inviteUserToTeam('org_123', [
             'email' => 'alex@example.com',
@@ -48,124 +37,106 @@ final class OrganizationsTeamManagementTest extends TestCase
         ]);
 
         self::assertSame('inv_123', $result['id']);
-        $request = $httpClient->requests()[0];
+        $request = test()->httpClient->requests()[0];
         self::assertSame('POST', $request->getMethod());
         self::assertSame('https://www.facturapi.io/v2/organizations/org_123/team/invites', (string) $request->getUri());
         self::assertSame('application/json', $request->getHeaderLine('Content-Type'));
         self::assertStringContainsString('"email":"alex@example.com"', (string) $request->getBody());
         self::assertStringContainsString('"role":"role_123"', (string) $request->getBody());
-    }
-
-    public function testListSentTeamInvitesUsesExpectedEndpoint(): void
-    {
-        $httpClient = new FakeHttpClient(new Response(200, [], '[]'));
-        $organizations = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->organizations();
+    });
+    test('list sent team invites uses expected endpoint', function () {
+        mockResponse('[]', 200);
+        $organizations = test()->facturapi->organizations();
 
         $result = $organizations->listSentTeamInvites('org_123');
 
         self::assertIsArray($result);
-        $request = $httpClient->requests()[0];
+        $request = test()->httpClient->requests()[0];
         self::assertSame('GET', $request->getMethod());
         self::assertSame('https://www.facturapi.io/v2/organizations/org_123/team/invites', (string) $request->getUri());
-    }
-
-    public function testCancelTeamInviteUsesExpectedEndpoint(): void
-    {
-        $httpClient = new FakeHttpClient(new Response(200, [], '{"ok":true}'));
-        $organizations = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->organizations();
+    });
+    test('cancel team invite uses expected endpoint', function () {
+        mockResponse('{"ok":true}', 200);
+        $organizations = test()->facturapi->organizations();
 
         $result = $organizations->cancelTeamInvite('org_123', 'inv_123');
 
         self::assertTrue($result['ok']);
-        $request = $httpClient->requests()[0];
+        $request = test()->httpClient->requests()[0];
         self::assertSame('DELETE', $request->getMethod());
         self::assertSame('https://www.facturapi.io/v2/organizations/org_123/team/invites/inv_123', (string) $request->getUri());
-    }
-
-    public function testListReceivedTeamInvitesUsesExpectedEndpoint(): void
-    {
-        $httpClient = new FakeHttpClient(new Response(200, [], '[]'));
-        $organizations = (new \Facturapi\Facturapi('sk_user_abc123', ['httpClient' => $httpClient]))->organizations();
+    });
+    test('list received team invites uses expected endpoint', function () {
+        mockResponse('[]', 200);
+        $organizations = test()->facturapi->organizations();
 
         $result = $organizations->listReceivedTeamInvites();
 
         self::assertIsArray($result);
-        $request = $httpClient->requests()[0];
+        $request = test()->httpClient->requests()[0];
         self::assertSame('GET', $request->getMethod());
         self::assertSame('https://www.facturapi.io/v2/organizations/invites/pending', (string) $request->getUri());
-    }
-
-    public function testRespondTeamInviteUsesExpectedEndpointAndJsonBody(): void
-    {
-        $httpClient = new FakeHttpClient(new Response(200, [], '{"ok":true}'));
-        $organizations = (new \Facturapi\Facturapi('sk_user_abc123', ['httpClient' => $httpClient]))->organizations();
+    });
+    test('respond team invite uses expected endpoint and json body', function () {
+        mockResponse('{"ok":true}', 200);
+        $organizations = test()->facturapi->organizations();
 
         $result = $organizations->respondTeamInvite('inv_123', ['accept' => true]);
 
         self::assertTrue($result['ok']);
-        $request = $httpClient->requests()[0];
+        $request = test()->httpClient->requests()[0];
         self::assertSame('POST', $request->getMethod());
         self::assertSame('https://www.facturapi.io/v2/organizations/invites/inv_123/response', (string) $request->getUri());
         self::assertSame('application/json', $request->getHeaderLine('Content-Type'));
         self::assertStringContainsString('"accept":true', (string) $request->getBody());
-    }
-
-    public function testListTeamRolesUsesExpectedEndpoint(): void
-    {
-        $httpClient = new FakeHttpClient(new Response(200, [], '[]'));
-        $organizations = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->organizations();
+    });
+    test('list team roles uses expected endpoint', function () {
+        mockResponse('[]', 200);
+        $organizations = test()->facturapi->organizations();
 
         $result = $organizations->listTeamRoles('org_123');
 
         self::assertIsArray($result);
-        $request = $httpClient->requests()[0];
+        $request = test()->httpClient->requests()[0];
         self::assertSame('GET', $request->getMethod());
         self::assertSame('https://www.facturapi.io/v2/organizations/org_123/team/roles', (string) $request->getUri());
-    }
-
-    public function testListTeamRoleTemplatesUsesExpectedEndpoint(): void
-    {
-        $httpClient = new FakeHttpClient(new Response(200, [], '[]'));
-        $organizations = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->organizations();
+    });
+    test('list team role templates uses expected endpoint', function () {
+        mockResponse('[]', 200);
+        $organizations = test()->facturapi->organizations();
 
         $result = $organizations->listTeamRoleTemplates('org_123');
 
         self::assertIsArray($result);
-        $request = $httpClient->requests()[0];
+        $request = test()->httpClient->requests()[0];
         self::assertSame('GET', $request->getMethod());
         self::assertSame('https://www.facturapi.io/v2/organizations/org_123/team/roles/templates', (string) $request->getUri());
-    }
-
-    public function testListTeamRoleOperationsUsesExpectedEndpoint(): void
-    {
-        $httpClient = new FakeHttpClient(new Response(200, [], '[]'));
-        $organizations = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->organizations();
+    });
+    test('list team role operations uses expected endpoint', function () {
+        mockResponse('[]', 200);
+        $organizations = test()->facturapi->organizations();
 
         $result = $organizations->listTeamRoleOperations('org_123');
 
         self::assertIsArray($result);
-        $request = $httpClient->requests()[0];
+        $request = test()->httpClient->requests()[0];
         self::assertSame('GET', $request->getMethod());
         self::assertSame('https://www.facturapi.io/v2/organizations/org_123/team/roles/operations', (string) $request->getUri());
-    }
-
-    public function testRetrieveTeamRoleUsesExpectedEndpoint(): void
-    {
-        $httpClient = new FakeHttpClient(new Response(200, [], '{"id":"role_123"}'));
-        $organizations = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->organizations();
+    });
+    test('retrieve team role uses expected endpoint', function () {
+        mockResponse('{"id":"role_123"}', 200);
+        $organizations = test()->facturapi->organizations();
 
         $result = $organizations->retrieveTeamRole('org_123', 'role_123');
 
         self::assertSame('role_123', $result['id']);
-        $request = $httpClient->requests()[0];
+        $request = test()->httpClient->requests()[0];
         self::assertSame('GET', $request->getMethod());
         self::assertSame('https://www.facturapi.io/v2/organizations/org_123/team/roles/role_123', (string) $request->getUri());
-    }
-
-    public function testCreateTeamRoleUsesExpectedEndpointAndJsonBody(): void
-    {
-        $httpClient = new FakeHttpClient(new Response(200, [], '{"id":"role_123","name":"Billing analyst"}'));
-        $organizations = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->organizations();
+    });
+    test('create team role uses expected endpoint and json body', function () {
+        mockResponse('{"id":"role_123","name":"Billing analyst"}', 200);
+        $organizations = test()->facturapi->organizations();
 
         $result = $organizations->createTeamRole('org_123', [
             'name' => 'Billing analyst',
@@ -173,47 +144,41 @@ final class OrganizationsTeamManagementTest extends TestCase
         ]);
 
         self::assertSame('role_123', $result['id']);
-        $request = $httpClient->requests()[0];
+        $request = test()->httpClient->requests()[0];
         self::assertSame('POST', $request->getMethod());
         self::assertSame('https://www.facturapi.io/v2/organizations/org_123/team/roles', (string) $request->getUri());
         self::assertSame('application/json', $request->getHeaderLine('Content-Type'));
         self::assertStringContainsString('"name":"Billing analyst"', (string) $request->getBody());
         self::assertStringContainsString('"operations":["read:invoices"]', (string) $request->getBody());
-    }
-
-    public function testUpdateTeamAccessRoleUsesExpectedEndpointAndJsonBody(): void
-    {
-        $httpClient = new FakeHttpClient(new Response(200, [], '{"id":"acc_123","role":"role_123"}'));
-        $organizations = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->organizations();
+    });
+    test('update team access role uses expected endpoint and json body', function () {
+        mockResponse('{"id":"acc_123","role":"role_123"}', 200);
+        $organizations = test()->facturapi->organizations();
 
         $result = $organizations->updateTeamAccessRole('org_123', 'acc_123', 'role_123');
 
         self::assertSame('acc_123', $result['id']);
         self::assertSame('role_123', $result['role']);
-        $request = $httpClient->requests()[0];
+        $request = test()->httpClient->requests()[0];
         self::assertSame('PUT', $request->getMethod());
         self::assertSame('https://www.facturapi.io/v2/organizations/org_123/team/acc_123/role', (string) $request->getUri());
         self::assertSame('application/json', $request->getHeaderLine('Content-Type'));
         self::assertStringContainsString('"role":"role_123"', (string) $request->getBody());
-    }
-
-    public function testRemoveTeamAccessUsesExpectedEndpoint(): void
-    {
-        $httpClient = new FakeHttpClient(new Response(200, [], '{"ok":true}'));
-        $organizations = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->organizations();
+    });
+    test('remove team access uses expected endpoint', function () {
+        mockResponse('{"ok":true}', 200);
+        $organizations = test()->facturapi->organizations();
 
         $result = $organizations->removeTeamAccess('org_123', 'acc_123');
 
         self::assertTrue($result['ok']);
-        $request = $httpClient->requests()[0];
+        $request = test()->httpClient->requests()[0];
         self::assertSame('DELETE', $request->getMethod());
         self::assertSame('https://www.facturapi.io/v2/organizations/org_123/team/acc_123', (string) $request->getUri());
-    }
-
-    public function testUpdateTeamRoleUsesExpectedEndpointAndJsonBody(): void
-    {
-        $httpClient = new FakeHttpClient(new Response(200, [], '{"id":"role_123","name":"Senior billing analyst"}'));
-        $organizations = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->organizations();
+    });
+    test('update team role uses expected endpoint and json body', function () {
+        mockResponse('{"id":"role_123","name":"Senior billing analyst"}', 200);
+        $organizations = test()->facturapi->organizations();
 
         $result = $organizations->updateTeamRole('org_123', 'role_123', [
             'name' => 'Senior billing analyst',
@@ -221,23 +186,22 @@ final class OrganizationsTeamManagementTest extends TestCase
 
         self::assertSame('role_123', $result['id']);
         self::assertSame('Senior billing analyst', $result['name']);
-        $request = $httpClient->requests()[0];
+        $request = test()->httpClient->requests()[0];
         self::assertSame('PUT', $request->getMethod());
         self::assertSame('https://www.facturapi.io/v2/organizations/org_123/team/roles/role_123', (string) $request->getUri());
         self::assertSame('application/json', $request->getHeaderLine('Content-Type'));
         self::assertStringContainsString('"name":"Senior billing analyst"', (string) $request->getBody());
-    }
-
-    public function testDeleteTeamRoleUsesExpectedEndpoint(): void
-    {
-        $httpClient = new FakeHttpClient(new Response(200, [], '{"ok":true}'));
-        $organizations = (new \Facturapi\Facturapi('sk_test_abc123', ['httpClient' => $httpClient]))->organizations();
+    });
+    test('delete team role uses expected endpoint', function () {
+        mockResponse('{"ok":true}', 200);
+        $organizations = test()->facturapi->organizations();
 
         $result = $organizations->deleteTeamRole('org_123', 'role_123');
 
         self::assertTrue($result['ok']);
-        $request = $httpClient->requests()[0];
+        $request = test()->httpClient->requests()[0];
         self::assertSame('DELETE', $request->getMethod());
         self::assertSame('https://www.facturapi.io/v2/organizations/org_123/team/roles/role_123', (string) $request->getUri());
-    }
-}
+    });
+
+});

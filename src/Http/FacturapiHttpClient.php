@@ -94,7 +94,10 @@ class FacturapiHttpClient
         $builder = new MultipartStreamBuilder($this->streamFactory);
 
         foreach ($files as $name => $path) {
-            $stream = @fopen($path, 'rb');
+            if (!file_exists($path) || !is_readable($path)) {
+                throw new FacturapiException('Unable to open file: ' . $path);
+            }
+            $stream = fopen($path, 'rb');
             if ($stream === false) {
                 throw new FacturapiException('Unable to open file: ' . $path);
             }
