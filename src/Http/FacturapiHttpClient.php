@@ -143,6 +143,7 @@ class FacturapiHttpClient
 
     /**
      * @throws FacturapiException
+     * @throws \JsonException
      */
     private function executeRequest(string $method, string $url, array $headers = [], string $body = ''): mixed
     {
@@ -150,7 +151,7 @@ class FacturapiHttpClient
         if ($rawResponse === '') {
             return null;
         }
-        return json_decode($rawResponse);
+        return json_decode($rawResponse, true, 512, JSON_THROW_ON_ERROR);
     }
 
     /**
