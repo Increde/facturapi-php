@@ -175,7 +175,7 @@ class FacturapiHttpClient
         try {
             $response = $this->client->sendRequest($request);
         } catch (ClientExceptionInterface $e) {
-            throw new FacturapiException($e->getMessage(), 0, $e);
+            throw new \Facturapi\Exceptions\NetworkException($e->getMessage(), 0, $e);
         }
 
         $this->lastStatus = $response->getStatusCode();
@@ -191,7 +191,16 @@ class FacturapiHttpClient
                 $normalizedHeaders[strtolower($name)] = implode(', ', $values);
             }
 
-            throw new FacturapiException(
+            $exceptionClass = match (true) {
+                $this->lastStatus === 400, $this->lastStatus === 422 => \Facturapi\Exceptions\ValidationException::class,
+                $this->lastStatus === 401, $this->lastStatus === 403 => \Facturapi\Exceptions\AuthenticationException::class,
+                $this->lastStatus === 404 => \Facturapi\Exceptions\NotFoundException::class,
+                $this->lastStatus === 429 => \Facturapi\Exceptions\RateLimitException::class,
+                $this->lastStatus >= 500 => \Facturapi\Exceptions\ServerException::class,
+                default => FacturapiException::class,
+            };
+
+            throw new $exceptionClass(
                 $message,
                 0,
                 null,

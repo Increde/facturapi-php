@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Facturapi\Exceptions;
 
 use Exception;
@@ -19,7 +21,7 @@ class FacturapiException extends Exception
 		mixed $errorData = null,
 		?int $statusCode = null,
 		?string $rawBody = null,
-		array $headers = array()
+		array $headers = []
 	) {
 		parent::__construct($message, $code, $previous);
 		$this->errorData = $errorData;
