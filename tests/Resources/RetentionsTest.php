@@ -90,7 +90,7 @@ describe('Retentions', function () {
 
         $result = $retentions->retrieve('ret_123');
 
-        expect($result['id'])->toBe('ret_123');
+        expect($result->id)->toBe('ret_123');
         $request = test()->httpClient->requests()[0];
         expect($request->getMethod())->toBe('GET');
         expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/retentions/ret_123');
@@ -102,7 +102,7 @@ describe('Retentions', function () {
 
         $result = $retentions->sendByEmail('ret_123', ['user@example.com']);
 
-        expect($result['success'])->toBeTrue();
+        expect($result->success)->toBeTrue();
         $request = test()->httpClient->requests()[0];
         expect($request->getMethod())->toBe('POST');
         expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/retentions/ret_123/email');

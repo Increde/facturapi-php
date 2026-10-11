@@ -36,7 +36,7 @@ describe('Receipts', function () {
 
         $result = $receipts->create($payload);
 
-        expect($result['id'])->toBe('rec_123');
+        expect($result->id)->toBe('rec_123');
 
         $request = test()->httpClient->requests()[0];
         expect($request->getMethod())->toBe('POST');
@@ -74,7 +74,7 @@ describe('Receipts', function () {
 
         $result = $receipts->retrieve('rec_123');
 
-        expect($result['id'])->toBe('rec_123');
+        expect($result->id)->toBe('rec_123');
         $request = test()->httpClient->requests()[0];
         expect($request->getMethod())->toBe('GET');
         expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/receipts/rec_123');
@@ -87,7 +87,7 @@ describe('Receipts', function () {
         $payload = ['use' => 'G03'];
         $result = $receipts->invoice('rec_123', $payload);
 
-        expect($result['id'])->toBe('inv_123');
+        expect($result->id)->toBe('inv_123');
         $request = test()->httpClient->requests()[0];
         expect($request->getMethod())->toBe('POST');
         expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/receipts/rec_123/invoice');
@@ -101,7 +101,7 @@ describe('Receipts', function () {
         $payload = ['periodicity' => '04', 'months' => '03', 'year' => 2025];
         $result = $receipts->createGlobalInvoice($payload);
 
-        expect($result['id'])->toBe('inv_123');
+        expect($result->id)->toBe('inv_123');
         $request = test()->httpClient->requests()[0];
         expect($request->getMethod())->toBe('POST');
         expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/receipts/global-invoice');
@@ -114,7 +114,7 @@ describe('Receipts', function () {
         $payload = ['receipts' => ['rec_1', 'rec_2'], 'customer' => 'cus_123'];
         $result = $receipts->toInvoice($payload);
 
-        expect($result['id'])->toBe('inv_123');
+        expect($result->id)->toBe('inv_123');
         $request = test()->httpClient->requests()[0];
         expect($request->getMethod())->toBe('POST');
         expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/receipts/to-invoice');
@@ -140,7 +140,7 @@ describe('Receipts', function () {
 
         $result = $receipts->cancel('rec_123');
 
-        expect($result['id'])->toBe('rec_123');
+        expect($result->id)->toBe('rec_123');
         $request = test()->httpClient->requests()[0];
         expect($request->getMethod())->toBe('DELETE');
         expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/receipts/rec_123');
@@ -152,7 +152,7 @@ describe('Receipts', function () {
 
         $result = $receipts->sendByEmail('rec_123', ['user@example.com']);
 
-        expect($result['success'])->toBeTrue();
+        expect($result->success)->toBeTrue();
         $request = test()->httpClient->requests()[0];
         expect($request->getMethod())->toBe('POST');
         expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/receipts/rec_123/email');

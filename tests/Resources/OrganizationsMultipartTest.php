@@ -8,12 +8,12 @@ describe('OrganizationsMultipart', function () {
         $tmpLogo = tempnam(sys_get_temp_dir(), 'logo_');
         file_put_contents($tmpLogo, 'LOGO_BYTES');
 
-        mockResponse('{"ok":true}', 200);
+        mockResponse('{"id":"org_123"}', 200);
         $organizations = test()->facturapi->organizations();
 
         $result = $organizations->uploadLogo('org_123', $tmpLogo);
 
-        expect($result['ok'])->toBeTrue();
+        expect($result->id)->toBe('org_123');
 
         $request = test()->httpClient->requests()[0];
         expect($request->getMethod())->toBe('PUT');
@@ -33,7 +33,7 @@ describe('OrganizationsMultipart', function () {
         file_put_contents($tmpCer, 'CER_BYTES');
         file_put_contents($tmpKey, 'KEY_BYTES');
 
-        mockResponse('{"ok":true}', 200);
+        mockResponse('{"id":"org_123"}', 200);
         $organizations = test()->facturapi->organizations();
 
         $result = $organizations->uploadCertificate('org_123', [
@@ -42,7 +42,7 @@ describe('OrganizationsMultipart', function () {
             'password' => 'secret_password',
         ]);
 
-        expect($result['ok'])->toBeTrue();
+        expect($result->id)->toBe('org_123');
 
         $request = test()->httpClient->requests()[0];
         expect($request->getMethod())->toBe('PUT');
@@ -60,7 +60,7 @@ describe('OrganizationsMultipart', function () {
         @unlink($tmpKey);
     });
     test('upload certificate fails when required fields are missing', function () {
-        mockResponse('{"ok":true}', 200);
+        mockResponse('{"id":"org_123"}', 200);
         $organizations = test()->facturapi->organizations();
 
         expect(fn () => $organizations->uploadCertificate('org_123', [
@@ -68,7 +68,7 @@ describe('OrganizationsMultipart', function () {
         ]))->toThrow(FacturapiException::class, 'Invalid certificate payload. Expected cerFile, keyFile and password.');
     });
     test('upload logo fails when file cannot be opened', function () {
-        mockResponse('{"ok":true}', 200);
+        mockResponse('{"id":"org_123"}', 200);
         $organizations = test()->facturapi->organizations();
 
         expect(fn () => $organizations->uploadLogo('org_123', '/tmp/file_that_does_not_exist.pdf'))

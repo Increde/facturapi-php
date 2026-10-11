@@ -10,7 +10,7 @@ describe('Tools', function () {
 
         $result = $tools->validateTaxId('ABC010101XYZ');
 
-        expect($result['is_valid'])->toBeTrue();
+        expect($result->is_valid)->toBeTrue();
         $request = test()->httpClient->requests()[0];
         expect($request->getMethod())->toBe('GET');
         expect(urldecode((string) $request->getUri()))->toBe('https://www.facturapi.io/v2/tools/tax_id_validation?tax_id=ABC010101XYZ');
@@ -22,7 +22,7 @@ describe('Tools', function () {
 
         $result = $tools->check();
 
-        expect($result['ok'])->toBeTrue();
+        expect($result->ok)->toBeTrue();
         $request = test()->httpClient->requests()[0];
         expect($request->getMethod())->toBe('GET');
         expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/check');

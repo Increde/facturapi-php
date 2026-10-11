@@ -75,7 +75,7 @@ describe('Webhooks', function () {
 
         $result = $webhooks->create($payload);
 
-        expect($result['id'])->toBe('wh_123');
+        expect($result->id)->toBe('wh_123');
         $request = test()->httpClient->requests()[0];
         expect($request->getMethod())->toBe('POST');
         expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/webhooks');
@@ -92,7 +92,7 @@ describe('Webhooks', function () {
 
         $result = $webhooks->update('wh_123', $payload);
 
-        expect($result['id'])->toBe('wh_123');
+        expect($result->id)->toBe('wh_123');
         $request = test()->httpClient->requests()[0];
         expect($request->getMethod())->toBe('PUT');
         expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/webhooks/wh_123');
@@ -116,7 +116,7 @@ describe('Webhooks', function () {
 
         $result = $webhooks->retrieve('wh_123');
 
-        expect($result['id'])->toBe('wh_123');
+        expect($result->id)->toBe('wh_123');
         $request = test()->httpClient->requests()[0];
         expect($request->getMethod())->toBe('GET');
         expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/webhooks/wh_123');
@@ -128,7 +128,7 @@ describe('Webhooks', function () {
 
         $result = $webhooks->delete('wh_123');
 
-        expect($result['id'])->toBe('wh_123');
+        expect($result->id)->toBe('wh_123');
         $request = test()->httpClient->requests()[0];
         expect($request->getMethod())->toBe('DELETE');
         expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/webhooks/wh_123');

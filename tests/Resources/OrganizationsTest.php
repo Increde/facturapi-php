@@ -21,7 +21,7 @@ describe('Organizations', function () {
 
         $result = $organizations->retrieve('org_123');
 
-        expect($result['id'])->toBe('org_123');
+        expect($result->id)->toBe('org_123');
         $request = test()->httpClient->requests()[0];
         expect($request->getMethod())->toBe('GET');
         expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/organizations/org_123');
@@ -34,7 +34,7 @@ describe('Organizations', function () {
         $payload = ['name' => 'Mi Empresa'];
         $result = $organizations->create($payload);
 
-        expect($result['id'])->toBe('org_123');
+        expect($result->id)->toBe('org_123');
         $request = test()->httpClient->requests()[0];
         expect($request->getMethod())->toBe('POST');
         expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/organizations');
@@ -48,7 +48,7 @@ describe('Organizations', function () {
         $payload = ['legal_name' => 'Empresa SA', 'tax_id' => 'XAXX010101000'];
         $result = $organizations->updateLegal('org_123', $payload);
 
-        expect($result['id'])->toBe('org_123');
+        expect($result->id)->toBe('org_123');
         $request = test()->httpClient->requests()[0];
         expect($request->getMethod())->toBe('PUT');
         expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/organizations/org_123/legal');
@@ -62,7 +62,7 @@ describe('Organizations', function () {
         $payload = ['color' => '#FFFFFF'];
         $result = $organizations->updateCustomization('org_123', $payload);
 
-        expect($result['id'])->toBe('org_123');
+        expect($result->id)->toBe('org_123');
         $request = test()->httpClient->requests()[0];
         expect($request->getMethod())->toBe('PUT');
         expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/organizations/org_123/customization');
@@ -76,7 +76,7 @@ describe('Organizations', function () {
         $payload = ['next_folio' => 100];
         $result = $organizations->updateReceiptSettings('org_123', $payload);
 
-        expect($result['id'])->toBe('org_123');
+        expect($result->id)->toBe('org_123');
         $request = test()->httpClient->requests()[0];
         expect($request->getMethod())->toBe('PUT');
         expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/organizations/org_123/receipts');
@@ -90,7 +90,7 @@ describe('Organizations', function () {
         $payload = ['domain' => 'my-domain'];
         $result = $organizations->updateDomain('org_123', $payload);
 
-        expect($result['id'])->toBe('org_123');
+        expect($result->id)->toBe('org_123');
         $request = test()->httpClient->requests()[0];
         expect($request->getMethod())->toBe('PUT');
         expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/organizations/org_123/domain');
@@ -104,7 +104,7 @@ describe('Organizations', function () {
         $payload = ['active' => true];
         $result = $organizations->updateSelfInvoiceSettings('org_123', $payload);
 
-        expect($result['id'])->toBe('org_123');
+        expect($result->id)->toBe('org_123');
         $request = test()->httpClient->requests()[0];
         expect($request->getMethod())->toBe('PUT');
         expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/organizations/org_123/self-invoice');

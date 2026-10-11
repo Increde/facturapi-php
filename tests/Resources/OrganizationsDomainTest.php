@@ -23,7 +23,7 @@ describe('OrganizationsDomain', function () {
             'domain' => 'acme.mx',
         ]);
 
-        expect($result['available'])->toBeTrue();
+        expect($result->available)->toBeTrue();
 
         $request = test()->httpClient->requests()[0];
         expect($request->getMethod())->toBe('GET');

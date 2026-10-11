@@ -43,7 +43,7 @@ describe('Invoices', function () {
 
         $result = $invoices->create($payload);
 
-        expect($result['id'])->toBe('inv_123');
+        expect($result->id)->toBe('inv_123');
 
         $request = test()->httpClient->requests()[0];
         expect($request->getMethod())->toBe('POST');
@@ -128,7 +128,7 @@ describe('Invoices', function () {
         expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/invoices?q=ACME+SA+de+CV');
     });
     test('create zip request uses expected path and json body', function () {
-        mockResponse('{"id":"zip_123"}', 200);
+        mockResponse('{"id":"zip_123","created_at":"2025-03-01T00:00:00.000Z","livemode":false,"organization":"org_123","issuer_type":"issuing","invoice_types":[],"start_date":"2025-03-01T00:00:00.000Z","end_date":"2025-03-31T00:00:00.000Z","status":"finished"}', 200);
         $invoices = test()->facturapi->invoices();
         $payload = [
             'year' => 2025,
@@ -139,7 +139,7 @@ describe('Invoices', function () {
 
         $result = $invoices->createZipRequest($payload);
 
-        expect($result['id'])->toBe('zip_123');
+        expect($result->id)->toBe('zip_123');
         $request = test()->httpClient->requests()[0];
         expect($request->getMethod())->toBe('POST');
         expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/invoices/zip-requests');
@@ -158,18 +158,18 @@ describe('Invoices', function () {
             'page' => 1,
         ]);
 
-        expect($result['data'])->toBe([]);
+        expect($result->data)->toBe([]);
         $request = test()->httpClient->requests()[0];
         expect($request->getMethod())->toBe('GET');
         expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/invoices/zip-requests?year=2025&month=3&status=finished&limit=20&page=1');
     });
     test('retrieve zip request uses expected path', function () {
-        mockResponse('{"id":"zip_123"}', 200);
+        mockResponse('{"id":"zip_123","created_at":"2025-03-01T00:00:00.000Z","livemode":false,"organization":"org_123","issuer_type":"issuing","invoice_types":[],"start_date":"2025-03-01T00:00:00.000Z","end_date":"2025-03-31T00:00:00.000Z","status":"finished"}', 200);
         $invoices = test()->facturapi->invoices();
 
         $result = $invoices->retrieveZipRequest('zip_123');
 
-        expect($result['id'])->toBe('zip_123');
+        expect($result->id)->toBe('zip_123');
         $request = test()->httpClient->requests()[0];
         expect($request->getMethod())->toBe('GET');
         expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/invoices/zip-requests/zip_123');
@@ -202,9 +202,9 @@ describe('Invoices', function () {
 
         $result = $invoices->paymentSummary('inv_123', 58.0);
 
-        expect($result['uuid'])->toBe('6CF6CE33-1BD2-4F88-A443-33013C069169');
-        expect($result['installment'])->toBe(1);
-        expect((float) $result['taxes'][0]['base'])->toBe(50.0);
+        expect($result->uuid)->toBe('6CF6CE33-1BD2-4F88-A443-33013C069169');
+        expect($result->installment)->toBe(1);
+        expect((float) $result->taxes[0]['base'])->toBe(50.0);
 
         $request = test()->httpClient->requests()[0];
         expect($request->getMethod())->toBe('GET');

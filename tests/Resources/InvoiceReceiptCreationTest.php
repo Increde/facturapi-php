@@ -15,7 +15,7 @@ describe('InvoiceReceiptCreation', function () {
 
         $result = $invoices->create($payload, ['as' => 'draft', 'validate' => true]);
 
-        expect($result['id'])->toBe('inv_123');
+        expect($result->id)->toBe('inv_123');
 
         $request = test()->httpClient->requests()[0];
         expect($request->getMethod())->toBe('POST');
@@ -34,7 +34,7 @@ describe('InvoiceReceiptCreation', function () {
 
         $result = $receipts->create($payload);
 
-        expect($result['id'])->toBe('rec_123');
+        expect($result->id)->toBe('rec_123');
 
         $request = test()->httpClient->requests()[0];
         expect($request->getMethod())->toBe('POST');
