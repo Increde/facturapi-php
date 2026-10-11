@@ -1,4 +1,4 @@
-name: CI
+name: CI Strict Linter & Tests
 
 on:
   push:
@@ -28,10 +28,16 @@ jobs:
         with:
           php-version: ${{ matrix.php-version }}
           coverage: none
-          tools: composer:v2
+          tools: composer:v2, pest
 
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist
 
-      - name: Run test suite
-        run: ./vendor/bin/phpunit --configuration phpunit.xml
+      - name: Check Code Style (Pint)
+        run: composer format:test
+
+      - name: Static Analysis (PHPStan)
+        run: composer analyze
+
+      - name: Run test suite (Pest)
+        run: composer test
