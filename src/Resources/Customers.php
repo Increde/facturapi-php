@@ -49,7 +49,7 @@ class Customers {
 	 * @throws FacturapiException
 	 */
 	public function create(array $data, ?array $params = null): Customer {
-		$response = $this->client->post('customers', $data);
+		$response = $this->client->post('customers', $data, $params);
 		return Customer::fromArray($response);
 	}
 
@@ -65,7 +65,7 @@ class Customers {
 	 * @throws FacturapiException
 	 */
 	public function update(string $id, array $data, ?array $params = null): Customer {
-		$response = $this->client->put('customers/' . $id, $data);
+		$response = $this->client->put('customers/' . $id, $data, $params);
 		return Customer::fromArray($response);
 	}
 
@@ -95,4 +95,16 @@ class Customers {
 		return TaxIdValidationResult::fromArray($response);
 	}
 
+	/**
+	 * Send an edit link to the customer's email
+	 *
+	 * @param string $id Customer ID.
+	 * @param array $data Data containing email.
+	 * @return array
+	 *
+	 * @throws FacturapiException
+	 */
+	public function sendEditLink(string $id, array $data): array {
+		return $this->client->post('customers/' . $id . '/email-edit-link', $data);
+	}
 }

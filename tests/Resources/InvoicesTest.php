@@ -8,6 +8,53 @@ describe('Invoices', function () {
     test('get last status is null before any request', function () {
         expect(true)->toBeTrue();
     });
+
+    test('create sends full json body with all required and optional properties', function () {
+        mockResponse('{"id":"inv_123"}', 201);
+        $invoices = test()->facturapi->invoices();
+
+        $payload = [
+            'customer' => 'cus_123',
+            'items' => [
+                [
+                    'quantity' => 2,
+                    'product' => [
+                        'description' => 'Guitarra',
+                        'product_key' => '60131324',
+                        'price' => 345.60,
+                        'tax_included' => true,
+                        'taxes' => [
+                            ['type' => 'IVA', 'rate' => 0.16]
+                        ]
+                    ]
+                ]
+            ],
+            'use' => 'G03',
+            'payment_form' => '01',
+            'payment_method' => 'PUE',
+            'currency' => 'MXN',
+            'exchange' => 1.5,
+            'conditions' => 'Pago a 30 dias',
+            'related' => [
+                'relation' => '01',
+                'invoices' => ['inv_001', 'inv_002']
+            ],
+            'pdf_custom_section' => 'Custom text here',
+            'addenda' => 'XML string',
+            'namespaced_addenda' => [['namespace' => 'x', 'xml' => 'y']]
+        ];
+
+        $result = $invoices->create($payload);
+
+        expect($result['id'])->toBe('inv_123');
+
+        $request = test()->httpClient->requests()[0];
+        expect($request->getMethod())->toBe('POST');
+        expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/invoices');
+        
+        $sentPayload = json_decode((string) $request->getBody(), true);
+        expect($sentPayload)->toBe($payload);
+    });
     test('download pdf uses expected path and authorization header', function () {
         mockResponse('PDF_BINARY_CONTENT', 200);
         $invoices = test()->facturapi->invoices();
