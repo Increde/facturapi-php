@@ -20,7 +20,6 @@ class Products
      * Get all Products
      *
      * @param array|null $params Search parameters.
-     * @return ProductSearchResult
      *
      * @throws FacturapiException
      */
@@ -34,7 +33,6 @@ class Products
      * Get a Product by ID
      *
      * @param string $id Product ID.
-     * @return Product
      *
      * @throws FacturapiException
      */
@@ -48,7 +46,6 @@ class Products
      * Create a Product in your organization
      *
      * @param array $params Product data.
-     * @return Product
      *
      * @throws FacturapiException
      */
@@ -64,7 +61,6 @@ class Products
      *
      * @param string $id Product ID.
      * @param array $params Product data.
-     * @return Product
      *
      * @throws FacturapiException
      */
@@ -78,7 +74,6 @@ class Products
      * Delete a Product in your organization
      *
      * @param string $id Product ID.
-     * @return Product
      *
      * @throws FacturapiException
      */

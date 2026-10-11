@@ -22,7 +22,7 @@ class NominaCatalogs
         return $this->search('perceptions', $params);
     }
 
-    private function search(string $path, $params): mixed
+    private function search(string $path, ?array $params): mixed
     {
         return $this->client->get('catalogs/nomina/' . $path, $params);
     }

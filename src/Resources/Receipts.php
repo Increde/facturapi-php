@@ -48,7 +48,7 @@ class Receipts
      *
      * @throws FacturapiException
      */
-    public function create($params): mixed
+    public function create(array $params): mixed
     {
         return $this->client->post('receipts', $params);
     }
@@ -63,7 +63,7 @@ class Receipts
      *
      * @throws FacturapiException
      */
-    public function invoice($id, $params): mixed
+    public function invoice($id, array $params): mixed
     {
         return $this->client->post('receipts/' . $id . '/invoice', $params);
     }
@@ -76,7 +76,7 @@ class Receipts
      *
      * @throws FacturapiException
      */
-    public function createGlobalInvoice($params): mixed
+    public function createGlobalInvoice(array $params): mixed
     {
         return $this->client->post('receipts' . '/global-invoice', $params);
     }
@@ -90,12 +90,12 @@ class Receipts
      *
      * @throws FacturapiException
      */
-    public function toInvoice($data)
+    public function toInvoice(array $data): array
     {
         try {
             return $this->client->post('receipts' . '/to-invoice', $data);
         } catch (FacturapiException $e) {
-            throw new FacturapiException('Unable to create invoice: ' . $e->getMessage());
+            throw new FacturapiException('Unable to create invoice: ' . $e->getMessage(), $e->getCode(), $e);
         }
     }
 

@@ -62,7 +62,7 @@ class Invoices
      * @return mixed JSON-decoded response.
      * @throws FacturapiException
      */
-    public function create($body, ?array $query = null): mixed
+    public function create(array $body, ?array $query = null): mixed
     {
         return $this->client->post('invoices', $body, $query);
     }
@@ -76,7 +76,7 @@ class Invoices
      * @return mixed JSON-decoded response.
      * @throws FacturapiException
      */
-    public function cancel($id, $query): mixed
+    public function cancel($id, ?array $query): mixed
     {
         return $this->client->delete('invoices/' . $id, $query);
     }
@@ -131,7 +131,7 @@ class Invoices
      * @return mixed JSON-decoded response.
      * @throws FacturapiException
      */
-    public function createZipRequest($body): mixed
+    public function createZipRequest(array $body): mixed
     {
         return $this->client->post('invoices/' . 'zip-requests', $body);
     }
@@ -287,7 +287,7 @@ class Invoices
      * @return mixed JSON-decoded response.
      * @throws FacturapiException
      */
-    public function updateDraft($id, $body): mixed
+    public function updateDraft($id, array $body): mixed
     {
         return $this->client->put('invoices/' . $id, $body);
     }
@@ -351,7 +351,7 @@ class Invoices
      * @return string PDF file contents.
      * @throws FacturapiException
      */
-    public function previewPdf($body): string
+    public function previewPdf(array $body): string
     {
         return $this->client->postRaw('invoices/preview/pdf', $body);
     }

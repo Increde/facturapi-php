@@ -47,7 +47,7 @@ class Webhooks
      *
      * @throws FacturapiException
      */
-    public function create($params): mixed
+    public function create(array $params): mixed
     {
         return $this->client->post('webhooks', $params);
     }
@@ -62,7 +62,7 @@ class Webhooks
      *
      * @throws FacturapiException
      */
-    public function update($id, $params): mixed
+    public function update($id, array $params): mixed
     {
         return $this->client->put('webhooks/' . $id, $params);
     }
@@ -99,7 +99,7 @@ class Webhooks
                 if ($localResult !== null) {
                     return ['valid' => $localResult];
                 }
-            } catch (\Throwable $ignored) {
+            } catch (\Throwable) {
                 // Fallback to server-side verification.
             }
         }

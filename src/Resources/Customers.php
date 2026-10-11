@@ -20,7 +20,6 @@ class Customers
      * Get all Customers
      *
      * @param array|null $params Search parameters.
-     * @return CustomerSearchResult
      *
      * @throws FacturapiException
      */
@@ -34,7 +33,6 @@ class Customers
      * Get a Customer by ID
      *
      * @param string $id Customer ID.
-     * @return Customer
      *
      * @throws FacturapiException
      */
@@ -49,7 +47,6 @@ class Customers
      *
      * @param array $data Customer data.
      * @param array|null $params Optional query parameters.
-     * @return Customer
      *
      * @throws FacturapiException
      */
@@ -66,7 +63,6 @@ class Customers
      * @param string $id Customer ID.
      * @param array $data Customer data.
      * @param array|null $params Optional query parameters.
-     * @return Customer
      *
      * @throws FacturapiException
      */
@@ -80,7 +76,6 @@ class Customers
      * Delete a Customer in your organization
      *
      * @param string $id Customer ID.
-     * @return Customer
      *
      * @throws FacturapiException
      */
@@ -94,7 +89,6 @@ class Customers
      * Validates that a Customer's tax info is still valid
      *
      * @param string $id Customer ID.
-     * @return TaxIdValidationResult
      *
      * @throws FacturapiException
      */
@@ -109,7 +103,6 @@ class Customers
      *
      * @param string $id Customer ID.
      * @param array $data Data containing email.
-     * @return array
      *
      * @throws FacturapiException
      */

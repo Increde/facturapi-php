@@ -48,7 +48,7 @@ class Organizations
      *
      * @throws FacturapiException
      */
-    public function create($params): mixed
+    public function create(array $params): mixed
     {
         return $this->client->post('organizations', $params);
     }
@@ -62,7 +62,7 @@ class Organizations
      *
      * @throws FacturapiException
      */
-    public function updateLegal($id, $params): mixed
+    public function updateLegal($id, array $params): mixed
     {
         return $this->client->put('organizations/' . $id . '/legal', $params);
     }
@@ -76,7 +76,7 @@ class Organizations
      *
      * @throws FacturapiException
      */
-    public function updateCustomization($id, $params): mixed
+    public function updateCustomization($id, array $params): mixed
     {
         return $this->client->put('organizations/' . $id . '/customization', $params);
     }
@@ -90,7 +90,7 @@ class Organizations
      *
      * @throws FacturapiException
      */
-    public function updateReceiptSettings($id, $params): mixed
+    public function updateReceiptSettings($id, array $params): mixed
     {
         return $this->client->put('organizations/' . $id . '/receipts', $params);
     }
@@ -104,7 +104,7 @@ class Organizations
      *
      * @throws FacturapiException
      */
-    public function updateDomain($id, $params): mixed
+    public function updateDomain($id, array $params): mixed
     {
         return $this->client->put('organizations/' . $id . '/domain', $params);
     }
@@ -326,7 +326,7 @@ class Organizations
      *
      * @throws FacturapiException
      */
-    public function createSeriesGroup($id, $params): mixed
+    public function createSeriesGroup($id, array $params): mixed
     {
         return $this->client->post('organizations/' . $id . '/series-group', $params);
     }
@@ -355,7 +355,7 @@ class Organizations
      *
      * @throws FacturapiException
      */
-    public function updateDefaultSeries($id, $params): mixed
+    public function updateDefaultSeries($id, array $params): mixed
     {
         return $this->client->put('organizations/' . $id . '/series-group/default-series', $params);
     }
@@ -383,7 +383,7 @@ class Organizations
      *
      * @throws FacturapiException
      */
-    public function updateSelfInvoiceSettings($id, $params): mixed
+    public function updateSelfInvoiceSettings($id, array $params): mixed
     {
         return $this->client->put('organizations/' . $id . '/self-invoice', $params);
     }
@@ -466,7 +466,7 @@ class Organizations
      *
      * @throws FacturapiException
      */
-    public function inviteUserToTeam($organizationId, $params): mixed
+    public function inviteUserToTeam($organizationId, array $params): mixed
     {
         return $this->client->post('organizations/' . $organizationId . '/team/invites', $params);
     }
@@ -506,7 +506,7 @@ class Organizations
      *
      * @throws FacturapiException
      */
-    public function respondTeamInvite($inviteKey, $params): mixed
+    public function respondTeamInvite($inviteKey, array $params): mixed
     {
         return $this->client->post('organizations/' . 'invites/' . $inviteKey . '/response', $params);
     }
@@ -573,7 +573,7 @@ class Organizations
      *
      * @throws FacturapiException
      */
-    public function createTeamRole($organizationId, $params): mixed
+    public function createTeamRole($organizationId, array $params): mixed
     {
         return $this->client->post('organizations/' . $organizationId . '/team/roles', $params);
     }
@@ -588,7 +588,7 @@ class Organizations
      *
      * @throws FacturapiException
      */
-    public function updateTeamRole($organizationId, $roleId, $params): mixed
+    public function updateTeamRole($organizationId, $roleId, array $params): mixed
     {
         return $this->client->put('organizations/' . $organizationId . '/team/roles/' . $roleId, $params);
     }

@@ -48,7 +48,7 @@ class Retentions
      *
      * @throws FacturapiException
      */
-    public function create($params): mixed
+    public function create(array $params): mixed
     {
         return $this->client->post('retentions', $params);
     }
@@ -77,7 +77,7 @@ class Retentions
      *
      * @throws FacturapiException
      */
-    public function updateDraft($id, $body): mixed
+    public function updateDraft($id, array $body): mixed
     {
         return $this->client->put('retentions/' . $id, $body);
     }
