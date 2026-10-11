@@ -47,7 +47,7 @@ class FacturapiHttpClient
     /**
      * @throws FacturapiException
      */
-    public function get(string $endpoint, ?array $params = null): mixed
+    public function get(string $endpoint, ?array $params = null): array
     {
         $url = $this->buildUrl($endpoint, $params);
         return $this->executeRequest('GET', $url);
@@ -56,7 +56,7 @@ class FacturapiHttpClient
     /**
      * @throws FacturapiException
      */
-    public function post(string $endpoint, array $data = [], ?array $query = null): mixed
+    public function post(string $endpoint, array $data = [], ?array $query = null): array
     {
         $url = $this->buildUrl($endpoint, $query);
         $body = empty($data) ? '' : json_encode($data, JSON_THROW_ON_ERROR);
@@ -66,7 +66,7 @@ class FacturapiHttpClient
     /**
      * @throws FacturapiException
      */
-    public function put(string $endpoint, array $data = [], ?array $query = null): mixed
+    public function put(string $endpoint, array $data = [], ?array $query = null): array
     {
         $url = $this->buildUrl($endpoint, $query);
         $body = empty($data) ? '' : json_encode($data, JSON_THROW_ON_ERROR);
@@ -76,7 +76,7 @@ class FacturapiHttpClient
     /**
      * @throws FacturapiException
      */
-    public function delete(string $endpoint, ?array $query = null): mixed
+    public function delete(string $endpoint, ?array $query = null): array
     {
         $url = $this->buildUrl($endpoint, $query);
         return $this->executeRequest('DELETE', $url);
@@ -85,10 +85,10 @@ class FacturapiHttpClient
     /**
      * @throws FacturapiException
      */
-        /**
+    /**
      * @throws FacturapiException
      */
-    public function multipartRequest(string $method, string $endpoint, array $files, array $data = []): mixed
+    public function multipartRequest(string $method, string $endpoint, array $files, array $data = []): array
     {
         $url = $this->buildUrl($endpoint);
         $builder = new MultipartStreamBuilder($this->streamFactory);
@@ -122,11 +122,11 @@ class FacturapiHttpClient
     /**
      * @throws FacturapiException
      */
-    public function multipartPost(string $endpoint, array $files, array $data = []): mixed
+    public function multipartPost(string $endpoint, array $files, array $data = []): array
     {
         return $this->multipartRequest('POST', $endpoint, $files, $data);
     }
-    
+
     /**
      * @throws FacturapiException
      */
@@ -135,7 +135,7 @@ class FacturapiHttpClient
         $url = $this->buildUrl($endpoint, $params);
         return $this->executeRawRequest('GET', $url);
     }
-    
+
     /**
      * @throws FacturapiException
      */
@@ -150,8 +150,12 @@ class FacturapiHttpClient
     {
         $url = $this->baseUrl . $this->apiVersion . '/' . $endpoint;
         if ($params !== null && !empty($params)) {
-            foreach($params as $k => $v) { if (is_bool($v)) $params[$k] = $v ? 'true' : 'false'; }
-        $url .= '?' . preg_replace('/%5B[0-9]+%5D/simU', '', http_build_query($params));
+            foreach ($params as $k => $v) {
+                if (is_bool($v)) {
+                    $params[$k] = $v ? 'true' : 'false';
+                }
+            }
+            $url .= '?' . preg_replace('/%5B[0-9]+%5D/simU', '', http_build_query($params));
         }
         return $url;
     }
@@ -160,13 +164,14 @@ class FacturapiHttpClient
      * @throws FacturapiException
      * @throws \JsonException
      */
-    private function executeRequest(string $method, string $url, array $headers = [], string $body = ''): mixed
+    private function executeRequest(string $method, string $url, array $headers = [], string $body = ''): array
     {
         $rawResponse = $this->executeRawRequest($method, $url, $headers, $body);
         if ($rawResponse === '') {
-            return null;
+            return [];
         }
-        return json_decode($rawResponse, true, 512, JSON_THROW_ON_ERROR);
+        $decoded = json_decode($rawResponse, true, 512, JSON_THROW_ON_ERROR);
+        return is_array($decoded) ? $decoded : [];
     }
 
     /**
@@ -175,7 +180,7 @@ class FacturapiHttpClient
     private function executeRawRequest(string $method, string $url, array $headers = [], string $body = ''): string
     {
         $request = $this->requestFactory->createRequest($method, $url);
-        
+
         $request = $request->withHeader('Authorization', 'Basic ' . $this->apiKey)
                            ->withHeader('User-Agent', $this->userAgent);
 
@@ -232,10 +237,18 @@ class FacturapiHttpClient
 
     private function extractErrorMessage(?array $errorData, string $rawBody): string
     {
-        if ($errorData === null) return $rawBody;
-        if (isset($errorData['message']) && is_string($errorData['message'])) return $errorData['message'];
-        if (isset($errorData['error']['message']) && is_string($errorData['error']['message'])) return $errorData['error']['message'];
-        if (isset($errorData['errors'][0]['message']) && is_string($errorData['errors'][0]['message'])) return $errorData['errors'][0]['message'];
+        if ($errorData === null) {
+            return $rawBody;
+        }
+        if (isset($errorData['message']) && is_string($errorData['message'])) {
+            return $errorData['message'];
+        }
+        if (isset($errorData['error']['message']) && is_string($errorData['error']['message'])) {
+            return $errorData['error']['message'];
+        }
+        if (isset($errorData['errors'][0]['message']) && is_string($errorData['errors'][0]['message'])) {
+            return $errorData['errors'][0]['message'];
+        }
         $encoded = json_encode($errorData);
         return $encoded === false ? $rawBody : $encoded;
     }
