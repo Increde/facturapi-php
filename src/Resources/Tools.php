@@ -22,4 +22,16 @@ class Tools {
 	{
 		return $this->client->get('tools/tax_id_validation', ['tax_id' => $tax_id]);
 	}
+
+	/**
+	 * Health check (Pulse)
+	 *
+	 * @return mixed JSON-decoded response.
+	 *
+	 * @throws FacturapiException
+	 */
+	public function check(): mixed
+	{
+		return $this->client->get('check');
+	}
 }

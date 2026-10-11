@@ -20,7 +20,7 @@ class Catalogs {
 	 */
 	public function searchProducts(?array $params = null): mixed
 	{
-		return $this->client->get('catalogs/' . "products");
+		return $this->client->get('catalogs/products', $params);
 	}
 
 	/**
@@ -33,6 +33,6 @@ class Catalogs {
 	 */
 	public function searchUnits(?array $params = null): mixed
 	{
-		return $this->client->get('catalogs/' . "units");
+		return $this->client->get('catalogs/units', $params);
 	}
 }

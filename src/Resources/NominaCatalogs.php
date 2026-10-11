@@ -22,6 +22,6 @@ class NominaCatalogs {
 
     private function search(string $path, $params): mixed
     {
-        return $this->client->get('unknown', $params);
+        return $this->client->get('catalogs/nomina/' . $path, $params);
     }
 }

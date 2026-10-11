@@ -19,6 +19,6 @@ class ComercioExteriorCatalogs {
      */
     public function searchTariffFractions(?array $params = null): mixed
     {
-        return $this->client->get('catalogs/comercio_exterior/' . "tariff-fractions");
+        return $this->client->get('catalogs/comercioexterior/2.0/tariff-fractions', $params);
     }
 }

@@ -19,7 +19,7 @@ class CartaPorteCatalogs {
      */
     public function searchAirTransportCodes(?array $params = null): mixed
     {
-        return $this->client->get('catalogs/cartaporte/' . "air-transport-codes");
+        return $this->client->get('catalogs/cartaporte/3.1/air-transport-codes', $params);
     }
 
     /**
@@ -31,7 +31,7 @@ class CartaPorteCatalogs {
      */
     public function searchTransportConfigs(?array $params = null): mixed
     {
-        return $this->client->get('catalogs/cartaporte/' . "transport-configs");
+        return $this->client->get('catalogs/cartaporte/3.1/transport-configs', $params);
     }
 
     /**
@@ -43,7 +43,7 @@ class CartaPorteCatalogs {
      */
     public function searchRightsOfPassage(?array $params = null): mixed
     {
-        return $this->client->get('catalogs/cartaporte/' . "rights-of-passage");
+        return $this->client->get('catalogs/cartaporte/3.1/rights-of-passage', $params);
     }
 
     /**
@@ -55,7 +55,7 @@ class CartaPorteCatalogs {
      */
     public function searchCustomsDocuments(?array $params = null): mixed
     {
-        return $this->client->get('catalogs/cartaporte/' . "customs-documents");
+        return $this->client->get('catalogs/cartaporte/3.1/customs-documents', $params);
     }
 
     /**
@@ -67,7 +67,7 @@ class CartaPorteCatalogs {
      */
     public function searchPackagingTypes(?array $params = null): mixed
     {
-        return $this->client->get('catalogs/cartaporte/' . "packaging-types");
+        return $this->client->get('catalogs/cartaporte/3.1/packaging-types', $params);
     }
 
     /**
@@ -79,7 +79,7 @@ class CartaPorteCatalogs {
      */
     public function searchTrailerTypes(?array $params = null): mixed
     {
-        return $this->client->get('catalogs/cartaporte/' . "trailer-types");
+        return $this->client->get('catalogs/cartaporte/3.1/trailer-types', $params);
     }
 
     /**
@@ -91,7 +91,7 @@ class CartaPorteCatalogs {
      */
     public function searchHazardousMaterials(?array $params = null): mixed
     {
-        return $this->client->get('catalogs/cartaporte/' . "hazardous-materials");
+        return $this->client->get('catalogs/cartaporte/3.1/hazardous-materials', $params);
     }
 
     /**
@@ -103,7 +103,7 @@ class CartaPorteCatalogs {
      */
     public function searchNavalAuthorizations(?array $params = null): mixed
     {
-        return $this->client->get('catalogs/cartaporte/' . "naval-authorizations");
+        return $this->client->get('catalogs/cartaporte/3.1/naval-authorizations', $params);
     }
 
     /**
@@ -115,7 +115,7 @@ class CartaPorteCatalogs {
      */
     public function searchPortStations(?array $params = null): mixed
     {
-        return $this->client->get('catalogs/cartaporte/' . "port-stations");
+        return $this->client->get('catalogs/cartaporte/3.1/port-stations', $params);
     }
 
     /**
@@ -127,6 +127,6 @@ class CartaPorteCatalogs {
      */
     public function searchMarineContainers(?array $params = null): mixed
     {
-        return $this->client->get('catalogs/cartaporte/' . "marine-containers");
+        return $this->client->get('catalogs/cartaporte/3.1/marine-containers', $params);
     }
 }
