@@ -1,31 +1,24 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class CartaPorteDomicilio
 {
     public function __construct(
-
-    public ?string $Calle = null,
-
-    public ?string $NumeroExterior = null,
-
-    public ?string $NumeroInterior = null,
-
-    public ?string $Colonia = null,
-
-    public ?string $Localidad = null,
-
-    public ?string $Referencia = null,
-
-    public ?string $Municipio = null,
-
-    public string $Estado,
-
-    public string $Pais,
-
-    public string $CodigoPostal,
-    ) {}
+        public ?string $Calle = null,
+        public ?string $NumeroExterior = null,
+        public ?string $NumeroInterior = null,
+        public ?string $Colonia = null,
+        public ?string $Localidad = null,
+        public ?string $Referencia = null,
+        public ?string $Municipio = null,
+        public string $Estado,
+        public string $Pais,
+        public string $CodigoPostal,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -37,9 +30,9 @@ readonly class CartaPorteDomicilio
             $data['Localidad'] ?? null,
             $data['Referencia'] ?? null,
             $data['Municipio'] ?? null,
-            $data['Estado'] ?? "",
-            $data['Pais'] ?? "",
-            $data['CodigoPostal'] ?? ""
+            $data['Estado'] ?? '',
+            $data['Pais'] ?? '',
+            $data['CodigoPostal'] ?? ''
         );
     }
 
@@ -56,6 +49,6 @@ readonly class CartaPorteDomicilio
             'Estado' => $this->Estado,
             'Pais' => $this->Pais,
             'CodigoPostal' => $this->CodigoPostal
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

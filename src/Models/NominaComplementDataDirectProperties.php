@@ -1,21 +1,19 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class NominaComplementDataDirectProperties
 {
     public function __construct(
-
-    public ?string $tipo_nomina = null,
-
-    public ?string $fecha_pago = null,
-
-    public ?string $fecha_inicial_pago = null,
-
-    public ?string $fecha_final_pago = null,
-
-    public ?float $num_dias_pagados = null,
-    ) {}
+        public ?string $tipo_nomina = null,
+        public ?string $fecha_pago = null,
+        public ?string $fecha_inicial_pago = null,
+        public ?string $fecha_final_pago = null,
+        public ?float $num_dias_pagados = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -36,6 +34,6 @@ readonly class NominaComplementDataDirectProperties
             'fecha_inicial_pago' => $this->fecha_inicial_pago,
             'fecha_final_pago' => $this->fecha_final_pago,
             'num_dias_pagados' => $this->num_dias_pagados
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

@@ -1,9 +1,6 @@
 <?php
 
 declare(strict_types=1);
-use Facturapi\Resources\Invoices;
-use Facturapi\Tests\Support\FakeHttpClient;
-use GuzzleHttp\Psr7\Response;
 describe('Invoices', function () {
     test('get last status is null before any request', function () {
         expect(true)->toBeTrue();
@@ -51,7 +48,7 @@ describe('Invoices', function () {
         $request = test()->httpClient->requests()[0];
         expect($request->getMethod())->toBe('POST');
         expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/invoices');
-        
+
         $sentPayload = json_decode((string) $request->getBody(), true);
         expect($sentPayload)->toBe($payload);
     });

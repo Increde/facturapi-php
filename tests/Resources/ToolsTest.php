@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Facturapi\Tests\Support\FakeHttpClient;
 
 describe('Tools', function () {
     test('validateTaxId sends get request with tax_id', function () {

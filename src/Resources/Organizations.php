@@ -7,594 +7,603 @@ namespace Facturapi\Resources;
 use Facturapi\Http\FacturapiHttpClient;
 use Facturapi\Exceptions\FacturapiException;
 
-class Organizations {
-	public function __construct(private readonly FacturapiHttpClient $client) {}
-
-
-  /**
-   * Get all Organizations
-   *
-   * @param array|null $params Search parameters.
-   * @return mixed JSON-decoded response.
-   *
-   * @throws FacturapiException
-   */
-  public function all(?array $params = null): mixed
-  {
-    return $this->client->get('organizations', $params);
-  }
-
-  /**
-   * Get an Organization by ID.
-   *
-   * @param string $id Organization ID.
-   * @return mixed JSON-decoded response.
-   *
-   * @throws FacturapiException
-   */
-  public function retrieve($id): mixed
-  {
-    return $this->client->get('organizations/' . $id);
-  }
-
-  /**
-   * Create an Organization.
-   *
-   * @param array $params Organization payload.
-   * @return mixed JSON-decoded response.
-   *
-   * @throws FacturapiException
-   */
-  public function create($params): mixed
-  {
-    return $this->client->post('organizations', $params);
-  }
-
-  /**
-   * Update an organization's legal information.
-   *
-   * @param string $id Organization ID.
-   * @param array $params Legal information payload.
-   * @return mixed JSON-decoded response.
-   *
-   * @throws FacturapiException
-   */
-  public function updateLegal($id, $params): mixed
-  {
-    return $this->client->put('organizations/' . $id . "/legal", $params);
-  }
-
-  /**
-   * Update an organization's customization information.
-   *
-   * @param string $id Organization ID.
-   * @param array $params Customization payload.
-   * @return mixed JSON-decoded response.
-   *
-   * @throws FacturapiException
-   */
-  public function updateCustomization($id, $params): mixed
-  {
-    return $this->client->put('organizations/' . $id . "/customization", $params);
-  }
-
-  /**
-   * Update an organization's receipt settings.
-   *
-   * @param string $id Organization ID.
-   * @param array $params Receipt settings payload.
-   * @return mixed JSON-decoded response.
-   *
-   * @throws FacturapiException
-   */
-  public function updateReceiptSettings($id, $params): mixed
-  {
-    return $this->client->put('organizations/' . $id . "/receipts", $params);
-  }
-
-  /**
-   * Update an organization's domain.
-   *
-   * @param string $id Organization ID.
-   * @param array $params Domain payload.
-   * @return mixed JSON-decoded response.
-   *
-   * @throws FacturapiException
-   */
-  public function updateDomain($id, $params): mixed
-  {
-    return $this->client->put('organizations/' . $id . "/domain", $params);
-  }
-
-  /**
-   * Check domain availability.
-   *
-   * @param array $query Domain check query parameters.
-   * @return mixed JSON-decoded response.
-   *
-   * @throws FacturapiException
-   */
-  public function checkDomainAvailability($query): mixed
-  {
-    if (!is_array($query)) {
-      throw new FacturapiException('checkDomainAvailability expects $query to be an array.');
+class Organizations
+{
+    public function __construct(private readonly FacturapiHttpClient $client)
+    {
     }
 
-    return $this->client->get('organizations/' . "domain-check", $query);
-  }
 
-  /**
-   * @deprecated Use checkDomainAvailability($query) instead. This alias will be removed in v5.
-   *
-   * @param array|string $idOrQuery Domain check query parameters, or legacy organization ID.
-   * @param array|null $query Legacy query parameters when using historical signature.
-   * @return mixed JSON-decoded response.
-   *
-   * @throws FacturapiException
-   */
-  public function checkDomainIsAvailable($idOrQuery, ?array $query = null): mixed
-  {
-    trigger_error(
-      'Organizations::checkDomainIsAvailable(...) is deprecated and will be removed in v5. Use checkDomainAvailability($query) instead.',
-      E_USER_DEPRECATED
-    );
-
-    $argsCount = func_num_args();
-    if ($argsCount === 1 && is_array($idOrQuery)) {
-      return $this->checkDomainAvailability($idOrQuery);
+    /**
+     * Get all Organizations
+     *
+     * @param array|null $params Search parameters.
+     * @return mixed JSON-decoded response.
+     *
+     * @throws FacturapiException
+     */
+    public function all(?array $params = null): mixed
+    {
+        return $this->client->get('organizations', $params);
     }
 
-    if ($argsCount >= 2 && is_array($query)) {
-      // Backward compatibility with historical signature: ($id, $params).
-      return $this->checkDomainAvailability($query);
+    /**
+     * Get an Organization by ID.
+     *
+     * @param string $id Organization ID.
+     * @return mixed JSON-decoded response.
+     *
+     * @throws FacturapiException
+     */
+    public function retrieve($id): mixed
+    {
+        return $this->client->get('organizations/' . $id);
     }
 
-    throw new FacturapiException('checkDomainIsAvailable expects either ($query) or ($id, $params).');
-  }
-
-  /**
-   * Uploads the organization's logo
-   *
-   * @param string $id Organization ID.
-   * @param string $params Logo file path.
-   * @return mixed JSON-decoded response.
-   *
-   * @throws FacturapiException
-   */
-  public function uploadLogo($id, $file): mixed
-  {
-    return $this->client->multipartRequest('PUT', 'organizations/' . $id . "/logo", ['file' => $file]);
-  }
-
-  /**
-   * Uploads the organization's certificate (CSD)
-   *
-   * @param string $id Organization ID.
-   * @param array $params Certificate payload (`cerFile`, `keyFile`, `password`).
-   * @return mixed JSON-decoded response.
-   *
-   * @throws FacturapiException
-   */
-  public function uploadCertificate($id, array $params): mixed
-  {
-    $files = [];
-    $data = [];
-    if (!isset($params['cerFile']) || !isset($params['keyFile']) || !isset($params['password'])) {
-      throw new \Facturapi\Exceptions\FacturapiException('Invalid certificate payload. Expected cerFile, keyFile and password.');
+    /**
+     * Create an Organization.
+     *
+     * @param array $params Organization payload.
+     * @return mixed JSON-decoded response.
+     *
+     * @throws FacturapiException
+     */
+    public function create($params): mixed
+    {
+        return $this->client->post('organizations', $params);
     }
-    if (isset($params['cerFile'])) $files['cer'] = $params['cerFile'];
-    if (isset($params['keyFile'])) $files['key'] = $params['keyFile'];
-    if (isset($params['password'])) $data['password'] = $params['password'];
 
-    return $this->client->multipartRequest('PUT', 'organizations/' . $id . "/certificate", $files, $data);
-  }
+    /**
+     * Update an organization's legal information.
+     *
+     * @param string $id Organization ID.
+     * @param array $params Legal information payload.
+     * @return mixed JSON-decoded response.
+     *
+     * @throws FacturapiException
+     */
+    public function updateLegal($id, $params): mixed
+    {
+        return $this->client->put('organizations/' . $id . '/legal', $params);
+    }
 
-  /**
-   * Get the test API key for an organization.
-   *
-   * @param string $id Organization ID.
-   * @return mixed JSON-decoded response.
-   *
-   * @throws FacturapiException
-   */
-  public function getTestApiKey($id): mixed
-  {
-    return $this->client->get('organizations/' . $id . "/apikeys/test");
-  }
+    /**
+     * Update an organization's customization information.
+     *
+     * @param string $id Organization ID.
+     * @param array $params Customization payload.
+     * @return mixed JSON-decoded response.
+     *
+     * @throws FacturapiException
+     */
+    public function updateCustomization($id, $params): mixed
+    {
+        return $this->client->put('organizations/' . $id . '/customization', $params);
+    }
 
-  /**
-   * Renew the test API key for an organization.
-   *
-   * @param string $id Organization ID.
-   * @return mixed JSON-decoded response.
-   *
-   * @throws FacturapiException
-   */
-  public function renewTestApiKey($id): mixed
-  {
-    return $this->client->put('organizations/' . $id . '/apikeys/test',  []);
-  }
+    /**
+     * Update an organization's receipt settings.
+     *
+     * @param string $id Organization ID.
+     * @param array $params Receipt settings payload.
+     * @return mixed JSON-decoded response.
+     *
+     * @throws FacturapiException
+     */
+    public function updateReceiptSettings($id, $params): mixed
+    {
+        return $this->client->put('organizations/' . $id . '/receipts', $params);
+    }
 
-  /**
-   * @deprecated Use listLiveApiKeys() instead. Will be removed in v5.
-   *
-   * @param string $id Organization ID.
-   * @return mixed JSON-decoded response.
-   *
-   * @throws FacturapiException
-   */
-  public function lisLiveApiKeys($id): mixed
-  {
-    trigger_error('Organizations::lisLiveApiKeys() is deprecated and will be removed in v5. Use listLiveApiKeys() instead.', E_USER_DEPRECATED);
-    return $this->listLiveApiKeys($id);
-  }
+    /**
+     * Update an organization's domain.
+     *
+     * @param string $id Organization ID.
+     * @param array $params Domain payload.
+     * @return mixed JSON-decoded response.
+     *
+     * @throws FacturapiException
+     */
+    public function updateDomain($id, $params): mixed
+    {
+        return $this->client->put('organizations/' . $id . '/domain', $params);
+    }
 
-  /**
-   * List live API keys for an organization.
-   *
-   * @param string $id Organization ID.
-   * @return mixed JSON-decoded response.
-   *
-   * @throws FacturapiException
-   */
-  public function listLiveApiKeys($id): mixed
-  {
-    return $this->client->get('organizations/' . $id . '/apikeys/live');
-  }
+    /**
+     * Check domain availability.
+     *
+     * @param array $query Domain check query parameters.
+     * @return mixed JSON-decoded response.
+     *
+     * @throws FacturapiException
+     */
+    public function checkDomainAvailability($query): mixed
+    {
+        if (!is_array($query)) {
+            throw new FacturapiException('checkDomainAvailability expects $query to be an array.');
+        }
 
-  /**
-   * Renew the live API key for an organization.
-   *
-   * @param string $id Organization ID.
-   * @return mixed JSON-decoded response.
-   *
-   * @throws FacturapiException
-   */
-  public function renewLiveApiKey($id): mixed
-  {
-    return $this->client->put('organizations/' . $id . '/apikeys/live',  []);
-  }
+        return $this->client->get('organizations/' . 'domain-check', $query);
+    }
 
-  /**
-   * Delete one live API key for an organization.
-   *
-   * @param string $organizationId Organization ID.
-   * @param string $apiKeyId API key ID.
-   * @return mixed JSON-decoded response.
-   *
-   * @throws FacturapiException
-   */
-  public function deleteLiveApiKey($organizationId, $apiKeyId): mixed
-  {
-    return $this->client->delete('organizations/' . $organizationId . '/apikeys/live/' . $apiKeyId);
-  }
+    /**
+     * @deprecated Use checkDomainAvailability($query) instead. This alias will be removed in v5.
+     *
+     * @param array|string $idOrQuery Domain check query parameters, or legacy organization ID.
+     * @param array|null $query Legacy query parameters when using historical signature.
+     * @return mixed JSON-decoded response.
+     *
+     * @throws FacturapiException
+     */
+    public function checkDomainIsAvailable($idOrQuery, ?array $query = null): mixed
+    {
+        trigger_error(
+            'Organizations::checkDomainIsAvailable(...) is deprecated and will be removed in v5. Use checkDomainAvailability($query) instead.',
+            E_USER_DEPRECATED
+        );
 
-  /**
-   * Delete an organization.
-   *
-   * @param string $id Organization ID.
-   * @return mixed JSON-decoded response.
-   *
-   * @throws FacturapiException
-   */
-  public function delete($id): mixed
-  {
-    return $this->client->delete('organizations/' . $id);
-  }
+        $argsCount = func_num_args();
+        if ($argsCount === 1 && is_array($idOrQuery)) {
+            return $this->checkDomainAvailability($idOrQuery);
+        }
 
-  /**
-   * Delete an organization's certificate.
-   *
-   * @param string $id Organization ID.
-   * @return mixed JSON-decoded response.
-   *
-   * @throws FacturapiException
-   */
-  public function deleteCertificate($id): mixed
-  {
-    return $this->client->delete('organizations/' . $id . "/certificate");
-  }
+        if ($argsCount >= 2 && is_array($query)) {
+            // Backward compatibility with historical signature: ($id, $params).
+            return $this->checkDomainAvailability($query);
+        }
 
-  /**
-   * Get series groups for an organization.
-   *
-   * @param string $id Organization ID.
-   * @return mixed JSON-decoded response.
-   *
-   * @throws FacturapiException
-   */
-  public function getSeriesGroup($id): mixed
-  {
-    return $this->client->get('organizations/' . $id . "/series-group");
-  }
+        throw new FacturapiException('checkDomainIsAvailable expects either ($query) or ($id, $params).');
+    }
 
-  /**
-   * Create a series group for an organization.
-   *
-   * @param string $id Organization ID.
-   * @param array $params Series group payload.
-   * @return mixed JSON-decoded response.
-   *
-   * @throws FacturapiException
-   */
-  public function createSeriesGroup($id, $params): mixed
-  {
-    return $this->client->post('organizations/' . $id . "/series-group", $params);
-  }
+    /**
+     * Uploads the organization's logo
+     *
+     * @param string $id Organization ID.
+     * @param string $params Logo file path.
+     * @return mixed JSON-decoded response.
+     *
+     * @throws FacturapiException
+     */
+    public function uploadLogo($id, $file): mixed
+    {
+        return $this->client->multipartRequest('PUT', 'organizations/' . $id . '/logo', ['file' => $file]);
+    }
 
-  /**
-   * Update a series group for an organization.
-   *
-   * @param string $id Organization ID.
-   * @param string $series_name Series name.
-   * @param array $params Series group payload.
-   * @return mixed JSON-decoded response.
-   *
-   * @throws FacturapiException
-   */
-  public function updateSeriesGroup($id, $series_name, $params): mixed
-  {
-    return $this->client->put('organizations/' . $id . "/series-group" . "/", []);
-  }
+    /**
+     * Uploads the organization's certificate (CSD)
+     *
+     * @param string $id Organization ID.
+     * @param array $params Certificate payload (`cerFile`, `keyFile`, `password`).
+     * @return mixed JSON-decoded response.
+     *
+     * @throws FacturapiException
+     */
+    public function uploadCertificate($id, array $params): mixed
+    {
+        $files = [];
+        $data = [];
+        if (!isset($params['cerFile']) || !isset($params['keyFile']) || !isset($params['password'])) {
+            throw new \Facturapi\Exceptions\FacturapiException('Invalid certificate payload. Expected cerFile, keyFile and password.');
+        }
+        if (isset($params['cerFile'])) {
+            $files['cer'] = $params['cerFile'];
+        }
+        if (isset($params['keyFile'])) {
+            $files['key'] = $params['keyFile'];
+        }
+        if (isset($params['password'])) {
+            $data['password'] = $params['password'];
+        }
 
-  /**
-   * Update default series for an organization.
-   *
-   * @param string $id Organization ID.
-   * @param array $params Default series payload.
-   * @return mixed JSON-decoded response.
-   *
-   * @throws FacturapiException
-   */
-  public function updateDefaultSeries($id, $params): mixed
-  {
-    return $this->client->put('organizations/' . $id . '/series-group/default-series',  $params);
-  }
+        return $this->client->multipartRequest('PUT', 'organizations/' . $id . '/certificate', $files, $data);
+    }
 
-  /**
-   * Delete a series group for an organization.
-   *
-   * @param string $id Organization ID.
-   * @param string $series_name Series name.
-   * @return mixed JSON-decoded response.
-   *
-   * @throws FacturapiException
-   */
-  public function deleteSeriesGroup($id, $series_name): mixed
-  {
-    return $this->client->delete('organizations/' . $id . "/series-group" . "/");
-  }
+    /**
+     * Get the test API key for an organization.
+     *
+     * @param string $id Organization ID.
+     * @return mixed JSON-decoded response.
+     *
+     * @throws FacturapiException
+     */
+    public function getTestApiKey($id): mixed
+    {
+        return $this->client->get('organizations/' . $id . '/apikeys/test');
+    }
 
-  /**
-   * Update self-invoice settings for an Organization
-   *
-   * @param string $id Organization ID.
-   * @param array $params Self-invoice settings payload.
-   * @return mixed JSON-decoded response.
-   *
-   * @throws FacturapiException
-   */
-  public function updateSelfInvoiceSettings($id, $params): mixed
-  {
-    return $this->client->put('organizations/' . $id . "/self-invoice", $params);
-  }
+    /**
+     * Renew the test API key for an organization.
+     *
+     * @param string $id Organization ID.
+     * @return mixed JSON-decoded response.
+     *
+     * @throws FacturapiException
+     */
+    public function renewTestApiKey($id): mixed
+    {
+        return $this->client->put('organizations/' . $id . '/apikeys/test', []);
+    }
 
-  /**
-   * List users with access to an organization.
-   *
-   * @param string $organizationId Organization ID.
-   * @return mixed JSON-decoded response.
-   *
-   * @throws FacturapiException
-   */
-  public function listTeamAccess($organizationId): mixed
-  {
-    return $this->client->get('organizations/' . $organizationId . "/team");
-  }
+    /**
+     * @deprecated Use listLiveApiKeys() instead. Will be removed in v5.
+     *
+     * @param string $id Organization ID.
+     * @return mixed JSON-decoded response.
+     *
+     * @throws FacturapiException
+     */
+    public function lisLiveApiKeys($id): mixed
+    {
+        trigger_error('Organizations::lisLiveApiKeys() is deprecated and will be removed in v5. Use listLiveApiKeys() instead.', E_USER_DEPRECATED);
+        return $this->listLiveApiKeys($id);
+    }
 
-  /**
-   * Retrieve one user access entry within an organization.
-   *
-   * @param string $organizationId Organization ID.
-   * @param string $accessId Access ID.
-   * @return mixed JSON-decoded response.
-   *
-   * @throws FacturapiException
-   */
-  public function retrieveTeamAccess($organizationId, $accessId): mixed
-  {
-    return $this->client->get('organizations/' . $organizationId . '/team/' . $accessId);
-  }
+    /**
+     * List live API keys for an organization.
+     *
+     * @param string $id Organization ID.
+     * @return mixed JSON-decoded response.
+     *
+     * @throws FacturapiException
+     */
+    public function listLiveApiKeys($id): mixed
+    {
+        return $this->client->get('organizations/' . $id . '/apikeys/live');
+    }
 
-  /**
-   * Reassign a role to a user access entry.
-   *
-   * @param string $organizationId Organization ID.
-   * @param string $accessId Access ID.
-   * @param string $role Role ID.
-   * @return mixed JSON-decoded response.
-   *
-   * @throws FacturapiException
-   */
-  public function updateTeamAccessRole($organizationId, $accessId, $role): mixed
-  {
-    return $this->client->put('organizations/' . $organizationId . '/team/' . $accessId . '/role', ['role' => $role]);
-  }
+    /**
+     * Renew the live API key for an organization.
+     *
+     * @param string $id Organization ID.
+     * @return mixed JSON-decoded response.
+     *
+     * @throws FacturapiException
+     */
+    public function renewLiveApiKey($id): mixed
+    {
+        return $this->client->put('organizations/' . $id . '/apikeys/live', []);
+    }
 
-  /**
-   * Remove a user access entry from an organization.
-   *
-   * @param string $organizationId Organization ID.
-   * @param string $accessId Access ID.
-   * @return mixed JSON-decoded response.
-   *
-   * @throws FacturapiException
-   */
-  public function removeTeamAccess($organizationId, $accessId): mixed
-  {
-    return $this->client->delete('organizations/' . $organizationId . '/team/' . $accessId);
-  }
+    /**
+     * Delete one live API key for an organization.
+     *
+     * @param string $organizationId Organization ID.
+     * @param string $apiKeyId API key ID.
+     * @return mixed JSON-decoded response.
+     *
+     * @throws FacturapiException
+     */
+    public function deleteLiveApiKey($organizationId, $apiKeyId): mixed
+    {
+        return $this->client->delete('organizations/' . $organizationId . '/apikeys/live/' . $apiKeyId);
+    }
 
-  /**
-   * List sent team invites for an organization.
-   *
-   * @param string $organizationId Organization ID.
-   * @return mixed JSON-decoded response.
-   *
-   * @throws FacturapiException
-   */
-  public function listSentTeamInvites($organizationId): mixed
-  {
-    return $this->client->get('organizations/' . $organizationId . '/team/invites');
-  }
+    /**
+     * Delete an organization.
+     *
+     * @param string $id Organization ID.
+     * @return mixed JSON-decoded response.
+     *
+     * @throws FacturapiException
+     */
+    public function delete($id): mixed
+    {
+        return $this->client->delete('organizations/' . $id);
+    }
 
-  /**
-   * Create or update a team invite for an organization.
-   *
-   * @param string $organizationId Organization ID.
-   * @param array $params Invite payload.
-   * @return mixed JSON-decoded response.
-   *
-   * @throws FacturapiException
-   */
-  public function inviteUserToTeam($organizationId, $params): mixed
-  {
-    return $this->client->post('organizations/' . $organizationId . '/team/invites',  $params);
-  }
+    /**
+     * Delete an organization's certificate.
+     *
+     * @param string $id Organization ID.
+     * @return mixed JSON-decoded response.
+     *
+     * @throws FacturapiException
+     */
+    public function deleteCertificate($id): mixed
+    {
+        return $this->client->delete('organizations/' . $id . '/certificate');
+    }
 
-  /**
-   * Cancel a pending team invite.
-   *
-   * @param string $organizationId Organization ID.
-   * @param string $inviteKey Invite key.
-   * @return mixed JSON-decoded response.
-   *
-   * @throws FacturapiException
-   */
-  public function cancelTeamInvite($organizationId, $inviteKey): mixed
-  {
-    return $this->client->delete('organizations/' . $organizationId . '/team/invites/' . $inviteKey);
-  }
+    /**
+     * Get series groups for an organization.
+     *
+     * @param string $id Organization ID.
+     * @return mixed JSON-decoded response.
+     *
+     * @throws FacturapiException
+     */
+    public function getSeriesGroup($id): mixed
+    {
+        return $this->client->get('organizations/' . $id . '/series-group');
+    }
 
-  /**
-   * List pending invites received by the authenticated user.
-   *
-   * @return mixed JSON-decoded response.
-   *
-   * @throws FacturapiException
-   */
-  public function listReceivedTeamInvites(): mixed
-  {
-    return $this->client->get('organizations/' . "invites/pending");
-  }
+    /**
+     * Create a series group for an organization.
+     *
+     * @param string $id Organization ID.
+     * @param array $params Series group payload.
+     * @return mixed JSON-decoded response.
+     *
+     * @throws FacturapiException
+     */
+    public function createSeriesGroup($id, $params): mixed
+    {
+        return $this->client->post('organizations/' . $id . '/series-group', $params);
+    }
 
-  /**
-   * Respond to a team invite.
-   *
-   * @param string $inviteKey Invite key.
-   * @param array $params Response payload.
-   * @return mixed JSON-decoded response.
-   *
-   * @throws FacturapiException
-   */
-  public function respondTeamInvite($inviteKey, $params): mixed
-  {
-    return $this->client->post('organizations/' . "invites/" . $inviteKey . "/response",  $params);
-  }
+    /**
+     * Update a series group for an organization.
+     *
+     * @param string $id Organization ID.
+     * @param string $series_name Series name.
+     * @param array $params Series group payload.
+     * @return mixed JSON-decoded response.
+     *
+     * @throws FacturapiException
+     */
+    public function updateSeriesGroup($id, $series_name, $params): mixed
+    {
+        return $this->client->put('organizations/' . $id . '/series-group' . '/', []);
+    }
 
-  /**
-   * List organization team roles.
-   *
-   * @param string $organizationId Organization ID.
-   * @return mixed JSON-decoded response.
-   *
-   * @throws FacturapiException
-   */
-  public function listTeamRoles($organizationId): mixed
-  {
-    return $this->client->get('organizations/' . $organizationId . '/team/roles');
-  }
+    /**
+     * Update default series for an organization.
+     *
+     * @param string $id Organization ID.
+     * @param array $params Default series payload.
+     * @return mixed JSON-decoded response.
+     *
+     * @throws FacturapiException
+     */
+    public function updateDefaultSeries($id, $params): mixed
+    {
+        return $this->client->put('organizations/' . $id . '/series-group/default-series', $params);
+    }
 
-  /**
-   * List team role templates.
-   *
-   * @param string $organizationId Organization ID.
-   * @return mixed JSON-decoded response.
-   *
-   * @throws FacturapiException
-   */
-  public function listTeamRoleTemplates($organizationId): mixed
-  {
-    return $this->client->get('organizations/' . $organizationId . '/team/roles/templates');
-  }
+    /**
+     * Delete a series group for an organization.
+     *
+     * @param string $id Organization ID.
+     * @param string $series_name Series name.
+     * @return mixed JSON-decoded response.
+     *
+     * @throws FacturapiException
+     */
+    public function deleteSeriesGroup($id, $series_name): mixed
+    {
+        return $this->client->delete('organizations/' . $id . '/series-group' . '/');
+    }
 
-  /**
-   * List team role operations.
-   *
-   * @param string $organizationId Organization ID.
-   * @return mixed JSON-decoded response.
-   *
-   * @throws FacturapiException
-   */
-  public function listTeamRoleOperations($organizationId): mixed
-  {
-    return $this->client->get('organizations/' . $organizationId . '/team/roles/operations');
-  }
+    /**
+     * Update self-invoice settings for an Organization
+     *
+     * @param string $id Organization ID.
+     * @param array $params Self-invoice settings payload.
+     * @return mixed JSON-decoded response.
+     *
+     * @throws FacturapiException
+     */
+    public function updateSelfInvoiceSettings($id, $params): mixed
+    {
+        return $this->client->put('organizations/' . $id . '/self-invoice', $params);
+    }
 
-  /**
-   * Retrieve a team role by ID.
-   *
-   * @param string $organizationId Organization ID.
-   * @param string $roleId Role ID.
-   * @return mixed JSON-decoded response.
-   *
-   * @throws FacturapiException
-   */
-  public function retrieveTeamRole($organizationId, $roleId): mixed
-  {
-    return $this->client->get('organizations/' . $organizationId . '/team/roles/' . $roleId);
-  }
+    /**
+     * List users with access to an organization.
+     *
+     * @param string $organizationId Organization ID.
+     * @return mixed JSON-decoded response.
+     *
+     * @throws FacturapiException
+     */
+    public function listTeamAccess($organizationId): mixed
+    {
+        return $this->client->get('organizations/' . $organizationId . '/team');
+    }
 
-  /**
-   * Create a team role.
-   *
-   * @param string $organizationId Organization ID.
-   * @param array $params Role payload.
-   * @return mixed JSON-decoded response.
-   *
-   * @throws FacturapiException
-   */
-  public function createTeamRole($organizationId, $params): mixed
-  {
-    return $this->client->post('organizations/' . $organizationId . '/team/roles',  $params);
-  }
+    /**
+     * Retrieve one user access entry within an organization.
+     *
+     * @param string $organizationId Organization ID.
+     * @param string $accessId Access ID.
+     * @return mixed JSON-decoded response.
+     *
+     * @throws FacturapiException
+     */
+    public function retrieveTeamAccess($organizationId, $accessId): mixed
+    {
+        return $this->client->get('organizations/' . $organizationId . '/team/' . $accessId);
+    }
 
-  /**
-   * Update a team role.
-   *
-   * @param string $organizationId Organization ID.
-   * @param string $roleId Role ID.
-   * @param array $params Role payload.
-   * @return mixed JSON-decoded response.
-   *
-   * @throws FacturapiException
-   */
-  public function updateTeamRole($organizationId, $roleId, $params): mixed
-  {
-    return $this->client->put('organizations/' . $organizationId . '/team/roles/' . $roleId, $params);
-  }
+    /**
+     * Reassign a role to a user access entry.
+     *
+     * @param string $organizationId Organization ID.
+     * @param string $accessId Access ID.
+     * @param string $role Role ID.
+     * @return mixed JSON-decoded response.
+     *
+     * @throws FacturapiException
+     */
+    public function updateTeamAccessRole($organizationId, $accessId, $role): mixed
+    {
+        return $this->client->put('organizations/' . $organizationId . '/team/' . $accessId . '/role', ['role' => $role]);
+    }
 
-  /**
-   * Delete a team role.
-   *
-   * @param string $organizationId Organization ID.
-   * @param string $roleId Role ID.
-   * @return mixed JSON-decoded response.
-   *
-   * @throws FacturapiException
-   */
-  public function deleteTeamRole($organizationId, $roleId): mixed
-  {
-    return $this->client->delete('organizations/' . $organizationId . '/team/roles/' . $roleId);
-  }
+    /**
+     * Remove a user access entry from an organization.
+     *
+     * @param string $organizationId Organization ID.
+     * @param string $accessId Access ID.
+     * @return mixed JSON-decoded response.
+     *
+     * @throws FacturapiException
+     */
+    public function removeTeamAccess($organizationId, $accessId): mixed
+    {
+        return $this->client->delete('organizations/' . $organizationId . '/team/' . $accessId);
+    }
+
+    /**
+     * List sent team invites for an organization.
+     *
+     * @param string $organizationId Organization ID.
+     * @return mixed JSON-decoded response.
+     *
+     * @throws FacturapiException
+     */
+    public function listSentTeamInvites($organizationId): mixed
+    {
+        return $this->client->get('organizations/' . $organizationId . '/team/invites');
+    }
+
+    /**
+     * Create or update a team invite for an organization.
+     *
+     * @param string $organizationId Organization ID.
+     * @param array $params Invite payload.
+     * @return mixed JSON-decoded response.
+     *
+     * @throws FacturapiException
+     */
+    public function inviteUserToTeam($organizationId, $params): mixed
+    {
+        return $this->client->post('organizations/' . $organizationId . '/team/invites', $params);
+    }
+
+    /**
+     * Cancel a pending team invite.
+     *
+     * @param string $organizationId Organization ID.
+     * @param string $inviteKey Invite key.
+     * @return mixed JSON-decoded response.
+     *
+     * @throws FacturapiException
+     */
+    public function cancelTeamInvite($organizationId, $inviteKey): mixed
+    {
+        return $this->client->delete('organizations/' . $organizationId . '/team/invites/' . $inviteKey);
+    }
+
+    /**
+     * List pending invites received by the authenticated user.
+     *
+     * @return mixed JSON-decoded response.
+     *
+     * @throws FacturapiException
+     */
+    public function listReceivedTeamInvites(): mixed
+    {
+        return $this->client->get('organizations/' . 'invites/pending');
+    }
+
+    /**
+     * Respond to a team invite.
+     *
+     * @param string $inviteKey Invite key.
+     * @param array $params Response payload.
+     * @return mixed JSON-decoded response.
+     *
+     * @throws FacturapiException
+     */
+    public function respondTeamInvite($inviteKey, $params): mixed
+    {
+        return $this->client->post('organizations/' . 'invites/' . $inviteKey . '/response', $params);
+    }
+
+    /**
+     * List organization team roles.
+     *
+     * @param string $organizationId Organization ID.
+     * @return mixed JSON-decoded response.
+     *
+     * @throws FacturapiException
+     */
+    public function listTeamRoles($organizationId): mixed
+    {
+        return $this->client->get('organizations/' . $organizationId . '/team/roles');
+    }
+
+    /**
+     * List team role templates.
+     *
+     * @param string $organizationId Organization ID.
+     * @return mixed JSON-decoded response.
+     *
+     * @throws FacturapiException
+     */
+    public function listTeamRoleTemplates($organizationId): mixed
+    {
+        return $this->client->get('organizations/' . $organizationId . '/team/roles/templates');
+    }
+
+    /**
+     * List team role operations.
+     *
+     * @param string $organizationId Organization ID.
+     * @return mixed JSON-decoded response.
+     *
+     * @throws FacturapiException
+     */
+    public function listTeamRoleOperations($organizationId): mixed
+    {
+        return $this->client->get('organizations/' . $organizationId . '/team/roles/operations');
+    }
+
+    /**
+     * Retrieve a team role by ID.
+     *
+     * @param string $organizationId Organization ID.
+     * @param string $roleId Role ID.
+     * @return mixed JSON-decoded response.
+     *
+     * @throws FacturapiException
+     */
+    public function retrieveTeamRole($organizationId, $roleId): mixed
+    {
+        return $this->client->get('organizations/' . $organizationId . '/team/roles/' . $roleId);
+    }
+
+    /**
+     * Create a team role.
+     *
+     * @param string $organizationId Organization ID.
+     * @param array $params Role payload.
+     * @return mixed JSON-decoded response.
+     *
+     * @throws FacturapiException
+     */
+    public function createTeamRole($organizationId, $params): mixed
+    {
+        return $this->client->post('organizations/' . $organizationId . '/team/roles', $params);
+    }
+
+    /**
+     * Update a team role.
+     *
+     * @param string $organizationId Organization ID.
+     * @param string $roleId Role ID.
+     * @param array $params Role payload.
+     * @return mixed JSON-decoded response.
+     *
+     * @throws FacturapiException
+     */
+    public function updateTeamRole($organizationId, $roleId, $params): mixed
+    {
+        return $this->client->put('organizations/' . $organizationId . '/team/roles/' . $roleId, $params);
+    }
+
+    /**
+     * Delete a team role.
+     *
+     * @param string $organizationId Organization ID.
+     * @param string $roleId Role ID.
+     * @return mixed JSON-decoded response.
+     *
+     * @throws FacturapiException
+     */
+    public function deleteTeamRole($organizationId, $roleId): mixed
+    {
+        return $this->client->delete('organizations/' . $organizationId . '/team/roles/' . $roleId);
+    }
 }

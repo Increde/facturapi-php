@@ -1,47 +1,32 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class NominaReceptorDirectProperties
 {
     public function __construct(
-
-    public ?string $curp = null,
-
-    public ?string $num_seguridad_social = null,
-
-    public ?string $fecha_inicio_rel_laboral = null,
-
-    public mixed $antiguedad = null,
-
-    public ?string $tipo_contrato = null,
-
-    public ?bool $sindicalizado = null,
-
-    public ?string $tipo_jornada = null,
-
-    public ?string $tipo_regimen = null,
-
-    public ?string $num_empleado = null,
-
-    public ?string $departamento = null,
-
-    public ?string $puesto = null,
-
-    public ?string $riesgo_puesto = null,
-
-    public ?string $periodicidad_pago = null,
-
-    public ?string $banco = null,
-
-    public ?string $cuenta_bancaria = null,
-
-    public ?float $salario_base_cot_apor = null,
-
-    public ?float $salario_diario_integrado = null,
-
-    public ?string $clave_ent_fed = null,
-    ) {}
+        public ?string $curp = null,
+        public ?string $num_seguridad_social = null,
+        public ?string $fecha_inicio_rel_laboral = null,
+        public mixed $antiguedad = null,
+        public ?string $tipo_contrato = null,
+        public ?bool $sindicalizado = null,
+        public ?string $tipo_jornada = null,
+        public ?string $tipo_regimen = null,
+        public ?string $num_empleado = null,
+        public ?string $departamento = null,
+        public ?string $puesto = null,
+        public ?string $riesgo_puesto = null,
+        public ?string $periodicidad_pago = null,
+        public ?string $banco = null,
+        public ?string $cuenta_bancaria = null,
+        public ?float $salario_base_cot_apor = null,
+        public ?float $salario_diario_integrado = null,
+        public ?string $clave_ent_fed = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -88,6 +73,6 @@ readonly class NominaReceptorDirectProperties
             'salario_base_cot_apor' => $this->salario_base_cot_apor,
             'salario_diario_integrado' => $this->salario_diario_integrado,
             'clave_ent_fed' => $this->clave_ent_fed
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

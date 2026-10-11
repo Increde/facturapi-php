@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Facturapi\Tests\Support\FakeHttpClient;
 
 describe('Organizations', function () {
     test('all retrieves list of organizations', function () {

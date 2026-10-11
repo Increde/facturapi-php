@@ -1,15 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class WebhookCreateEdit
 {
     public function __construct(
-
-    public ?string $status = null,
-
-    public array $enabled_events,
-    ) {}
+        public ?string $status = null,
+        public array $enabled_events,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -24,6 +25,6 @@ readonly class WebhookCreateEdit
         return array_filter([
             'status' => $this->status,
             'enabled_events' => $this->enabled_events
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

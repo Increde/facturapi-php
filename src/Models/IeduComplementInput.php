@@ -1,29 +1,27 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class IeduComplementInput
 {
     public function __construct(
-
-    public string $nombreAlumno,
-
-    public string $CURP,
-
-    public string $nivelEducativo,
-
-    public string $autRVOE,
-
-    public ?string $rfcPago = null,
-    ) {}
+        public string $nombreAlumno,
+        public string $CURP,
+        public string $nivelEducativo,
+        public string $autRVOE,
+        public ?string $rfcPago = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
         return new self(
-            $data['nombreAlumno'] ?? "",
-            $data['CURP'] ?? "",
-            $data['nivelEducativo'] ?? "",
-            $data['autRVOE'] ?? "",
+            $data['nombreAlumno'] ?? '',
+            $data['CURP'] ?? '',
+            $data['nivelEducativo'] ?? '',
+            $data['autRVOE'] ?? '',
             $data['rfcPago'] ?? null
         );
     }
@@ -36,6 +34,6 @@ readonly class IeduComplementInput
             'nivelEducativo' => $this->nivelEducativo,
             'autRVOE' => $this->autRVOE,
             'rfcPago' => $this->rfcPago
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

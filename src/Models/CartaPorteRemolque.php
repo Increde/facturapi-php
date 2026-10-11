@@ -1,15 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class CartaPorteRemolque
 {
     public function __construct(
-
-    public ?string $SubTipoRem = null,
-
-    public ?string $Placa = null,
-    ) {}
+        public ?string $SubTipoRem = null,
+        public ?string $Placa = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -24,6 +25,6 @@ readonly class CartaPorteRemolque
         return array_filter([
             'SubTipoRem' => $this->SubTipoRem,
             'Placa' => $this->Placa
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

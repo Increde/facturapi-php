@@ -1,20 +1,21 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class ComercioExteriorInput
 {
     public function __construct(
-
-    public string $type,
-
-    public \Facturapi\Models\ComercioExteriorDataInput $data,
-    ) {}
+        public string $type,
+        public \Facturapi\Models\ComercioExteriorDataInput $data,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
         return new self(
-            $data['type'] ?? "",
+            $data['type'] ?? '',
             isset($data['data']) && is_array($data['data']) ? \Facturapi\Models\ComercioExteriorDataInput::fromArray($data['data']) : null
         );
     }
@@ -24,6 +25,6 @@ readonly class ComercioExteriorInput
         return array_filter([
             'type' => $this->type,
             'data' => $this->data !== null ? $this->data->toArray() : null
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

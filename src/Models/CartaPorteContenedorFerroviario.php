@@ -1,17 +1,17 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class CartaPorteContenedorFerroviario
 {
     public function __construct(
-
-    public ?string $TipoContenedor = null,
-
-    public ?float $PesoContenedorVacio = null,
-
-    public ?float $PesoNetoMercancia = null,
-    ) {}
+        public ?string $TipoContenedor = null,
+        public ?float $PesoContenedorVacio = null,
+        public ?float $PesoNetoMercancia = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -28,6 +28,6 @@ readonly class CartaPorteContenedorFerroviario
             'TipoContenedor' => $this->TipoContenedor,
             'PesoContenedorVacio' => $this->PesoContenedorVacio,
             'PesoNetoMercancia' => $this->PesoNetoMercancia
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

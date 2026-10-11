@@ -1,25 +1,21 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class CartaPorteContenedorMaritimo
 {
     public function __construct(
-
-    public ?string $TipoContenedor = null,
-
-    public ?string $MatriculaContenedor = null,
-
-    public ?string $NumPrecinto = null,
-
-    public ?string $IdCCPRelacionado = null,
-
-    public ?string $PlacaVMCCP = null,
-
-    public ?string $FechaCertificacionCCP = null,
-
-    public ?array $RemolquesCCP = null,
-    ) {}
+        public ?string $TipoContenedor = null,
+        public ?string $MatriculaContenedor = null,
+        public ?string $NumPrecinto = null,
+        public ?string $IdCCPRelacionado = null,
+        public ?string $PlacaVMCCP = null,
+        public ?string $FechaCertificacionCCP = null,
+        public ?array $RemolquesCCP = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -44,6 +40,6 @@ readonly class CartaPorteContenedorMaritimo
             'PlacaVMCCP' => $this->PlacaVMCCP,
             'FechaCertificacionCCP' => $this->FechaCertificacionCCP,
             'RemolquesCCP' => $this->RemolquesCCP
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

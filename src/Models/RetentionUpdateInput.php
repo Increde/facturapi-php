@@ -1,40 +1,30 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class RetentionUpdateInput
 {
     public function __construct(
+        public ?string $status = null,
+        public mixed $customer = null,
+        public ?string $cve_retenc = null,
+        public ?string $fecha_exp = null,
+        public ?string $desc_retenc = null,
+        public ?string $folio_int = null,
+        public ?array $periodo = null,
+        public ?array $totales = null,
+        public ?string $external_id = null,
+        public ?string $idempotency_key = null,
 
-    public ?string $status = null,
-
-    public mixed $customer = null,
-
-    public ?string $cve_retenc = null,
-
-    public ?string $fecha_exp = null,
-
-    public ?string $desc_retenc = null,
-
-    public ?string $folio_int = null,
-
-    public ?array $periodo = null,
-
-    public ?array $totales = null,
-
-    public ?string $external_id = null,
-
-    public ?string $idempotency_key = null,
-
-    /** @var \Facturapi\Models\CustomComplementData[]|null */
-    public ?array $complements = null,
-
-    public ?string $pdf_custom_section = null,
-
-    public ?string $addenda = null,
-
-    public ?array $namespaces = null,
-    ) {}
+        /** @var \Facturapi\Models\CustomComplementData[]|null */
+        public ?array $complements = null,
+        public ?string $pdf_custom_section = null,
+        public ?string $addenda = null,
+        public ?array $namespaces = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -49,7 +39,7 @@ readonly class RetentionUpdateInput
             $data['totales'] ?? [],
             $data['external_id'] ?? null,
             $data['idempotency_key'] ?? null,
-            isset($data['complements']) && is_array($data['complements']) ? array_map(fn($i) => is_array($i) ? \Facturapi\Models\CustomComplementData::fromArray($i) : $i, $data['complements']) : [],
+            isset($data['complements']) && is_array($data['complements']) ? array_map(fn ($i) => is_array($i) ? \Facturapi\Models\CustomComplementData::fromArray($i) : $i, $data['complements']) : [],
             $data['pdf_custom_section'] ?? null,
             $data['addenda'] ?? null,
             $data['namespaces'] ?? []
@@ -69,10 +59,10 @@ readonly class RetentionUpdateInput
             'totales' => $this->totales,
             'external_id' => $this->external_id,
             'idempotency_key' => $this->idempotency_key,
-            'complements' => $this->complements !== null ? array_map(fn($i) => $i->toArray(), $this->complements) : null,
+            'complements' => $this->complements !== null ? array_map(fn ($i) => $i->toArray(), $this->complements) : null,
             'pdf_custom_section' => $this->pdf_custom_section,
             'addenda' => $this->addenda,
             'namespaces' => $this->namespaces
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

@@ -1,26 +1,25 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class CartaPorteCantidadTransporta
 {
     public function __construct(
-
-    public float $Cantidad,
-
-    public string $IDOrigen,
-
-    public string $IDDestino,
-
-    public ?string $CvesTransporte = null,
-    ) {}
+        public float $Cantidad,
+        public string $IDOrigen,
+        public string $IDDestino,
+        public ?string $CvesTransporte = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
         return new self(
             $data['Cantidad'] ?? 0,
-            $data['IDOrigen'] ?? "",
-            $data['IDDestino'] ?? "",
+            $data['IDOrigen'] ?? '',
+            $data['IDDestino'] ?? '',
             $data['CvesTransporte'] ?? null
         );
     }
@@ -32,6 +31,6 @@ readonly class CartaPorteCantidadTransporta
             'IDOrigen' => $this->IDOrigen,
             'IDDestino' => $this->IDDestino,
             'CvesTransporte' => $this->CvesTransporte
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

@@ -1,13 +1,15 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class LeyendasFiscalesData
 {
     public function __construct(
-
-    public array $leyendas,
-    ) {}
+        public array $leyendas,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -20,6 +22,6 @@ readonly class LeyendasFiscalesData
     {
         return array_filter([
             'leyendas' => $this->leyendas
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

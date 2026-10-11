@@ -1,31 +1,27 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class PartInput
 {
     public function __construct(
-
-    public string $description,
-
-    public string $product_key,
-
-    public ?float $quantity = null,
-
-    public ?string $sku = null,
-
-    public ?float $unit_price = null,
-
-    public ?string $unit_name = null,
-
-    public ?array $customs_keys = null,
-    ) {}
+        public string $description,
+        public string $product_key,
+        public ?float $quantity = null,
+        public ?string $sku = null,
+        public ?float $unit_price = null,
+        public ?string $unit_name = null,
+        public ?array $customs_keys = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
         return new self(
-            $data['description'] ?? "",
-            $data['product_key'] ?? "",
+            $data['description'] ?? '',
+            $data['product_key'] ?? '',
             $data['quantity'] ?? 0,
             $data['sku'] ?? null,
             $data['unit_price'] ?? 0,
@@ -44,6 +40,6 @@ readonly class PartInput
             'unit_price' => $this->unit_price,
             'unit_name' => $this->unit_name,
             'customs_keys' => $this->customs_keys
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

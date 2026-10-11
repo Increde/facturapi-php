@@ -2,10 +2,7 @@
 
 declare(strict_types=1);
 use Facturapi\Exceptions\FacturapiException;
-use Facturapi\Resources\Invoices;
-use Facturapi\Resources\Receipts;
-use Facturapi\Tests\Support\FakeHttpClient;
-use GuzzleHttp\Psr7\Response;
+
 describe('InvoiceReceiptCreation', function () {
     test('invoices create sends json body and query params', function () {
         mockResponse('{"id":"inv_123"}', 201);

@@ -1,15 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class CartaPorteDerechosDePaso
 {
     public function __construct(
-
-    public ?string $TipoDerechoDePaso = null,
-
-    public ?float $KilometrajePagado = null,
-    ) {}
+        public ?string $TipoDerechoDePaso = null,
+        public ?float $KilometrajePagado = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -24,6 +25,6 @@ readonly class CartaPorteDerechosDePaso
         return array_filter([
             'TipoDerechoDePaso' => $this->TipoDerechoDePaso,
             'KilometrajePagado' => $this->KilometrajePagado
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

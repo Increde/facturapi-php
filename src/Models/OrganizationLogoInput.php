@@ -1,18 +1,20 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class OrganizationLogoInput
 {
     public function __construct(
-
-    public string $file,
-    ) {}
+        public string $file,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
         return new self(
-            $data['file'] ?? ""
+            $data['file'] ?? ''
         );
     }
 
@@ -20,6 +22,6 @@ readonly class OrganizationLogoInput
     {
         return array_filter([
             'file' => $this->file
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

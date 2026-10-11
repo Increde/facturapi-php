@@ -1,19 +1,18 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class OrganizationCustomizationInput
 {
     public function __construct(
-
-    public ?string $color = null,
-
-    public ?int $next_folio_number = null,
-
-    public ?int $next_folio_number_test = null,
-
-    public ?array $pdf_extra = null,
-    ) {}
+        public ?string $color = null,
+        public ?int $next_folio_number = null,
+        public ?int $next_folio_number_test = null,
+        public ?array $pdf_extra = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -32,6 +31,6 @@ readonly class OrganizationCustomizationInput
             'next_folio_number' => $this->next_folio_number,
             'next_folio_number_test' => $this->next_folio_number_test,
             'pdf_extra' => $this->pdf_extra
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

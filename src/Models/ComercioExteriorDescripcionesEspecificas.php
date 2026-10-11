@@ -1,24 +1,23 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class ComercioExteriorDescripcionesEspecificas
 {
     public function __construct(
-
-    public string $Marca,
-
-    public ?string $Modelo = null,
-
-    public ?string $SubModelo = null,
-
-    public ?string $NumeroSerie = null,
-    ) {}
+        public string $Marca,
+        public ?string $Modelo = null,
+        public ?string $SubModelo = null,
+        public ?string $NumeroSerie = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
         return new self(
-            $data['Marca'] ?? "",
+            $data['Marca'] ?? '',
             $data['Modelo'] ?? null,
             $data['SubModelo'] ?? null,
             $data['NumeroSerie'] ?? null
@@ -32,6 +31,6 @@ readonly class ComercioExteriorDescripcionesEspecificas
             'Modelo' => $this->Modelo,
             'SubModelo' => $this->SubModelo,
             'NumeroSerie' => $this->NumeroSerie
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

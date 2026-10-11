@@ -1,19 +1,18 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class ThirdParty
 {
     public function __construct(
-
-    public ?string $legal_name = null,
-
-    public ?string $tax_id = null,
-
-    public ?string $tax_system = null,
-
-    public ?string $zip = null,
-    ) {}
+        public ?string $legal_name = null,
+        public ?string $tax_id = null,
+        public ?string $tax_system = null,
+        public ?string $zip = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -32,6 +31,6 @@ readonly class ThirdParty
             'tax_id' => $this->tax_id,
             'tax_system' => $this->tax_system,
             'zip' => $this->zip
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

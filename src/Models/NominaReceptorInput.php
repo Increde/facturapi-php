@@ -1,71 +1,55 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class NominaReceptorInput
 {
     public function __construct(
-
-    public string $curp,
-
-    public ?string $num_seguridad_social = null,
-
-    public ?string $fecha_inicio_rel_laboral = null,
-
-    public mixed $antiguedad = null,
-
-    public string $tipo_contrato,
-
-    public ?bool $sindicalizado = null,
-
-    public ?string $tipo_jornada = null,
-
-    public string $tipo_regimen,
-
-    public string $num_empleado,
-
-    public ?string $departamento = null,
-
-    public ?string $puesto = null,
-
-    public ?string $riesgo_puesto = null,
-
-    public string $periodicidad_pago,
-
-    public ?string $banco = null,
-
-    public ?string $cuenta_bancaria = null,
-
-    public ?float $salario_base_cot_apor = null,
-
-    public ?float $salario_diario_integrado = null,
-
-    public string $clave_ent_fed,
-
-    public ?array $sub_contratacion = null,
-    ) {}
+        public string $curp,
+        public ?string $num_seguridad_social = null,
+        public ?string $fecha_inicio_rel_laboral = null,
+        public mixed $antiguedad = null,
+        public string $tipo_contrato,
+        public ?bool $sindicalizado = null,
+        public ?string $tipo_jornada = null,
+        public string $tipo_regimen,
+        public string $num_empleado,
+        public ?string $departamento = null,
+        public ?string $puesto = null,
+        public ?string $riesgo_puesto = null,
+        public string $periodicidad_pago,
+        public ?string $banco = null,
+        public ?string $cuenta_bancaria = null,
+        public ?float $salario_base_cot_apor = null,
+        public ?float $salario_diario_integrado = null,
+        public string $clave_ent_fed,
+        public ?array $sub_contratacion = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
         return new self(
-            $data['curp'] ?? "",
+            $data['curp'] ?? '',
             $data['num_seguridad_social'] ?? null,
             $data['fecha_inicio_rel_laboral'] ?? null,
             $data['antiguedad'] ?? null,
-            $data['tipo_contrato'] ?? "",
+            $data['tipo_contrato'] ?? '',
             $data['sindicalizado'] ?? false,
             $data['tipo_jornada'] ?? null,
-            $data['tipo_regimen'] ?? "",
-            $data['num_empleado'] ?? "",
+            $data['tipo_regimen'] ?? '',
+            $data['num_empleado'] ?? '',
             $data['departamento'] ?? null,
             $data['puesto'] ?? null,
             $data['riesgo_puesto'] ?? null,
-            $data['periodicidad_pago'] ?? "",
+            $data['periodicidad_pago'] ?? '',
             $data['banco'] ?? null,
             $data['cuenta_bancaria'] ?? null,
             $data['salario_base_cot_apor'] ?? 0,
             $data['salario_diario_integrado'] ?? 0,
-            $data['clave_ent_fed'] ?? "",
+            $data['clave_ent_fed'] ?? '',
             $data['sub_contratacion'] ?? []
         );
     }
@@ -92,6 +76,6 @@ readonly class NominaReceptorInput
             'salario_diario_integrado' => $this->salario_diario_integrado,
             'clave_ent_fed' => $this->clave_ent_fed,
             'sub_contratacion' => $this->sub_contratacion
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

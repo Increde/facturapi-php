@@ -1,19 +1,18 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class Stamp
 {
     public function __construct(
-
-    public ?string $signature = null,
-
-    public ?string $date = null,
-
-    public ?string $sat_cert_number = null,
-
-    public ?string $sat_signature = null,
-    ) {}
+        public ?string $signature = null,
+        public ?string $date = null,
+        public ?string $sat_cert_number = null,
+        public ?string $sat_signature = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -32,6 +31,6 @@ readonly class Stamp
             'date' => $this->date,
             'sat_cert_number' => $this->sat_cert_number,
             'sat_signature' => $this->sat_signature
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

@@ -1,27 +1,22 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class OrganizationInvite
 {
     public function __construct(
-
-    public ?string $id = null,
-
-    public ?string $created_at = null,
-
-    public ?string $email = null,
-
-    public ?string $organization_name = null,
-
-    public ?string $role = null,
-
-    public ?string $role_name = null,
-
-    public ?array $roles = null,
-
-    public ?string $expires_at = null,
-    ) {}
+        public ?string $id = null,
+        public ?string $created_at = null,
+        public ?string $email = null,
+        public ?string $organization_name = null,
+        public ?string $role = null,
+        public ?string $role_name = null,
+        public ?array $roles = null,
+        public ?string $expires_at = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -48,6 +43,6 @@ readonly class OrganizationInvite
             'role_name' => $this->role_name,
             'roles' => $this->roles,
             'expires_at' => $this->expires_at
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

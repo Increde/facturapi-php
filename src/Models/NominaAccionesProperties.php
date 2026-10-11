@@ -1,15 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class NominaAccionesProperties
 {
     public function __construct(
-
-    public ?float $valor_mercado = null,
-
-    public ?float $precio_al_otorgarse = null,
-    ) {}
+        public ?float $valor_mercado = null,
+        public ?float $precio_al_otorgarse = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -24,6 +25,6 @@ readonly class NominaAccionesProperties
         return array_filter([
             'valor_mercado' => $this->valor_mercado,
             'precio_al_otorgarse' => $this->precio_al_otorgarse
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

@@ -1,44 +1,32 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class ReceiptProperties
 {
     public function __construct(
+        public ?string $date = null,
+        public ?string $expires_at = null,
+        public ?string $status = null,
+        public ?string $self_invoice_url = null,
+        public ?float $total = null,
+        public ?string $invoice = null,
+        public ?string $customer = null,
+        public ?string $key = null,
 
-    public ?string $date = null,
-
-    public ?string $expires_at = null,
-
-    public ?string $status = null,
-
-    public ?string $self_invoice_url = null,
-
-    public ?float $total = null,
-
-    public ?string $invoice = null,
-
-    public ?string $customer = null,
-
-    public ?string $key = null,
-
-    /** @var \Facturapi\Models\LineItem[]|null */
-    public ?array $items = null,
-
-    public ?string $external_id = null,
-
-    public ?string $idempotency_key = null,
-
-    public ?string $payment_form = null,
-
-    public ?int $folio_number = null,
-
-    public ?string $currency = null,
-
-    public ?float $exchange = null,
-
-    public ?string $branch = null,
-    ) {}
+        /** @var \Facturapi\Models\LineItem[]|null */
+        public ?array $items = null,
+        public ?string $external_id = null,
+        public ?string $idempotency_key = null,
+        public ?string $payment_form = null,
+        public ?int $folio_number = null,
+        public ?string $currency = null,
+        public ?float $exchange = null,
+        public ?string $branch = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -51,7 +39,7 @@ readonly class ReceiptProperties
             $data['invoice'] ?? null,
             $data['customer'] ?? null,
             $data['key'] ?? null,
-            isset($data['items']) && is_array($data['items']) ? array_map(fn($i) => is_array($i) ? \Facturapi\Models\LineItem::fromArray($i) : $i, $data['items']) : [],
+            isset($data['items']) && is_array($data['items']) ? array_map(fn ($i) => is_array($i) ? \Facturapi\Models\LineItem::fromArray($i) : $i, $data['items']) : [],
             $data['external_id'] ?? null,
             $data['idempotency_key'] ?? null,
             $data['payment_form'] ?? null,
@@ -73,7 +61,7 @@ readonly class ReceiptProperties
             'invoice' => $this->invoice,
             'customer' => $this->customer,
             'key' => $this->key,
-            'items' => $this->items !== null ? array_map(fn($i) => $i->toArray(), $this->items) : null,
+            'items' => $this->items !== null ? array_map(fn ($i) => $i->toArray(), $this->items) : null,
             'external_id' => $this->external_id,
             'idempotency_key' => $this->idempotency_key,
             'payment_form' => $this->payment_form,
@@ -81,6 +69,6 @@ readonly class ReceiptProperties
             'currency' => $this->currency,
             'exchange' => $this->exchange,
             'branch' => $this->branch
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

@@ -1,13 +1,15 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class OrganizationDomainInput
 {
     public function __construct(
-
-    public \Facturapi\Models\DomainField $domain,
-    ) {}
+        public \Facturapi\Models\DomainField $domain,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -20,6 +22,6 @@ readonly class OrganizationDomainInput
     {
         return array_filter([
             'domain' => $this->domain !== null ? $this->domain->toArray() : null
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

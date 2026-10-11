@@ -1,15 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class RelatedDocument
 {
     public function __construct(
-
-    public ?string $relationship = null,
-
-    public ?array $documents = null,
-    ) {}
+        public ?string $relationship = null,
+        public ?array $documents = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -24,6 +25,6 @@ readonly class RelatedDocument
         return array_filter([
             'relationship' => $this->relationship,
             'documents' => $this->documents
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

@@ -1,43 +1,33 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class Customer
 {
     public function __construct(
-
-    public string $id,
-
-    public string $created_at,
-
-    public bool $livemode,
-
-    public ?string $edit_link = null,
-
-    public ?string $edit_link_expires_at = null,
-
-    public ?string $sat_validated_at = null,
-
-    public ?string $legal_name = null,
-
-    public ?string $tax_id = null,
-
-    public ?string $tax_system = null,
-
-    public ?string $email = null,
-
-    public ?string $phone = null,
-
-    public ?string $default_invoice_use = null,
-
-    public mixed $address = null,
-    ) {}
+        public string $id,
+        public string $created_at,
+        public bool $livemode,
+        public ?string $edit_link = null,
+        public ?string $edit_link_expires_at = null,
+        public ?string $sat_validated_at = null,
+        public ?string $legal_name = null,
+        public ?string $tax_id = null,
+        public ?string $tax_system = null,
+        public ?string $email = null,
+        public ?string $phone = null,
+        public ?string $default_invoice_use = null,
+        public mixed $address = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
         return new self(
-            $data['id'] ?? "",
-            $data['created_at'] ?? "",
+            $data['id'] ?? '',
+            $data['created_at'] ?? '',
             $data['livemode'] ?? false,
             $data['edit_link'] ?? null,
             $data['edit_link_expires_at'] ?? null,
@@ -68,6 +58,6 @@ readonly class Customer
             'phone' => $this->phone,
             'default_invoice_use' => $this->default_invoice_use,
             'address' => $this->address
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

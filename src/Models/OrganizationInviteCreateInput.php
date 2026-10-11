@@ -1,20 +1,21 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class OrganizationInviteCreateInput
 {
     public function __construct(
-
-    public string $email,
-
-    public ?string $role = null,
-    ) {}
+        public string $email,
+        public ?string $role = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
         return new self(
-            $data['email'] ?? "",
+            $data['email'] ?? '',
             $data['role'] ?? null
         );
     }
@@ -24,6 +25,6 @@ readonly class OrganizationInviteCreateInput
         return array_filter([
             'email' => $this->email,
             'role' => $this->role
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

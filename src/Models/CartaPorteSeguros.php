@@ -1,25 +1,21 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class CartaPorteSeguros
 {
     public function __construct(
-
-    public ?string $AseguraRespCivil = null,
-
-    public ?string $PolizaRespCivil = null,
-
-    public ?string $AseguraMedAmbiente = null,
-
-    public ?string $PolizaMedAmbiente = null,
-
-    public ?string $AseguraCarga = null,
-
-    public ?string $PolizaCarga = null,
-
-    public ?float $PrimaSeguro = null,
-    ) {}
+        public ?string $AseguraRespCivil = null,
+        public ?string $PolizaRespCivil = null,
+        public ?string $AseguraMedAmbiente = null,
+        public ?string $PolizaMedAmbiente = null,
+        public ?string $AseguraCarga = null,
+        public ?string $PolizaCarga = null,
+        public ?float $PrimaSeguro = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -44,6 +40,6 @@ readonly class CartaPorteSeguros
             'AseguraCarga' => $this->AseguraCarga,
             'PolizaCarga' => $this->PolizaCarga,
             'PrimaSeguro' => $this->PrimaSeguro
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

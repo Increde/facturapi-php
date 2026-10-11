@@ -1,22 +1,21 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class CartaPorteCarroFerroviario
 {
     public function __construct(
+        public ?string $TipoCarro = null,
+        public ?string $MatriculaCarro = null,
+        public ?string $GuiaCarro = null,
+        public ?float $ToneladasNetasCarro = null,
 
-    public ?string $TipoCarro = null,
-
-    public ?string $MatriculaCarro = null,
-
-    public ?string $GuiaCarro = null,
-
-    public ?float $ToneladasNetasCarro = null,
-
-    /** @var \Facturapi\Models\CartaPorteContenedorFerroviario[]|null */
-    public ?array $Contenedor = null,
-    ) {}
+        /** @var \Facturapi\Models\CartaPorteContenedorFerroviario[]|null */
+        public ?array $Contenedor = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -25,7 +24,7 @@ readonly class CartaPorteCarroFerroviario
             $data['MatriculaCarro'] ?? null,
             $data['GuiaCarro'] ?? null,
             $data['ToneladasNetasCarro'] ?? 0,
-            isset($data['Contenedor']) && is_array($data['Contenedor']) ? array_map(fn($i) => is_array($i) ? \Facturapi\Models\CartaPorteContenedorFerroviario::fromArray($i) : $i, $data['Contenedor']) : []
+            isset($data['Contenedor']) && is_array($data['Contenedor']) ? array_map(fn ($i) => is_array($i) ? \Facturapi\Models\CartaPorteContenedorFerroviario::fromArray($i) : $i, $data['Contenedor']) : []
         );
     }
 
@@ -36,7 +35,7 @@ readonly class CartaPorteCarroFerroviario
             'MatriculaCarro' => $this->MatriculaCarro,
             'GuiaCarro' => $this->GuiaCarro,
             'ToneladasNetasCarro' => $this->ToneladasNetasCarro,
-            'Contenedor' => $this->Contenedor !== null ? array_map(fn($i) => $i->toArray(), $this->Contenedor) : null
-        ], fn($v) => $v !== null);
+            'Contenedor' => $this->Contenedor !== null ? array_map(fn ($i) => $i->toArray(), $this->Contenedor) : null
+        ], fn ($v) => $v !== null);
     }
 }

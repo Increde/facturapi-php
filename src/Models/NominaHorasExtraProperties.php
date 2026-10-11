@@ -1,19 +1,18 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class NominaHorasExtraProperties
 {
     public function __construct(
-
-    public ?int $dias = null,
-
-    public ?string $tipo_horas = null,
-
-    public ?int $horas_extra = null,
-
-    public ?float $importe_pagado = null,
-    ) {}
+        public ?int $dias = null,
+        public ?string $tipo_horas = null,
+        public ?int $horas_extra = null,
+        public ?float $importe_pagado = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -32,6 +31,6 @@ readonly class NominaHorasExtraProperties
             'tipo_horas' => $this->tipo_horas,
             'horas_extra' => $this->horas_extra,
             'importe_pagado' => $this->importe_pagado
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

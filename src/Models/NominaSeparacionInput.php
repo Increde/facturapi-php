@@ -1,21 +1,19 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class NominaSeparacionInput
 {
     public function __construct(
-
-    public float $total_pagado,
-
-    public int $num_anos_servicio,
-
-    public float $ultimo_sueldo_mens_ord,
-
-    public float $ingreso_acumulable,
-
-    public float $ingreso_no_acumulable,
-    ) {}
+        public float $total_pagado,
+        public int $num_anos_servicio,
+        public float $ultimo_sueldo_mens_ord,
+        public float $ingreso_acumulable,
+        public float $ingreso_no_acumulable,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -36,6 +34,6 @@ readonly class NominaSeparacionInput
             'ultimo_sueldo_mens_ord' => $this->ultimo_sueldo_mens_ord,
             'ingreso_acumulable' => $this->ingreso_acumulable,
             'ingreso_no_acumulable' => $this->ingreso_no_acumulable
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

@@ -1,21 +1,22 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class ComercioExteriorPropietario
 {
     public function __construct(
-
-    public string $NumRegIdTrib,
-
-    public string $ResidenciaFiscal,
-    ) {}
+        public string $NumRegIdTrib,
+        public string $ResidenciaFiscal,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
         return new self(
-            $data['NumRegIdTrib'] ?? "",
-            $data['ResidenciaFiscal'] ?? ""
+            $data['NumRegIdTrib'] ?? '',
+            $data['ResidenciaFiscal'] ?? ''
         );
     }
 
@@ -24,6 +25,6 @@ readonly class ComercioExteriorPropietario
         return array_filter([
             'NumRegIdTrib' => $this->NumRegIdTrib,
             'ResidenciaFiscal' => $this->ResidenciaFiscal
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

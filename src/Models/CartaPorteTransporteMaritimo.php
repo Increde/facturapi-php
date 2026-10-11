@@ -1,64 +1,45 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class CartaPorteTransporteMaritimo
 {
     public function __construct(
+        public string $PermSCT,
+        public string $NumPermisoSCT,
+        public ?string $NombreAseg = null,
+        public ?string $NumPolizaSeguro = null,
+        public ?string $TipoEmbarcacion = null,
+        public ?string $Matricula = null,
+        public ?string $NumeroOMI = null,
+        public ?string $AnioEmbarcacion = null,
+        public ?string $NombreEmbarc = null,
+        public ?string $NacionalidadEmbarc = null,
+        public ?float $UnidadesDeArqBruto = null,
+        public ?string $TipoCarga = null,
+        public ?float $Eslora = null,
+        public ?float $Manga = null,
+        public ?float $Calado = null,
+        public ?float $Puntal = null,
+        public ?string $LineaNaviera = null,
+        public ?string $NombreAgenteNaviero = null,
+        public ?string $NumAutorizacionNaviero = null,
+        public ?string $NumViaje = null,
+        public ?string $NumConocEmbarc = null,
+        public ?string $PermisoTempNavegacion = null,
 
-    public string $PermSCT,
-
-    public string $NumPermisoSCT,
-
-    public ?string $NombreAseg = null,
-
-    public ?string $NumPolizaSeguro = null,
-
-    public ?string $TipoEmbarcacion = null,
-
-    public ?string $Matricula = null,
-
-    public ?string $NumeroOMI = null,
-
-    public ?string $AnioEmbarcacion = null,
-
-    public ?string $NombreEmbarc = null,
-
-    public ?string $NacionalidadEmbarc = null,
-
-    public ?float $UnidadesDeArqBruto = null,
-
-    public ?string $TipoCarga = null,
-
-    public ?float $Eslora = null,
-
-    public ?float $Manga = null,
-
-    public ?float $Calado = null,
-
-    public ?float $Puntal = null,
-
-    public ?string $LineaNaviera = null,
-
-    public ?string $NombreAgenteNaviero = null,
-
-    public ?string $NumAutorizacionNaviero = null,
-
-    public ?string $NumViaje = null,
-
-    public ?string $NumConocEmbarc = null,
-
-    public ?string $PermisoTempNavegacion = null,
-
-    /** @var \Facturapi\Models\CartaPorteContenedorMaritimo[]|null */
-    public ?array $Contenedor = null,
-    ) {}
+        /** @var \Facturapi\Models\CartaPorteContenedorMaritimo[]|null */
+        public ?array $Contenedor = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
         return new self(
-            $data['PermSCT'] ?? "",
-            $data['NumPermisoSCT'] ?? "",
+            $data['PermSCT'] ?? '',
+            $data['NumPermisoSCT'] ?? '',
             $data['NombreAseg'] ?? null,
             $data['NumPolizaSeguro'] ?? null,
             $data['TipoEmbarcacion'] ?? null,
@@ -79,7 +60,7 @@ readonly class CartaPorteTransporteMaritimo
             $data['NumViaje'] ?? null,
             $data['NumConocEmbarc'] ?? null,
             $data['PermisoTempNavegacion'] ?? null,
-            isset($data['Contenedor']) && is_array($data['Contenedor']) ? array_map(fn($i) => is_array($i) ? \Facturapi\Models\CartaPorteContenedorMaritimo::fromArray($i) : $i, $data['Contenedor']) : []
+            isset($data['Contenedor']) && is_array($data['Contenedor']) ? array_map(fn ($i) => is_array($i) ? \Facturapi\Models\CartaPorteContenedorMaritimo::fromArray($i) : $i, $data['Contenedor']) : []
         );
     }
 
@@ -108,7 +89,7 @@ readonly class CartaPorteTransporteMaritimo
             'NumViaje' => $this->NumViaje,
             'NumConocEmbarc' => $this->NumConocEmbarc,
             'PermisoTempNavegacion' => $this->PermisoTempNavegacion,
-            'Contenedor' => $this->Contenedor !== null ? array_map(fn($i) => $i->toArray(), $this->Contenedor) : null
-        ], fn($v) => $v !== null);
+            'Contenedor' => $this->Contenedor !== null ? array_map(fn ($i) => $i->toArray(), $this->Contenedor) : null
+        ], fn ($v) => $v !== null);
     }
 }

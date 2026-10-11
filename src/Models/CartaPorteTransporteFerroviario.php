@@ -1,25 +1,24 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class CartaPorteTransporteFerroviario
 {
     public function __construct(
+        public ?string $TipoDeServicio = null,
+        public ?string $TipoDeTrafico = null,
+        public ?string $NombreAseg = null,
+        public ?string $NumPolizaSeguro = null,
 
-    public ?string $TipoDeServicio = null,
+        /** @var \Facturapi\Models\CartaPorteDerechosDePaso[]|null */
+        public ?array $DerechosDePaso = null,
 
-    public ?string $TipoDeTrafico = null,
-
-    public ?string $NombreAseg = null,
-
-    public ?string $NumPolizaSeguro = null,
-
-    /** @var \Facturapi\Models\CartaPorteDerechosDePaso[]|null */
-    public ?array $DerechosDePaso = null,
-
-    /** @var \Facturapi\Models\CartaPorteCarroFerroviario[]|null */
-    public ?array $Carro = null,
-    ) {}
+        /** @var \Facturapi\Models\CartaPorteCarroFerroviario[]|null */
+        public ?array $Carro = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -28,8 +27,8 @@ readonly class CartaPorteTransporteFerroviario
             $data['TipoDeTrafico'] ?? null,
             $data['NombreAseg'] ?? null,
             $data['NumPolizaSeguro'] ?? null,
-            isset($data['DerechosDePaso']) && is_array($data['DerechosDePaso']) ? array_map(fn($i) => is_array($i) ? \Facturapi\Models\CartaPorteDerechosDePaso::fromArray($i) : $i, $data['DerechosDePaso']) : [],
-            isset($data['Carro']) && is_array($data['Carro']) ? array_map(fn($i) => is_array($i) ? \Facturapi\Models\CartaPorteCarroFerroviario::fromArray($i) : $i, $data['Carro']) : []
+            isset($data['DerechosDePaso']) && is_array($data['DerechosDePaso']) ? array_map(fn ($i) => is_array($i) ? \Facturapi\Models\CartaPorteDerechosDePaso::fromArray($i) : $i, $data['DerechosDePaso']) : [],
+            isset($data['Carro']) && is_array($data['Carro']) ? array_map(fn ($i) => is_array($i) ? \Facturapi\Models\CartaPorteCarroFerroviario::fromArray($i) : $i, $data['Carro']) : []
         );
     }
 
@@ -40,8 +39,8 @@ readonly class CartaPorteTransporteFerroviario
             'TipoDeTrafico' => $this->TipoDeTrafico,
             'NombreAseg' => $this->NombreAseg,
             'NumPolizaSeguro' => $this->NumPolizaSeguro,
-            'DerechosDePaso' => $this->DerechosDePaso !== null ? array_map(fn($i) => $i->toArray(), $this->DerechosDePaso) : null,
-            'Carro' => $this->Carro !== null ? array_map(fn($i) => $i->toArray(), $this->Carro) : null
-        ], fn($v) => $v !== null);
+            'DerechosDePaso' => $this->DerechosDePaso !== null ? array_map(fn ($i) => $i->toArray(), $this->DerechosDePaso) : null,
+            'Carro' => $this->Carro !== null ? array_map(fn ($i) => $i->toArray(), $this->Carro) : null
+        ], fn ($v) => $v !== null);
     }
 }

@@ -1,15 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class ComercioExteriorReceptor
 {
     public function __construct(
-
-    public ?\Facturapi\Models\ComercioExteriorDomicilio $Domicilio = null,
-
-    public ?string $NumRegIdTrib = null,
-    ) {}
+        public ?\Facturapi\Models\ComercioExteriorDomicilio $Domicilio = null,
+        public ?string $NumRegIdTrib = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -24,6 +25,6 @@ readonly class ComercioExteriorReceptor
         return array_filter([
             'Domicilio' => $this->Domicilio !== null ? $this->Domicilio->toArray() : null,
             'NumRegIdTrib' => $this->NumRegIdTrib
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

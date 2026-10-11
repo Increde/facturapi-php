@@ -1,33 +1,31 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class LineItemTrasladoInput
 {
     public function __construct(
+        public ?float $quantity = null,
+        public mixed $product,
+        public ?array $customs_keys = null,
+        public ?string $complement = null,
 
-    public ?float $quantity = null,
-
-    public mixed $product,
-
-    public ?array $customs_keys = null,
-
-    public ?string $complement = null,
-
-    /** @var \Facturapi\Models\PartInput[]|null */
-    public ?array $parts = null,
-
-    public ?array $third_party = null,
-    ) {}
+        /** @var \Facturapi\Models\PartInput[]|null */
+        public ?array $parts = null,
+        public ?array $third_party = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
         return new self(
             $data['quantity'] ?? 0,
-            $data['product'] ?? "",
+            $data['product'] ?? '',
             $data['customs_keys'] ?? [],
             $data['complement'] ?? null,
-            isset($data['parts']) && is_array($data['parts']) ? array_map(fn($i) => is_array($i) ? \Facturapi\Models\PartInput::fromArray($i) : $i, $data['parts']) : [],
+            isset($data['parts']) && is_array($data['parts']) ? array_map(fn ($i) => is_array($i) ? \Facturapi\Models\PartInput::fromArray($i) : $i, $data['parts']) : [],
             $data['third_party'] ?? []
         );
     }
@@ -39,8 +37,8 @@ readonly class LineItemTrasladoInput
             'product' => $this->product,
             'customs_keys' => $this->customs_keys,
             'complement' => $this->complement,
-            'parts' => $this->parts !== null ? array_map(fn($i) => $i->toArray(), $this->parts) : null,
+            'parts' => $this->parts !== null ? array_map(fn ($i) => $i->toArray(), $this->parts) : null,
             'third_party' => $this->third_party
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

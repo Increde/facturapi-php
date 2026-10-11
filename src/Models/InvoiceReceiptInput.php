@@ -1,29 +1,23 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class InvoiceReceiptInput
 {
     public function __construct(
-
-    public mixed $customer = null,
-
-    public ?string $use = null,
-
-    public ?string $conditions = null,
-
-    public ?int $folio_number = null,
-
-    public ?string $series = null,
-
-    public ?string $pdf_custom_section = null,
-
-    public ?string $addenda = null,
-
-    public ?array $namespaces = null,
-
-    public ?array $pdf_options = null,
-    ) {}
+        public mixed $customer = null,
+        public ?string $use = null,
+        public ?string $conditions = null,
+        public ?int $folio_number = null,
+        public ?string $series = null,
+        public ?string $pdf_custom_section = null,
+        public ?string $addenda = null,
+        public ?array $namespaces = null,
+        public ?array $pdf_options = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -52,6 +46,6 @@ readonly class InvoiceReceiptInput
             'addenda' => $this->addenda,
             'namespaces' => $this->namespaces,
             'pdf_options' => $this->pdf_options
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

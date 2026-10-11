@@ -1,21 +1,19 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class BaseTax
 {
     public function __construct(
-
-    public float $rate,
-
-    public ?float $base = null,
-
-    public ?string $type = null,
-
-    public ?string $factor = null,
-
-    public ?bool $withholding = null,
-    ) {}
+        public float $rate,
+        public ?float $base = null,
+        public ?string $type = null,
+        public ?string $factor = null,
+        public ?bool $withholding = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -36,6 +34,6 @@ readonly class BaseTax
             'type' => $this->type,
             'factor' => $this->factor,
             'withholding' => $this->withholding
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

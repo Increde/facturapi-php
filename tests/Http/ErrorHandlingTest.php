@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 use Facturapi\Exceptions\FacturapiException;
-use Facturapi\Resources\Invoices;
-use Facturapi\Tests\Support\FakeHttpClient;
-use GuzzleHttp\Psr7\Response;
+
 describe('ErrorHandling', function () {
     test('api error shape is fully available on exception', function () {
         $errorBody = [
@@ -44,7 +42,7 @@ describe('ErrorHandling', function () {
                 expect($exception->getErrorData())->toBe($errorBody);
                 expect($exception->getResponseData())->toBe($errorBody);
                 expect($exception->getRawBody())->toBe(json_encode($errorBody));
-    
+
                 expect($exception->getErrorData()['code'])->toBe('validation_error');
                 expect($exception->getErrorCode())->toBe('validation_error');
                 expect($exception->getErrorPath())->toBe('customer.tax_id');

@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Facturapi\Tests\Support\FakeHttpClient;
 
 describe('Customers', function () {
     test('create sends full json body with all required and optional properties', function () {
@@ -36,7 +35,7 @@ describe('Customers', function () {
         expect($request->getMethod())->toBe('POST');
         expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/customers?createEditLink=1');
         expect($request->getHeaderLine('Content-Type'))->toBe('application/json');
-        
+
         $sentPayload = json_decode((string) $request->getBody(), true);
         expect($sentPayload)->toBe($payload);
     });
@@ -58,7 +57,7 @@ describe('Customers', function () {
         expect($request->getMethod())->toBe('PUT');
         expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/customers/cus_123?createEditLink=0');
         expect($request->getHeaderLine('Content-Type'))->toBe('application/json');
-        
+
         $sentPayload = json_decode((string) $request->getBody(), true);
         expect($sentPayload)->toBe($payload);
     });
@@ -132,7 +131,7 @@ describe('Customers', function () {
         $request = test()->httpClient->requests()[0];
         expect($request->getMethod())->toBe('POST');
         expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/customers/cus_123/email-edit-link');
-        
+
         $sentPayload = json_decode((string) $request->getBody(), true);
         expect($sentPayload)->toBe($payload);
     });

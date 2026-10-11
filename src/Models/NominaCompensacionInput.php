@@ -1,17 +1,17 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class NominaCompensacionInput
 {
     public function __construct(
-
-    public float $saldo_a_favor,
-
-    public int $ano,
-
-    public float $remanente_sal_fav,
-    ) {}
+        public float $saldo_a_favor,
+        public int $ano,
+        public float $remanente_sal_fav,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -28,6 +28,6 @@ readonly class NominaCompensacionInput
             'saldo_a_favor' => $this->saldo_a_favor,
             'ano' => $this->ano,
             'remanente_sal_fav' => $this->remanente_sal_fav
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

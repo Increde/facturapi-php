@@ -1,21 +1,19 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class NominaSeparacionProperties
 {
     public function __construct(
-
-    public ?float $total_pagado = null,
-
-    public ?int $num_anos_servicio = null,
-
-    public ?float $ultimo_sueldo_mens_ord = null,
-
-    public ?float $ingreso_acumulable = null,
-
-    public ?float $ingreso_no_acumulable = null,
-    ) {}
+        public ?float $total_pagado = null,
+        public ?int $num_anos_servicio = null,
+        public ?float $ultimo_sueldo_mens_ord = null,
+        public ?float $ingreso_acumulable = null,
+        public ?float $ingreso_no_acumulable = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -36,6 +34,6 @@ readonly class NominaSeparacionProperties
             'ultimo_sueldo_mens_ord' => $this->ultimo_sueldo_mens_ord,
             'ingreso_acumulable' => $this->ingreso_acumulable,
             'ingreso_no_acumulable' => $this->ingreso_no_acumulable
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

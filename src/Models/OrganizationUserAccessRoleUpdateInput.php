@@ -1,18 +1,20 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class OrganizationUserAccessRoleUpdateInput
 {
     public function __construct(
-
-    public string $role,
-    ) {}
+        public string $role,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
         return new self(
-            $data['role'] ?? ""
+            $data['role'] ?? ''
         );
     }
 
@@ -20,6 +22,6 @@ readonly class OrganizationUserAccessRoleUpdateInput
     {
         return array_filter([
             'role' => $this->role
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

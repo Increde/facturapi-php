@@ -1,13 +1,15 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class CustomerComercioExterior
 {
     public function __construct(
-
-    public ?string $id = null,
-    ) {}
+        public ?string $id = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -20,6 +22,6 @@ readonly class CustomerComercioExterior
     {
         return array_filter([
             'id' => $this->id
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

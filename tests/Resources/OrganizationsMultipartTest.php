@@ -2,31 +2,29 @@
 
 declare(strict_types=1);
 use Facturapi\Exceptions\FacturapiException;
-use Facturapi\Resources\Organizations;
-use Facturapi\Tests\Support\FakeHttpClient;
-use GuzzleHttp\Psr7\Response;
+
 describe('OrganizationsMultipart', function () {
     test('upload logo builds multipart request', function () {
         $tmpLogo = tempnam(sys_get_temp_dir(), 'logo_');
         file_put_contents($tmpLogo, 'LOGO_BYTES');
 
         mockResponse('{"ok":true}', 200);
-            $organizations = test()->facturapi->organizations();
+        $organizations = test()->facturapi->organizations();
 
-            $result = $organizations->uploadLogo('org_123', $tmpLogo);
+        $result = $organizations->uploadLogo('org_123', $tmpLogo);
 
-            expect($result['ok'])->toBeTrue();
+        expect($result['ok'])->toBeTrue();
 
-            $request = test()->httpClient->requests()[0];
-            expect($request->getMethod())->toBe('PUT');
-            expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/organizations/org_123/logo');
-            expect($request->getHeaderLine('Content-Type'))->toStartWith('multipart/form-data; boundary=');
+        $request = test()->httpClient->requests()[0];
+        expect($request->getMethod())->toBe('PUT');
+        expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/organizations/org_123/logo');
+        expect($request->getHeaderLine('Content-Type'))->toStartWith('multipart/form-data; boundary=');
 
-            $body = (string) $request->getBody();
-            expect($body)->toContain('name="file"');
-            expect($body)->toContain('filename="' . basename($tmpLogo) . '"');
-            expect($body)->toContain('LOGO_BYTES');
-        
+        $body = (string) $request->getBody();
+        expect($body)->toContain('name="file"');
+        expect($body)->toContain('filename="' . basename($tmpLogo) . '"');
+        expect($body)->toContain('LOGO_BYTES');
+
         @unlink($tmpLogo);
     });
     test('upload certificate builds multipart request with cer key and password', function () {
@@ -36,28 +34,28 @@ describe('OrganizationsMultipart', function () {
         file_put_contents($tmpKey, 'KEY_BYTES');
 
         mockResponse('{"ok":true}', 200);
-            $organizations = test()->facturapi->organizations();
+        $organizations = test()->facturapi->organizations();
 
-            $result = $organizations->uploadCertificate('org_123', [
-                'cerFile' => $tmpCer,
-                'keyFile' => $tmpKey,
-                'password' => 'secret_password',
-            ]);
+        $result = $organizations->uploadCertificate('org_123', [
+            'cerFile' => $tmpCer,
+            'keyFile' => $tmpKey,
+            'password' => 'secret_password',
+        ]);
 
-            expect($result['ok'])->toBeTrue();
+        expect($result['ok'])->toBeTrue();
 
-            $request = test()->httpClient->requests()[0];
-            expect($request->getMethod())->toBe('PUT');
-            expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/organizations/org_123/certificate');
+        $request = test()->httpClient->requests()[0];
+        expect($request->getMethod())->toBe('PUT');
+        expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/organizations/org_123/certificate');
 
-            $body = (string) $request->getBody();
-            expect($body)->toContain('name="cer"');
-            expect($body)->toContain('name="key"');
-            expect($body)->toContain('name="password"');
-            expect($body)->toContain('CER_BYTES');
-            expect($body)->toContain('KEY_BYTES');
-            expect($body)->toContain('secret_password');
-        
+        $body = (string) $request->getBody();
+        expect($body)->toContain('name="cer"');
+        expect($body)->toContain('name="key"');
+        expect($body)->toContain('name="password"');
+        expect($body)->toContain('CER_BYTES');
+        expect($body)->toContain('KEY_BYTES');
+        expect($body)->toContain('secret_password');
+
         @unlink($tmpCer);
         @unlink($tmpKey);
     });
@@ -97,7 +95,7 @@ describe('OrganizationsMultipart', function () {
                 expect($exception->getMessage())->toBe('Upload failed');
                 expect($exception->getErrorData())->toBe($errorBody);
             });
-        
+
         @unlink($tmpLogo);
     });
 

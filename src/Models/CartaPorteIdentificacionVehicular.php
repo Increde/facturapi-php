@@ -1,19 +1,18 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class CartaPorteIdentificacionVehicular
 {
     public function __construct(
-
-    public ?string $ConfigVehicular = null,
-
-    public ?float $PesoBrutoVehicular = null,
-
-    public ?string $PlacaVM = null,
-
-    public ?string $AnioModeloVM = null,
-    ) {}
+        public ?string $ConfigVehicular = null,
+        public ?float $PesoBrutoVehicular = null,
+        public ?string $PlacaVM = null,
+        public ?string $AnioModeloVM = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -32,6 +31,6 @@ readonly class CartaPorteIdentificacionVehicular
             'PesoBrutoVehicular' => $this->PesoBrutoVehicular,
             'PlacaVM' => $this->PlacaVM,
             'AnioModeloVM' => $this->AnioModeloVM
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

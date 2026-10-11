@@ -1,35 +1,26 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class Organization
 {
     public function __construct(
-
-    public ?string $id = null,
-
-    public ?string $logo_url = null,
-
-    public ?string $timezone = null,
-
-    public ?string $created_at = null,
-
-    public ?bool $is_production_ready = null,
-
-    public ?array $pending_steps = null,
-
-    public ?array $legal = null,
-
-    public ?array $customization = null,
-
-    public ?array $certificate = null,
-
-    public ?array $fiel = null,
-
-    public ?array $receipts = null,
-
-    public ?array $self_invoice = null,
-    ) {}
+        public ?string $id = null,
+        public ?string $logo_url = null,
+        public ?string $timezone = null,
+        public ?string $created_at = null,
+        public ?bool $is_production_ready = null,
+        public ?array $pending_steps = null,
+        public ?array $legal = null,
+        public ?array $customization = null,
+        public ?array $certificate = null,
+        public ?array $fiel = null,
+        public ?array $receipts = null,
+        public ?array $self_invoice = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -64,6 +55,6 @@ readonly class Organization
             'fiel' => $this->fiel,
             'receipts' => $this->receipts,
             'self_invoice' => $this->self_invoice
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

@@ -1,18 +1,20 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class ReceiptAssignCustomerInput
 {
     public function __construct(
-
-    public mixed $customer,
-    ) {}
+        public mixed $customer,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
         return new self(
-            $data['customer'] ?? ""
+            $data['customer'] ?? ''
         );
     }
 
@@ -20,6 +22,6 @@ readonly class ReceiptAssignCustomerInput
     {
         return array_filter([
             'customer' => $this->customer
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

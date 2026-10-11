@@ -1,64 +1,51 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class InvoiceTrasladoInput
 {
     public function __construct(
+        public string $type,
 
-    public string $type,
+        /** @var \Facturapi\Models\LineItemTrasladoInput[]|null */
+        public array $items,
 
-    /** @var \Facturapi\Models\LineItemTrasladoInput[]|null */
-    public array $items,
+        /** @var \Facturapi\Models\CartaPorteOrCustomComplementInput[]|null */
+        public ?array $complements = null,
+        public ?string $use = null,
+        public ?string $currency = null,
+        public ?float $exchange = null,
 
-    /** @var \Facturapi\Models\CartaPorteOrCustomComplementInput[]|null */
-    public ?array $complements = null,
-
-    public ?string $use = null,
-
-    public ?string $currency = null,
-
-    public ?float $exchange = null,
-
-    /** @var \Facturapi\Models\RelatedDocumentInput[]|null */
-    public ?array $related_documents = null,
-
-    public mixed $customer,
-
-    public ?string $status = null,
-
-    public ?string $date = null,
-
-    public mixed $address = null,
-
-    public ?string $external_id = null,
-
-    public ?string $idempotency_key = null,
-
-    public ?int $folio_number = null,
-
-    public ?string $series = null,
-
-    public ?string $pdf_custom_section = null,
-
-    public ?string $addenda = null,
-
-    public ?array $namespaces = null,
-
-    public ?array $pdf_options = null,
-    ) {}
+        /** @var \Facturapi\Models\RelatedDocumentInput[]|null */
+        public ?array $related_documents = null,
+        public mixed $customer,
+        public ?string $status = null,
+        public ?string $date = null,
+        public mixed $address = null,
+        public ?string $external_id = null,
+        public ?string $idempotency_key = null,
+        public ?int $folio_number = null,
+        public ?string $series = null,
+        public ?string $pdf_custom_section = null,
+        public ?string $addenda = null,
+        public ?array $namespaces = null,
+        public ?array $pdf_options = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
         return new self(
-            $data['type'] ?? "",
-            isset($data['items']) && is_array($data['items']) ? array_map(fn($i) => is_array($i) ? \Facturapi\Models\LineItemTrasladoInput::fromArray($i) : $i, $data['items']) : [],
-            isset($data['complements']) && is_array($data['complements']) ? array_map(fn($i) => is_array($i) ? \Facturapi\Models\CartaPorteOrCustomComplementInput::fromArray($i) : $i, $data['complements']) : [],
+            $data['type'] ?? '',
+            isset($data['items']) && is_array($data['items']) ? array_map(fn ($i) => is_array($i) ? \Facturapi\Models\LineItemTrasladoInput::fromArray($i) : $i, $data['items']) : [],
+            isset($data['complements']) && is_array($data['complements']) ? array_map(fn ($i) => is_array($i) ? \Facturapi\Models\CartaPorteOrCustomComplementInput::fromArray($i) : $i, $data['complements']) : [],
             $data['use'] ?? null,
             $data['currency'] ?? null,
             $data['exchange'] ?? 0,
-            isset($data['related_documents']) && is_array($data['related_documents']) ? array_map(fn($i) => is_array($i) ? \Facturapi\Models\RelatedDocumentInput::fromArray($i) : $i, $data['related_documents']) : [],
-            $data['customer'] ?? "",
+            isset($data['related_documents']) && is_array($data['related_documents']) ? array_map(fn ($i) => is_array($i) ? \Facturapi\Models\RelatedDocumentInput::fromArray($i) : $i, $data['related_documents']) : [],
+            $data['customer'] ?? '',
             $data['status'] ?? null,
             $data['date'] ?? null,
             $data['address'] ?? null,
@@ -77,12 +64,12 @@ readonly class InvoiceTrasladoInput
     {
         return array_filter([
             'type' => $this->type,
-            'items' => $this->items !== null ? array_map(fn($i) => $i->toArray(), $this->items) : null,
-            'complements' => $this->complements !== null ? array_map(fn($i) => $i->toArray(), $this->complements) : null,
+            'items' => $this->items !== null ? array_map(fn ($i) => $i->toArray(), $this->items) : null,
+            'complements' => $this->complements !== null ? array_map(fn ($i) => $i->toArray(), $this->complements) : null,
             'use' => $this->use,
             'currency' => $this->currency,
             'exchange' => $this->exchange,
-            'related_documents' => $this->related_documents !== null ? array_map(fn($i) => $i->toArray(), $this->related_documents) : null,
+            'related_documents' => $this->related_documents !== null ? array_map(fn ($i) => $i->toArray(), $this->related_documents) : null,
             'customer' => $this->customer,
             'status' => $this->status,
             'date' => $this->date,
@@ -95,6 +82,6 @@ readonly class InvoiceTrasladoInput
             'addenda' => $this->addenda,
             'namespaces' => $this->namespaces,
             'pdf_options' => $this->pdf_options
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

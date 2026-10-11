@@ -7,8 +7,11 @@ namespace Facturapi\Resources;
 use Facturapi\Http\FacturapiHttpClient;
 use Facturapi\Exceptions\FacturapiException;
 
-class CartaPorteCatalogs {
-	public function __construct(private readonly FacturapiHttpClient $client) {}
+class CartaPorteCatalogs
+{
+    public function __construct(private readonly FacturapiHttpClient $client)
+    {
+    }
 
     /**
      * Air transport codes (Carta Porte 3.1)

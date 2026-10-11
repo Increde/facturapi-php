@@ -1,46 +1,34 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class PaymentInput
 {
     public function __construct(
-
-    public string $payment_form,
-
-    public array $related_documents,
-
-    public ?string $currency = null,
-
-    public ?float $exchange = null,
-
-    public ?string $date = null,
-
-    public ?string $numOperacion = null,
-
-    public ?string $rfcEmisorCtaOrd = null,
-
-    public ?string $nomBancoOrdExt = null,
-
-    public ?string $ctaOrdenante = null,
-
-    public ?string $rfcEmisorCtaBen = null,
-
-    public ?string $ctaBeneficiario = null,
-
-    public ?string $tipoCadPago = null,
-
-    public ?string $certPago = null,
-
-    public ?string $cadPago = null,
-
-    public ?string $selloPago = null,
-    ) {}
+        public string $payment_form,
+        public array $related_documents,
+        public ?string $currency = null,
+        public ?float $exchange = null,
+        public ?string $date = null,
+        public ?string $numOperacion = null,
+        public ?string $rfcEmisorCtaOrd = null,
+        public ?string $nomBancoOrdExt = null,
+        public ?string $ctaOrdenante = null,
+        public ?string $rfcEmisorCtaBen = null,
+        public ?string $ctaBeneficiario = null,
+        public ?string $tipoCadPago = null,
+        public ?string $certPago = null,
+        public ?string $cadPago = null,
+        public ?string $selloPago = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
         return new self(
-            $data['payment_form'] ?? "",
+            $data['payment_form'] ?? '',
             $data['related_documents'] ?? [],
             $data['currency'] ?? null,
             $data['exchange'] ?? 0,
@@ -76,6 +64,6 @@ readonly class PaymentInput
             'certPago' => $this->certPago,
             'cadPago' => $this->cadPago,
             'selloPago' => $this->selloPago
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

@@ -1,17 +1,17 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class OrganizationPermissionRoleTemplate
 {
     public function __construct(
-
-    public ?string $code = null,
-
-    public ?string $label = null,
-
-    public ?array $operations = null,
-    ) {}
+        public ?string $code = null,
+        public ?string $label = null,
+        public ?array $operations = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -28,6 +28,6 @@ readonly class OrganizationPermissionRoleTemplate
             'code' => $this->code,
             'label' => $this->label,
             'operations' => $this->operations
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

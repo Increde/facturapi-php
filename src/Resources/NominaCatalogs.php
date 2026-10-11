@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Facturapi\Resources;
 
 use Facturapi\Http\FacturapiHttpClient;
-use Facturapi\Exceptions\FacturapiException;
 
-class NominaCatalogs {
-	public function __construct(private readonly FacturapiHttpClient $client) {}
+class NominaCatalogs
+{
+    public function __construct(private readonly FacturapiHttpClient $client)
+    {
+    }
 
     public function searchDeductions(?array $params = null): mixed
     {

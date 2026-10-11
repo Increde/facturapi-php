@@ -1,35 +1,26 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class CartaPorteTransporteAereo
 {
     public function __construct(
-
-    public ?string $PermSCT = null,
-
-    public ?string $NumPermisoSCT = null,
-
-    public ?string $MatriculaAeronave = null,
-
-    public ?string $NombreAseg = null,
-
-    public ?string $NumPolizaSeguro = null,
-
-    public ?string $NumeroGuia = null,
-
-    public ?string $LugarContrato = null,
-
-    public ?string $CodigoTransportista = null,
-
-    public ?string $RFCEmbarcador = null,
-
-    public ?string $NumRegIdTribEmbarc = null,
-
-    public ?string $ResidenciaFiscalEmbarc = null,
-
-    public ?string $NombreEmbarcador = null,
-    ) {}
+        public ?string $PermSCT = null,
+        public ?string $NumPermisoSCT = null,
+        public ?string $MatriculaAeronave = null,
+        public ?string $NombreAseg = null,
+        public ?string $NumPolizaSeguro = null,
+        public ?string $NumeroGuia = null,
+        public ?string $LugarContrato = null,
+        public ?string $CodigoTransportista = null,
+        public ?string $RFCEmbarcador = null,
+        public ?string $NumRegIdTribEmbarc = null,
+        public ?string $ResidenciaFiscalEmbarc = null,
+        public ?string $NombreEmbarcador = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -64,6 +55,6 @@ readonly class CartaPorteTransporteAereo
             'NumRegIdTribEmbarc' => $this->NumRegIdTribEmbarc,
             'ResidenciaFiscalEmbarc' => $this->ResidenciaFiscalEmbarc,
             'NombreEmbarcador' => $this->NombreEmbarcador
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

@@ -1,15 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class NominaSubContratacionProperties
 {
     public function __construct(
-
-    public ?string $rfc_labora = null,
-
-    public ?float $porcentaje_tiempo = null,
-    ) {}
+        public ?string $rfc_labora = null,
+        public ?float $porcentaje_tiempo = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -24,6 +25,6 @@ readonly class NominaSubContratacionProperties
         return array_filter([
             'rfc_labora' => $this->rfc_labora,
             'porcentaje_tiempo' => $this->porcentaje_tiempo
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

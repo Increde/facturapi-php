@@ -1,26 +1,24 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class CartaPorteDetalleMercancia
 {
     public function __construct(
-
-    public string $UnidadPesoMerc,
-
-    public float $PesoBruto,
-
-    public float $PesoNeto,
-
-    public float $PesoTara,
-
-    public ?float $NumPiezas = null,
-    ) {}
+        public string $UnidadPesoMerc,
+        public float $PesoBruto,
+        public float $PesoNeto,
+        public float $PesoTara,
+        public ?float $NumPiezas = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
         return new self(
-            $data['UnidadPesoMerc'] ?? "",
+            $data['UnidadPesoMerc'] ?? '',
             $data['PesoBruto'] ?? 0,
             $data['PesoNeto'] ?? 0,
             $data['PesoTara'] ?? 0,
@@ -36,6 +34,6 @@ readonly class CartaPorteDetalleMercancia
             'PesoNeto' => $this->PesoNeto,
             'PesoTara' => $this->PesoTara,
             'NumPiezas' => $this->NumPiezas
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

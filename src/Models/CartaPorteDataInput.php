@@ -1,43 +1,33 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class CartaPorteDataInput
 {
     public function __construct(
-
-    public string $IdCCP,
-
-    public string $TranspInternac,
-
-    public ?string $EntradaSalidaMerc = null,
-
-    public ?string $PaisOrigenDestino = null,
-
-    public ?string $ViaEntradaSalida = null,
-
-    public ?float $TotalDistRec = null,
-
-    public ?string $RegistroISTMO = null,
-
-    public ?string $UbicacionPoloOrigen = null,
-
-    public ?string $UbicacionPoloDestino = null,
-
-    public ?array $RegimenesAduaneros = null,
-
-    public array $Ubicaciones,
-
-    public \Facturapi\Models\CartaPorteMercancias $Mercancias,
-
-    public ?array $FiguraTransporte = null,
-    ) {}
+        public string $IdCCP,
+        public string $TranspInternac,
+        public ?string $EntradaSalidaMerc = null,
+        public ?string $PaisOrigenDestino = null,
+        public ?string $ViaEntradaSalida = null,
+        public ?float $TotalDistRec = null,
+        public ?string $RegistroISTMO = null,
+        public ?string $UbicacionPoloOrigen = null,
+        public ?string $UbicacionPoloDestino = null,
+        public ?array $RegimenesAduaneros = null,
+        public array $Ubicaciones,
+        public \Facturapi\Models\CartaPorteMercancias $Mercancias,
+        public ?array $FiguraTransporte = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
         return new self(
-            $data['IdCCP'] ?? "",
-            $data['TranspInternac'] ?? "",
+            $data['IdCCP'] ?? '',
+            $data['TranspInternac'] ?? '',
             $data['EntradaSalidaMerc'] ?? null,
             $data['PaisOrigenDestino'] ?? null,
             $data['ViaEntradaSalida'] ?? null,
@@ -68,6 +58,6 @@ readonly class CartaPorteDataInput
             'Ubicaciones' => $this->Ubicaciones,
             'Mercancias' => $this->Mercancias !== null ? $this->Mercancias->toArray() : null,
             'FiguraTransporte' => $this->FiguraTransporte
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

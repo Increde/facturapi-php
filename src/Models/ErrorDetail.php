@@ -1,30 +1,28 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class ErrorDetail
 {
     public function __construct(
-
-    public string $message,
-
-    public string $code,
-
-    public ?string $location = null,
-
-    public ?string $path = null,
-
-    public string $source,
-    ) {}
+        public string $message,
+        public string $code,
+        public ?string $location = null,
+        public ?string $path = null,
+        public string $source,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
         return new self(
-            $data['message'] ?? "",
-            $data['code'] ?? "",
+            $data['message'] ?? '',
+            $data['code'] ?? '',
             $data['location'] ?? null,
             $data['path'] ?? null,
-            $data['source'] ?? ""
+            $data['source'] ?? ''
         );
     }
 
@@ -36,6 +34,6 @@ readonly class ErrorDetail
             'location' => $this->location,
             'path' => $this->path,
             'source' => $this->source
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

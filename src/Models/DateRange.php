@@ -1,19 +1,18 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class DateRange
 {
     public function __construct(
-
-    public ?string $gt = null,
-
-    public ?string $gte = null,
-
-    public ?string $lt = null,
-
-    public ?string $lte = null,
-    ) {}
+        public ?string $gt = null,
+        public ?string $gte = null,
+        public ?string $lt = null,
+        public ?string $lte = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -32,6 +31,6 @@ readonly class DateRange
             'gte' => $this->gte,
             'lt' => $this->lt,
             'lte' => $this->lte
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

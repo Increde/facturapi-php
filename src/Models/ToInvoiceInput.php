@@ -1,21 +1,19 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class ToInvoiceInput
 {
     public function __construct(
-
-    public array $keys,
-
-    public mixed $customer = null,
-
-    public ?string $use = null,
-
-    public ?bool $dry_run = null,
-
-    public ?string $payment_form = null,
-    ) {}
+        public array $keys,
+        public mixed $customer = null,
+        public ?string $use = null,
+        public ?bool $dry_run = null,
+        public ?string $payment_form = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -36,6 +34,6 @@ readonly class ToInvoiceInput
             'use' => $this->use,
             'dry_run' => $this->dry_run,
             'payment_form' => $this->payment_form
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

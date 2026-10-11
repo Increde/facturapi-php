@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Facturapi\Tests\Support\FakeHttpClient;
 
 describe('NominaCatalogs', function () {
     test('searchDeductions passes query params correctly', function () {

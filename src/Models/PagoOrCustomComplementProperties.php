@@ -1,13 +1,15 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class PagoOrCustomComplementProperties
 {
     public function __construct(
-
-    public ?string $type = null,
-    ) {}
+        public ?string $type = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -20,6 +22,6 @@ readonly class PagoOrCustomComplementProperties
     {
         return array_filter([
             'type' => $this->type
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

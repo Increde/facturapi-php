@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Facturapi\Tests\Support\FakeHttpClient;
 
 describe('Receipts', function () {
     test('create sends full json body with all properties', function () {
@@ -42,7 +41,7 @@ describe('Receipts', function () {
         $request = test()->httpClient->requests()[0];
         expect($request->getMethod())->toBe('POST');
         expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/receipts');
-        
+
         $sentPayload = json_decode((string) $request->getBody(), true);
         expect($sentPayload)->toBe($payload);
     });

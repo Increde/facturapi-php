@@ -1,21 +1,19 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class NominaOtroPagoDirectProperties
 {
     public function __construct(
-
-    public ?string $tipo_otro_pago = null,
-
-    public ?string $clave = null,
-
-    public ?string $concepto = null,
-
-    public ?float $importe = null,
-
-    public ?float $subsidio_causado = null,
-    ) {}
+        public ?string $tipo_otro_pago = null,
+        public ?string $clave = null,
+        public ?string $concepto = null,
+        public ?float $importe = null,
+        public ?float $subsidio_causado = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -36,6 +34,6 @@ readonly class NominaOtroPagoDirectProperties
             'concepto' => $this->concepto,
             'importe' => $this->importe,
             'subsidio_causado' => $this->subsidio_causado
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

@@ -7,8 +7,11 @@ namespace Facturapi\Resources;
 use Facturapi\Http\FacturapiHttpClient;
 use Facturapi\Exceptions\FacturapiException;
 
-class ComercioExteriorCatalogs {
-	public function __construct(private readonly FacturapiHttpClient $client) {}
+class ComercioExteriorCatalogs
+{
+    public function __construct(private readonly FacturapiHttpClient $client)
+    {
+    }
 
     /**
      * Search tariff fractions (Fracciones Arancelarias).

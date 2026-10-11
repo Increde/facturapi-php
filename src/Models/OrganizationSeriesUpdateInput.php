@@ -1,15 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class OrganizationSeriesUpdateInput
 {
     public function __construct(
-
-    public ?int $next_folio = null,
-
-    public ?int $next_folio_test = null,
-    ) {}
+        public ?int $next_folio = null,
+        public ?int $next_folio_test = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -24,6 +25,6 @@ readonly class OrganizationSeriesUpdateInput
         return array_filter([
             'next_folio' => $this->next_folio,
             'next_folio_test' => $this->next_folio_test
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

@@ -1,29 +1,23 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class OrganizationUserAccess
 {
     public function __construct(
-
-    public ?string $id = null,
-
-    public ?string $full_name = null,
-
-    public ?string $email = null,
-
-    public ?string $role = null,
-
-    public ?string $role_name = null,
-
-    public ?string $organization = null,
-
-    public ?array $operations = null,
-
-    public ?string $created_at = null,
-
-    public ?string $updated_at = null,
-    ) {}
+        public ?string $id = null,
+        public ?string $full_name = null,
+        public ?string $email = null,
+        public ?string $role = null,
+        public ?string $role_name = null,
+        public ?string $organization = null,
+        public ?array $operations = null,
+        public ?string $created_at = null,
+        public ?string $updated_at = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -52,6 +46,6 @@ readonly class OrganizationUserAccess
             'operations' => $this->operations,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

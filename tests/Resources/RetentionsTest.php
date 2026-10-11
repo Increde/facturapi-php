@@ -1,9 +1,6 @@
 <?php
 
 declare(strict_types=1);
-use Facturapi\Resources\Retentions;
-use Facturapi\Tests\Support\FakeHttpClient;
-use GuzzleHttp\Psr7\Response;
 describe('Retentions', function () {
     test('create can send draft retention payload', function () {
         mockResponse('{"id":"ret_draft","status":"draft"}', 200);

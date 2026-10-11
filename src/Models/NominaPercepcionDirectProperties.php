@@ -1,21 +1,19 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class NominaPercepcionDirectProperties
 {
     public function __construct(
-
-    public ?string $tipo_percepcion = null,
-
-    public ?string $concepto = null,
-
-    public ?string $clave = null,
-
-    public ?float $importe_gravado = null,
-
-    public ?float $importe_exento = null,
-    ) {}
+        public ?string $tipo_percepcion = null,
+        public ?string $concepto = null,
+        public ?string $clave = null,
+        public ?float $importe_gravado = null,
+        public ?float $importe_exento = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -36,6 +34,6 @@ readonly class NominaPercepcionDirectProperties
             'clave' => $this->clave,
             'importe_gravado' => $this->importe_gravado,
             'importe_exento' => $this->importe_exento
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

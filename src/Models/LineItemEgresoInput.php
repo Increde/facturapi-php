@@ -1,34 +1,31 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class LineItemEgresoInput
 {
     public function __construct(
+        public ?float $quantity = null,
+        public ?float $discount = null,
+        public mixed $product,
 
-    public ?float $quantity = null,
-
-    public ?float $discount = null,
-
-    public mixed $product,
-
-    /** @var \Facturapi\Models\PartInput[]|null */
-    public ?array $parts = null,
-
-    public ?array $customs_keys = null,
-
-    public mixed $complement = null,
-
-    public mixed $third_party = null,
-    ) {}
+        /** @var \Facturapi\Models\PartInput[]|null */
+        public ?array $parts = null,
+        public ?array $customs_keys = null,
+        public mixed $complement = null,
+        public mixed $third_party = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
         return new self(
             $data['quantity'] ?? 0,
             $data['discount'] ?? 0,
-            $data['product'] ?? "",
-            isset($data['parts']) && is_array($data['parts']) ? array_map(fn($i) => is_array($i) ? \Facturapi\Models\PartInput::fromArray($i) : $i, $data['parts']) : [],
+            $data['product'] ?? '',
+            isset($data['parts']) && is_array($data['parts']) ? array_map(fn ($i) => is_array($i) ? \Facturapi\Models\PartInput::fromArray($i) : $i, $data['parts']) : [],
             $data['customs_keys'] ?? [],
             $data['complement'] ?? null,
             $data['third_party'] ?? null
@@ -41,10 +38,10 @@ readonly class LineItemEgresoInput
             'quantity' => $this->quantity,
             'discount' => $this->discount,
             'product' => $this->product,
-            'parts' => $this->parts !== null ? array_map(fn($i) => $i->toArray(), $this->parts) : null,
+            'parts' => $this->parts !== null ? array_map(fn ($i) => $i->toArray(), $this->parts) : null,
             'customs_keys' => $this->customs_keys,
             'complement' => $this->complement,
             'third_party' => $this->third_party
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

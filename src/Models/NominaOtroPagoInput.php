@@ -1,29 +1,26 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class NominaOtroPagoInput
 {
     public function __construct(
-
-    public string $tipo_otro_pago,
-
-    public string $clave,
-
-    public ?string $concepto = null,
-
-    public float $importe,
-
-    public ?float $subsidio_causado = null,
-
-    public ?\Facturapi\Models\NominaCompensacionInput $compensacion_saldos_a_favor = null,
-    ) {}
+        public string $tipo_otro_pago,
+        public string $clave,
+        public ?string $concepto = null,
+        public float $importe,
+        public ?float $subsidio_causado = null,
+        public ?\Facturapi\Models\NominaCompensacionInput $compensacion_saldos_a_favor = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
         return new self(
-            $data['tipo_otro_pago'] ?? "",
-            $data['clave'] ?? "",
+            $data['tipo_otro_pago'] ?? '',
+            $data['clave'] ?? '',
             $data['concepto'] ?? null,
             $data['importe'] ?? 0,
             $data['subsidio_causado'] ?? 0,
@@ -40,6 +37,6 @@ readonly class NominaOtroPagoInput
             'importe' => $this->importe,
             'subsidio_causado' => $this->subsidio_causado,
             'compensacion_saldos_a_favor' => $this->compensacion_saldos_a_favor !== null ? $this->compensacion_saldos_a_favor->toArray() : null
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

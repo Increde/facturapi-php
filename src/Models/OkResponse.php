@@ -1,13 +1,15 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class OkResponse
 {
     public function __construct(
-
-    public bool $ok,
-    ) {}
+        public bool $ok,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -20,6 +22,6 @@ readonly class OkResponse
     {
         return array_filter([
             'ok' => $this->ok
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

@@ -1,13 +1,15 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class OrganizationInviteRespondInput
 {
     public function __construct(
-
-    public bool $accept,
-    ) {}
+        public bool $accept,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -20,6 +22,6 @@ readonly class OrganizationInviteRespondInput
     {
         return array_filter([
             'accept' => $this->accept
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

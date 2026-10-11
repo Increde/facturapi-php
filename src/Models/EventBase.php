@@ -1,19 +1,18 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class EventBase
 {
     public function __construct(
-
-    public ?string $id = null,
-
-    public ?string $created_at = null,
-
-    public ?bool $livemode = null,
-
-    public ?string $organization = null,
-    ) {}
+        public ?string $id = null,
+        public ?string $created_at = null,
+        public ?bool $livemode = null,
+        public ?string $organization = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -32,6 +31,6 @@ readonly class EventBase
             'created_at' => $this->created_at,
             'livemode' => $this->livemode,
             'organization' => $this->organization
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

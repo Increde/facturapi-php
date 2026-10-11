@@ -1,24 +1,23 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class OrganizationPermissionRoleCreateInput
 {
     public function __construct(
-
-    public string $name,
-
-    public ?string $template_code = null,
-
-    public ?array $add = null,
-
-    public ?array $remove = null,
-    ) {}
+        public string $name,
+        public ?string $template_code = null,
+        public ?array $add = null,
+        public ?array $remove = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
         return new self(
-            $data['name'] ?? "",
+            $data['name'] ?? '',
             $data['template_code'] ?? null,
             $data['add'] ?? [],
             $data['remove'] ?? []
@@ -32,6 +31,6 @@ readonly class OrganizationPermissionRoleCreateInput
             'template_code' => $this->template_code,
             'add' => $this->add,
             'remove' => $this->remove
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

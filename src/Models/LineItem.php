@@ -1,19 +1,18 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class LineItem
 {
     public function __construct(
-
-    public ?float $quantity = null,
-
-    public ?float $discount = null,
-
-    public ?\Facturapi\Models\LineItemProduct $product = null,
-
-    public ?\Facturapi\Models\Parts $parts = null,
-    ) {}
+        public ?float $quantity = null,
+        public ?float $discount = null,
+        public ?\Facturapi\Models\LineItemProduct $product = null,
+        public ?\Facturapi\Models\Parts $parts = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -32,6 +31,6 @@ readonly class LineItem
             'discount' => $this->discount,
             'product' => $this->product !== null ? $this->product->toArray() : null,
             'parts' => $this->parts !== null ? $this->parts->toArray() : null
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

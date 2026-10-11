@@ -1,26 +1,24 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class LineItemTrasladoProductInput
 {
     public function __construct(
-
-    public string $description,
-
-    public ?string $product_key = null,
-
-    public ?string $unit_key = null,
-
-    public ?string $unit_name = null,
-
-    public ?string $sku = null,
-    ) {}
+        public string $description,
+        public ?string $product_key = null,
+        public ?string $unit_key = null,
+        public ?string $unit_name = null,
+        public ?string $sku = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
         return new self(
-            $data['description'] ?? "",
+            $data['description'] ?? '',
             $data['product_key'] ?? null,
             $data['unit_key'] ?? null,
             $data['unit_name'] ?? null,
@@ -36,6 +34,6 @@ readonly class LineItemTrasladoProductInput
             'unit_key' => $this->unit_key,
             'unit_name' => $this->unit_name,
             'sku' => $this->sku
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

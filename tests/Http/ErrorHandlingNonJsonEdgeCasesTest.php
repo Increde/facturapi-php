@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 use Facturapi\Exceptions\FacturapiException;
-use Facturapi\Resources\Invoices;
-use Facturapi\Tests\Support\FakeHttpClient;
-use GuzzleHttp\Psr7\Response;
+
 describe('ErrorHandlingNonJsonEdgeCases', function () {
     test('invalid json error body preserves raw body', function () {
         $rawBody = '{"message": "broken"';

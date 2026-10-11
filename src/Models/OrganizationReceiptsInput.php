@@ -1,23 +1,20 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class OrganizationReceiptsInput
 {
     public function __construct(
-
-    public ?string $periodicity = null,
-
-    public ?int $duration_days = null,
-
-    public ?int $next_folio_number = null,
-
-    public ?int $next_folio_number_test = null,
-
-    public ?bool $activate_global_invoice = null,
-
-    public ?bool $grouped_items_invoice = null,
-    ) {}
+        public ?string $periodicity = null,
+        public ?int $duration_days = null,
+        public ?int $next_folio_number = null,
+        public ?int $next_folio_number_test = null,
+        public ?bool $activate_global_invoice = null,
+        public ?bool $grouped_items_invoice = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -40,6 +37,6 @@ readonly class OrganizationReceiptsInput
             'next_folio_number_test' => $this->next_folio_number_test,
             'activate_global_invoice' => $this->activate_global_invoice,
             'grouped_items_invoice' => $this->grouped_items_invoice
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

@@ -1,18 +1,20 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class ErrorMessage
 {
     public function __construct(
-
-    public string $message,
-    ) {}
+        public string $message,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
         return new self(
-            $data['message'] ?? ""
+            $data['message'] ?? ''
         );
     }
 
@@ -20,6 +22,6 @@ readonly class ErrorMessage
     {
         return array_filter([
             'message' => $this->message
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

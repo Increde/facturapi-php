@@ -1,31 +1,24 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class OrganizationPermissionRole
 {
     public function __construct(
-
-    public ?string $id = null,
-
-    public ?string $name = null,
-
-    public ?string $template_code = null,
-
-    public ?string $organization = null,
-
-    public ?int $used_by = null,
-
-    public ?array $overrides_add = null,
-
-    public ?array $overrides_remove = null,
-
-    public ?array $operations = null,
-
-    public ?string $created_at = null,
-
-    public ?string $updated_at = null,
-    ) {}
+        public ?string $id = null,
+        public ?string $name = null,
+        public ?string $template_code = null,
+        public ?string $organization = null,
+        public ?int $used_by = null,
+        public ?array $overrides_add = null,
+        public ?array $overrides_remove = null,
+        public ?array $operations = null,
+        public ?string $created_at = null,
+        public ?string $updated_at = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -56,6 +49,6 @@ readonly class OrganizationPermissionRole
             'operations' => $this->operations,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

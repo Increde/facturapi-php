@@ -1,17 +1,17 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class NominaIncapacidadProperties
 {
     public function __construct(
-
-    public ?int $dias_incapacidad = null,
-
-    public ?string $tipo_incapacidad = null,
-
-    public ?float $importe_monetario = null,
-    ) {}
+        public ?int $dias_incapacidad = null,
+        public ?string $tipo_incapacidad = null,
+        public ?float $importe_monetario = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -28,6 +28,6 @@ readonly class NominaIncapacidadProperties
             'dias_incapacidad' => $this->dias_incapacidad,
             'tipo_incapacidad' => $this->tipo_incapacidad,
             'importe_monetario' => $this->importe_monetario
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

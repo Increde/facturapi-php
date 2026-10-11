@@ -1,48 +1,36 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class ComercioExteriorDataProperties
 {
     public function __construct(
-
-    public ?string $Version = null,
-
-    public ?string $MotivoTraslado = null,
-
-    public string $ClaveDePedimento,
-
-    public int $CertificadoOrigen,
-
-    public ?string $NumCertificadoOrigen = null,
-
-    public ?string $NumeroExportadorConfiable = null,
-
-    public ?string $Incoterm = null,
-
-    public ?string $Observaciones = null,
-
-    public float $TipoCambioUSD,
-
-    public float $TotalUSD,
-
-    public mixed $Emisor = null,
-
-    public ?array $Propietario = null,
-
-    public mixed $Receptor = null,
-
-    public ?array $Destinatario = null,
-
-    public \Facturapi\Models\ComercioExteriorMercancias $Mercancias,
-    ) {}
+        public ?string $Version = null,
+        public ?string $MotivoTraslado = null,
+        public string $ClaveDePedimento,
+        public int $CertificadoOrigen,
+        public ?string $NumCertificadoOrigen = null,
+        public ?string $NumeroExportadorConfiable = null,
+        public ?string $Incoterm = null,
+        public ?string $Observaciones = null,
+        public float $TipoCambioUSD,
+        public float $TotalUSD,
+        public mixed $Emisor = null,
+        public ?array $Propietario = null,
+        public mixed $Receptor = null,
+        public ?array $Destinatario = null,
+        public \Facturapi\Models\ComercioExteriorMercancias $Mercancias,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
         return new self(
             $data['Version'] ?? null,
             $data['MotivoTraslado'] ?? null,
-            $data['ClaveDePedimento'] ?? "",
+            $data['ClaveDePedimento'] ?? '',
             $data['CertificadoOrigen'] ?? 0,
             $data['NumCertificadoOrigen'] ?? null,
             $data['NumeroExportadorConfiable'] ?? null,
@@ -76,6 +64,6 @@ readonly class ComercioExteriorDataProperties
             'Receptor' => $this->Receptor,
             'Destinatario' => $this->Destinatario,
             'Mercancias' => $this->Mercancias !== null ? $this->Mercancias->toArray() : null
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

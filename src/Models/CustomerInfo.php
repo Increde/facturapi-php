@@ -1,19 +1,18 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class CustomerInfo
 {
     public function __construct(
-
-    public ?string $id = null,
-
-    public ?string $legal_name = null,
-
-    public ?string $tax_id = null,
-
-    public ?array $address = null,
-    ) {}
+        public ?string $id = null,
+        public ?string $legal_name = null,
+        public ?string $tax_id = null,
+        public ?array $address = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -32,6 +31,6 @@ readonly class CustomerInfo
             'legal_name' => $this->legal_name,
             'tax_id' => $this->tax_id,
             'address' => $this->address
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

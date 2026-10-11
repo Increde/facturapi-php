@@ -1,13 +1,15 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class OrganizationDeleteCerts
 {
     public function __construct(
-
-    public ?string $updated_at = null,
-    ) {}
+        public ?string $updated_at = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -20,6 +22,6 @@ readonly class OrganizationDeleteCerts
     {
         return array_filter([
             'updated_at' => $this->updated_at
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

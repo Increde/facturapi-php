@@ -1,17 +1,17 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class ProductCatalogResult
 {
     public function __construct(
-
-    public ?string $key = null,
-
-    public ?string $description = null,
-
-    public ?float $score = null,
-    ) {}
+        public ?string $key = null,
+        public ?string $description = null,
+        public ?float $score = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -28,6 +28,6 @@ readonly class ProductCatalogResult
             'key' => $this->key,
             'description' => $this->description,
             'score' => $this->score
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

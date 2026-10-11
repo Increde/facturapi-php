@@ -1,18 +1,20 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class OrganizationCreateInput
 {
     public function __construct(
-
-    public string $name,
-    ) {}
+        public string $name,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
         return new self(
-            $data['name'] ?? ""
+            $data['name'] ?? ''
         );
     }
 
@@ -20,6 +22,6 @@ readonly class OrganizationCreateInput
     {
         return array_filter([
             'name' => $this->name
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

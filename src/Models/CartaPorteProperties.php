@@ -1,15 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class CartaPorteProperties
 {
     public function __construct(
-
-    public ?string $type = null,
-
-    public ?\Facturapi\Models\CartaPorteDataProperties $data = null,
-    ) {}
+        public ?string $type = null,
+        public ?\Facturapi\Models\CartaPorteDataProperties $data = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -24,6 +25,6 @@ readonly class CartaPorteProperties
         return array_filter([
             'type' => $this->type,
             'data' => $this->data !== null ? $this->data->toArray() : null
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

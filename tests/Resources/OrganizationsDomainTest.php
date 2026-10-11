@@ -1,9 +1,6 @@
 <?php
 
 declare(strict_types=1);
-use Facturapi\Resources\Organizations;
-use Facturapi\Tests\Support\FakeHttpClient;
-use GuzzleHttp\Psr7\Response;
 describe('OrganizationsDomain', function () {
     test('all serializes query parameters into url', function () {
         mockResponse('{"data":[]}', 200);

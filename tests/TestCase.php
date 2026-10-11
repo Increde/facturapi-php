@@ -16,7 +16,7 @@ abstract class TestCase extends BaseTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         $this->httpClient = new FakeHttpClient();
         $this->facturapi = new Facturapi('sk_test_abc123', ['httpClient' => $this->httpClient]);
     }

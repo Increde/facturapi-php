@@ -1,36 +1,32 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class CustomerCreateInput
 {
     public function __construct(
-
-    public string $legal_name,
-
-    public string $tax_id,
-
-    public string $tax_system,
-
-    public ?string $email = null,
-
-    public ?string $phone = null,
-
-    public ?string $default_invoice_use = null,
-
-    public mixed $address,
-    ) {}
+        public string $legal_name,
+        public string $tax_id,
+        public string $tax_system,
+        public ?string $email = null,
+        public ?string $phone = null,
+        public ?string $default_invoice_use = null,
+        public mixed $address,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
         return new self(
-            $data['legal_name'] ?? "",
-            $data['tax_id'] ?? "",
-            $data['tax_system'] ?? "",
+            $data['legal_name'] ?? '',
+            $data['tax_id'] ?? '',
+            $data['tax_system'] ?? '',
             $data['email'] ?? null,
             $data['phone'] ?? null,
             $data['default_invoice_use'] ?? null,
-            $data['address'] ?? ""
+            $data['address'] ?? ''
         );
     }
 
@@ -44,6 +40,6 @@ readonly class CustomerCreateInput
             'phone' => $this->phone,
             'default_invoice_use' => $this->default_invoice_use,
             'address' => $this->address
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

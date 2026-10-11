@@ -1,19 +1,18 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class NominaDeduccionProperties
 {
     public function __construct(
-
-    public ?string $tipo_deduccion = null,
-
-    public ?string $concepto = null,
-
-    public ?string $clave = null,
-
-    public ?float $importe = null,
-    ) {}
+        public ?string $tipo_deduccion = null,
+        public ?string $concepto = null,
+        public ?string $clave = null,
+        public ?float $importe = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -32,6 +31,6 @@ readonly class NominaDeduccionProperties
             'concepto' => $this->concepto,
             'clave' => $this->clave,
             'importe' => $this->importe
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

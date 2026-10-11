@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Facturapi\Tests\Support\FakeHttpClient;
 
 describe('CartaPorteCatalogs', function () {
     test('searchAirTransportCodes passes query params', function () {

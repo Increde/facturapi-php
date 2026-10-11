@@ -1,23 +1,20 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class IepsTax
 {
     public function __construct(
-
-    public float $rate,
-
-    public ?float $base = null,
-
-    public ?string $type = null,
-
-    public ?string $factor = null,
-
-    public ?bool $withholding = null,
-
-    public ?string $ieps_mode = null,
-    ) {}
+        public float $rate,
+        public ?float $base = null,
+        public ?string $type = null,
+        public ?string $factor = null,
+        public ?bool $withholding = null,
+        public ?string $ieps_mode = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -40,6 +37,6 @@ readonly class IepsTax
             'factor' => $this->factor,
             'withholding' => $this->withholding,
             'ieps_mode' => $this->ieps_mode
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

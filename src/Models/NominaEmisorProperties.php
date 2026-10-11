@@ -1,19 +1,18 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class NominaEmisorProperties
 {
     public function __construct(
-
-    public ?string $curp = null,
-
-    public ?string $registro_patronal = null,
-
-    public ?string $rfc_patron_origen = null,
-
-    public ?array $entidad_sncf = null,
-    ) {}
+        public ?string $curp = null,
+        public ?string $registro_patronal = null,
+        public ?string $rfc_patron_origen = null,
+        public ?array $entidad_sncf = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -32,6 +31,6 @@ readonly class NominaEmisorProperties
             'registro_patronal' => $this->registro_patronal,
             'rfc_patron_origen' => $this->rfc_patron_origen,
             'entidad_sncf' => $this->entidad_sncf
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

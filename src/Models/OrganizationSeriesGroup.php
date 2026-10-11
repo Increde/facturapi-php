@@ -1,17 +1,17 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class OrganizationSeriesGroup
 {
     public function __construct(
-
-    public ?string $series = null,
-
-    public ?int $next_folio = null,
-
-    public ?int $next_folio_test = null,
-    ) {}
+        public ?string $series = null,
+        public ?int $next_folio = null,
+        public ?int $next_folio_test = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -28,6 +28,6 @@ readonly class OrganizationSeriesGroup
             'series' => $this->series,
             'next_folio' => $this->next_folio,
             'next_folio_test' => $this->next_folio_test
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

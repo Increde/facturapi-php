@@ -1,36 +1,32 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class OrganizationLegalInput
 {
     public function __construct(
-
-    public string $name,
-
-    public string $legal_name,
-
-    public string $tax_system,
-
-    public ?string $website = null,
-
-    public ?string $support_email = null,
-
-    public ?string $phone = null,
-
-    public mixed $address,
-    ) {}
+        public string $name,
+        public string $legal_name,
+        public string $tax_system,
+        public ?string $website = null,
+        public ?string $support_email = null,
+        public ?string $phone = null,
+        public mixed $address,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
         return new self(
-            $data['name'] ?? "",
-            $data['legal_name'] ?? "",
-            $data['tax_system'] ?? "",
+            $data['name'] ?? '',
+            $data['legal_name'] ?? '',
+            $data['tax_system'] ?? '',
             $data['website'] ?? null,
             $data['support_email'] ?? null,
             $data['phone'] ?? null,
-            $data['address'] ?? ""
+            $data['address'] ?? ''
         );
     }
 
@@ -44,6 +40,6 @@ readonly class OrganizationLegalInput
             'support_email' => $this->support_email,
             'phone' => $this->phone,
             'address' => $this->address
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

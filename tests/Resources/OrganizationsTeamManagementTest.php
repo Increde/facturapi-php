@@ -1,9 +1,6 @@
 <?php
 
 declare(strict_types=1);
-use Facturapi\Resources\Organizations;
-use Facturapi\Tests\Support\FakeHttpClient;
-use GuzzleHttp\Psr7\Response;
 describe('OrganizationsTeamManagement', function () {
     test('list team access uses expected endpoint', function () {
         mockResponse('[]', 200);

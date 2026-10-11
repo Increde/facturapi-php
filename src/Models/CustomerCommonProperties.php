@@ -1,23 +1,20 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class CustomerCommonProperties
 {
     public function __construct(
-
-    public ?string $legal_name = null,
-
-    public ?string $tax_id = null,
-
-    public ?string $tax_system = null,
-
-    public ?string $email = null,
-
-    public ?string $phone = null,
-
-    public ?string $default_invoice_use = null,
-    ) {}
+        public ?string $legal_name = null,
+        public ?string $tax_id = null,
+        public ?string $tax_system = null,
+        public ?string $email = null,
+        public ?string $phone = null,
+        public ?string $default_invoice_use = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -40,6 +37,6 @@ readonly class CustomerCommonProperties
             'email' => $this->email,
             'phone' => $this->phone,
             'default_invoice_use' => $this->default_invoice_use
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }

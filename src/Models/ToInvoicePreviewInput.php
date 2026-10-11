@@ -1,17 +1,17 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Facturapi\Models;
 
 readonly class ToInvoicePreviewInput
 {
     public function __construct(
-
-    public array $keys,
-
-    public mixed $customer = null,
-
-    public ?string $use = null,
-    ) {}
+        public array $keys,
+        public mixed $customer = null,
+        public ?string $use = null,
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -28,6 +28,6 @@ readonly class ToInvoicePreviewInput
             'keys' => $this->keys,
             'customer' => $this->customer,
             'use' => $this->use
-        ], fn($v) => $v !== null);
+        ], fn ($v) => $v !== null);
     }
 }
