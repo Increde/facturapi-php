@@ -11,5 +11,5 @@ composer.lock
 
 # temporary files
 /tmp/
-/.agents/
+/tmps/
 /build/
