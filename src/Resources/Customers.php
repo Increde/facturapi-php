@@ -6,6 +6,9 @@ namespace Facturapi\Resources;
 
 use Facturapi\Http\FacturapiHttpClient;
 use Facturapi\Exceptions\FacturapiException;
+use Facturapi\Models\Customer;
+use Facturapi\Models\CustomerSearchResult;
+use Facturapi\Models\TaxIdValidationResult;
 
 class Customers {
 	public function __construct(private readonly FacturapiHttpClient $client) {}
@@ -14,24 +17,26 @@ class Customers {
 	 * Get all Customers
 	 *
 	 * @param array|null $params Search parameters.
-	 * @return mixed JSON-decoded response.
+	 * @return CustomerSearchResult
 	 *
 	 * @throws FacturapiException
 	 */
-	public function all(?array $params = null): mixed {
-		return $this->client->get('customers', $params);
+	public function all(?array $params = null): CustomerSearchResult {
+		$response = $this->client->get('customers', $params);
+		return CustomerSearchResult::fromArray($response);
 	}
 
 	/**
 	 * Get a Customer by ID
 	 *
 	 * @param string $id Customer ID.
-	 * @return mixed JSON-decoded response.
+	 * @return Customer
 	 *
 	 * @throws FacturapiException
 	 */
-	public function retrieve( $id ): mixed {
-		return $this->client->get('customers/' . $id);
+	public function retrieve(string $id): Customer {
+		$response = $this->client->get('customers/' . $id);
+		return Customer::fromArray($response);
 	}
 
 	/**
@@ -39,12 +44,13 @@ class Customers {
 	 *
 	 * @param array $data Customer data.
 	 * @param array|null $params Optional query parameters.
-	 * @return mixed JSON-decoded response.
+	 * @return Customer
 	 *
 	 * @throws FacturapiException
 	 */
-	public function create($data, ?array $params = null): mixed {
-		return $this->client->post('customers', $data);
+	public function create(array $data, ?array $params = null): Customer {
+		$response = $this->client->post('customers', $data);
+		return Customer::fromArray($response);
 	}
 
 
@@ -54,36 +60,39 @@ class Customers {
 	 * @param string $id Customer ID.
 	 * @param array $data Customer data.
 	 * @param array|null $params Optional query parameters.
-	 * @return mixed JSON-decoded response.
+	 * @return Customer
 	 *
 	 * @throws FacturapiException
 	 */
-	public function update( $id, $data, $params = null ): mixed {
-		return $this->client->put('customers/' . $id, $data);
+	public function update(string $id, array $data, ?array $params = null): Customer {
+		$response = $this->client->put('customers/' . $id, $data);
+		return Customer::fromArray($response);
 	}
 
 	/**
 	 * Delete a Customer in your organization
 	 *
 	 * @param string $id Customer ID.
-	 * @return mixed JSON-decoded response.
+	 * @return Customer
 	 *
 	 * @throws FacturapiException
 	 */
-	public function delete( $id ): mixed {
-		return $this->client->delete('customers/' . $id);
+	public function delete(string $id): Customer {
+		$response = $this->client->delete('customers/' . $id);
+		return Customer::fromArray($response);
 	}
 
 	/**
 	 * Validates that a Customer's tax info is still valid
 	 *
 	 * @param string $id Customer ID.
-	 * @return mixed JSON-decoded response.
+	 * @return TaxIdValidationResult
 	 *
 	 * @throws FacturapiException
 	 */
-	public function validateTaxInfo( $id ): mixed {
-		return $this->client->get('customers/' . $id . "/tax-info-validation");
+	public function validateTaxInfo(string $id): TaxIdValidationResult {
+		$response = $this->client->get('customers/' . $id . "/tax-info-validation");
+		return TaxIdValidationResult::fromArray($response);
 	}
 
 }

@@ -6,6 +6,8 @@ namespace Facturapi\Resources;
 
 use Facturapi\Http\FacturapiHttpClient;
 use Facturapi\Exceptions\FacturapiException;
+use Facturapi\Models\Product;
+use Facturapi\Models\ProductSearchResult;
 
 class Products {
 	public function __construct(private readonly FacturapiHttpClient $client) {}
@@ -15,36 +17,39 @@ class Products {
 	 * Get all Products
 	 *
 	 * @param array|null $params Search parameters.
-	 * @return mixed JSON-decoded response.
+	 * @return ProductSearchResult
 	 *
 	 * @throws FacturapiException
 	 */
-	public function all(?array $params = null): mixed {
-		return $this->client->get('products', $params);
+	public function all(?array $params = null): ProductSearchResult {
+		$response = $this->client->get('products', $params);
+		return ProductSearchResult::fromArray($response);
 	}
 
 	/**
 	 * Get a Product by ID
 	 *
 	 * @param string $id Product ID.
-	 * @return mixed JSON-decoded response.
+	 * @return Product
 	 *
 	 * @throws FacturapiException
 	 */
-	public function retrieve( $id ): mixed {
-		return $this->client->get('products/' . $id);
+	public function retrieve(string $id): Product {
+		$response = $this->client->get('products/' . $id);
+		return Product::fromArray($response);
 	}
 
 	/**
 	 * Create a Product in your organization
 	 *
 	 * @param array $params Product data.
-	 * @return mixed JSON-decoded response.
+	 * @return Product
 	 *
 	 * @throws FacturapiException
 	 */
-	public function create( $params ): mixed {
-		return $this->client->post('products', $params);
+	public function create(array $params): Product {
+		$response = $this->client->post('products', $params);
+		return Product::fromArray($response);
 	}
 
 
@@ -53,24 +58,26 @@ class Products {
 	 *
 	 * @param string $id Product ID.
 	 * @param array $params Product data.
-	 * @return mixed JSON-decoded response.
+	 * @return Product
 	 *
 	 * @throws FacturapiException
 	 */
-	public function update( $id, $params ): mixed {
-		return $this->client->put('products/' . $id, $params);
+	public function update(string $id, array $params): Product {
+		$response = $this->client->put('products/' . $id, $params);
+		return Product::fromArray($response);
 	}
 
 	/**
 	 * Delete a Product in your organization
 	 *
 	 * @param string $id Product ID.
-	 * @return mixed JSON-decoded response.
+	 * @return Product
 	 *
 	 * @throws FacturapiException
 	 */
-	public function delete( $id ): mixed {
-		return $this->client->delete('products/' . $id);
+	public function delete(string $id): Product {
+		$response = $this->client->delete('products/' . $id);
+		return Product::fromArray($response);
 	}
 
 }
