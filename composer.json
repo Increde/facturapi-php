@@ -1,60 +1,63 @@
 {
-    "name": "facturapi/facturapi-php",
-    "type": "library",
-    "description": "Facturapi's PHP client library",
-    "keywords": [
-        "mexico",
-        "sat",
-        "cfdi",
-        "factura",
-        "facturapi",
-        "api"
-    ],
-    "homepage": "https://www.facturapi.io/",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Jhonatan Laguna"
-        },
-        {
-            "name": "Javier Rosas"
-        },
-        {
-            "name": "Ra\u00fal S\u00e1nchez"
-        }
-    ],
-    "support": {
-        "docs": "https://www.facturapi.io/docs",
-        "issues": "https://github.com/facturapi/facturapi-php/issues",
-        "source": "https://github.com/facturapi/facturapi-php",
-        "email": "contacto@facturapi.io"
+  "name": "facturapi/facturapi-php",
+  "type": "library",
+  "description": "Facturapi's PHP client library",
+  "keywords": [
+    "mexico",
+    "sat",
+    "cfdi",
+    "factura",
+    "facturapi",
+    "api"
+  ],
+  "homepage": "https://www.facturapi.io/",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Jhonatan Laguna"
     },
-    "require": {
-        "php": ">=8.2",
-        "psr/http-client": "^1.0",
-        "psr/http-factory": "^1.0",
-        "php-http/discovery": "^1.19",
-        "php-http/multipart-stream-builder": "^1.4"
+    {
+      "name": "Javier Rosas"
     },
-    "require-dev": {
-        "guzzlehttp/guzzle": "^7.9",
-        "pestphp/pest": "^5.3"
+    {
+      "name": "Raúl Sánchez"
     },
-    "autoload": {
-        "psr-4": {
-            "Facturapi\\": "src/"
-        }
-    },
-    "minimum-stability": "stable",
-    "config": {
-        "allow-plugins": {
-            "php-http/discovery": true,
-            "pestphp/pest-plugin": true
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Facturapi\\Tests\\": "tests/"
-        }
+    {
+      "name": "Arturo Ortega (macarthuror)"
     }
+  ],
+  "support": {
+    "docs": "https://www.facturapi.io/docs",
+    "issues": "https://github.com/facturapi/facturapi-php/issues",
+    "source": "https://github.com/facturapi/facturapi-php",
+    "email": "contacto@facturapi.io"
+  },
+  "require": {
+    "php": ">=8.2",
+    "psr/http-client": "^1.0",
+    "psr/http-factory": "^1.0",
+    "php-http/discovery": "^1.19",
+    "php-http/multipart-stream-builder": "^1.4"
+  },
+  "require-dev": {
+    "guzzlehttp/guzzle": "^8.0",
+    "pestphp/pest": "^5.3"
+  },
+  "autoload": {
+    "psr-4": {
+      "Facturapi\\": "src/"
+    }
+  },
+  "minimum-stability": "stable",
+  "config": {
+    "allow-plugins": {
+      "php-http/discovery": true,
+      "pestphp/pest-plugin": true
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Facturapi\\Tests\\": "tests/"
+    }
+  }
 }
