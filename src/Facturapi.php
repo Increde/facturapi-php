@@ -16,6 +16,7 @@ use Facturapi\Resources\NominaCatalogs;
 use Facturapi\Resources\Retentions;
 use Facturapi\Resources\Tools;
 use Facturapi\Resources\Webhooks;
+use Facturapi\Http\FacturapiHttpClient;
 
 class Facturapi
 {
@@ -32,73 +33,77 @@ class Facturapi
     private ?Tools $tools = null;
     private ?Webhooks $webhooks = null;
 
+    private FacturapiHttpClient $httpClient;
+
     /**
      * @param string $apiKey Facturapi API key.
-     * @param array{apiVersion?:string,timeout?:int|float,httpClient?:\Psr\Http\Client\ClientInterface}|null $config
-     *        Optional SDK config. Supported keys: apiVersion, timeout, httpClient.
+     * @param array{apiVersion?:string,httpClient?:\Psr\Http\Client\ClientInterface}|null $config
+     *        Optional SDK config.
      */
     public function __construct(
         private readonly string $apiKey,
         private readonly ?array $config = null
-    ) {}
+    ) {
+        $this->httpClient = new FacturapiHttpClient($this->apiKey, $this->config);
+    }
 
     public function customers(): Customers
     {
-        return $this->customers ??= new Customers($this->apiKey, $this->config);
+        return $this->customers ??= new Customers($this->httpClient);
     }
 
     public function organizations(): Organizations
     {
-        return $this->organizations ??= new Organizations($this->apiKey, $this->config);
+        return $this->organizations ??= new Organizations($this->httpClient);
     }
 
     public function products(): Products
     {
-        return $this->products ??= new Products($this->apiKey, $this->config);
+        return $this->products ??= new Products($this->httpClient);
     }
 
     public function invoices(): Invoices
     {
-        return $this->invoices ??= new Invoices($this->apiKey, $this->config);
+        return $this->invoices ??= new Invoices($this->httpClient);
     }
 
     public function receipts(): Receipts
     {
-        return $this->receipts ??= new Receipts($this->apiKey, $this->config);
+        return $this->receipts ??= new Receipts($this->httpClient);
     }
 
     public function catalogs(): Catalogs
     {
-        return $this->catalogs ??= new Catalogs($this->apiKey, $this->config);
+        return $this->catalogs ??= new Catalogs($this->httpClient);
     }
 
     public function cartaPorteCatalogs(): CartaPorteCatalogs
     {
-        return $this->cartaPorteCatalogs ??= new CartaPorteCatalogs($this->apiKey, $this->config);
+        return $this->cartaPorteCatalogs ??= new CartaPorteCatalogs($this->httpClient);
     }
 
     public function comercioExteriorCatalogs(): ComercioExteriorCatalogs
     {
-        return $this->comercioExteriorCatalogs ??= new ComercioExteriorCatalogs($this->apiKey, $this->config);
+        return $this->comercioExteriorCatalogs ??= new ComercioExteriorCatalogs($this->httpClient);
     }
 
     public function nominaCatalogs(): NominaCatalogs
     {
-        return $this->nominaCatalogs ??= new NominaCatalogs($this->apiKey, $this->config);
+        return $this->nominaCatalogs ??= new NominaCatalogs($this->httpClient);
     }
 
     public function retentions(): Retentions
     {
-        return $this->retentions ??= new Retentions($this->apiKey, $this->config);
+        return $this->retentions ??= new Retentions($this->httpClient);
     }
 
     public function tools(): Tools
     {
-        return $this->tools ??= new Tools($this->apiKey, $this->config);
+        return $this->tools ??= new Tools($this->httpClient);
     }
 
     public function webhooks(): Webhooks
     {
-        return $this->webhooks ??= new Webhooks($this->apiKey, $this->config);
+        return $this->webhooks ??= new Webhooks($this->httpClient);
     }
 }
