@@ -1,4 +1,4 @@
-.PHONY: install test test-coverage clean format analyze lint
+.PHONY: install test test-coverage clean format analyze lint pre-commit
 
 # Instala las dependencias del proyecto usando Composer
 install:
@@ -25,3 +25,6 @@ analyze:
 
 lint:
 	composer lint
+
+# Corre las herramientas de formato, análisis y tests (ideal para antes de un commit)
+pre-commit: format analyze test

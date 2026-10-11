@@ -42,10 +42,11 @@
   "require-dev": {
     "guzzlehttp/guzzle": "^8.0",
     "pestphp/pest": "^5.3",
-    "phpstan/phpstan": "^1.10",
-    "phpstan/phpstan-strict-rules": "^1.5",
+    "phpstan/phpstan": "^2.2",
+    "phpstan/phpstan-strict-rules": "^2.0",
     "laravel/pint": "^1.13",
-    "rector/rector": "^1.2"
+    "rector/rector": "*",
+    "phpstan/phpstan-deprecation-rules": "^2.0"
   },
   "autoload": {
     "psr-4": {
