@@ -33,7 +33,7 @@ class Facturapi
     private ?Tools $tools = null;
     private ?Webhooks $webhooks = null;
 
-    private FacturapiHttpClient $httpClient;
+    private readonly FacturapiHttpClient $httpClient;
 
     /**
      * @param string $apiKey Facturapi API key.

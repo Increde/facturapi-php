@@ -9,25 +9,16 @@ use Throwable;
 
 class FacturapiException extends Exception
 {
-    private mixed $errorData;
-    private ?int $statusCode;
-    private ?string $rawBody;
-    private array $headers;
-
     public function __construct(
         string $message = '',
         int $code = 0,
         ?Throwable $previous = null,
-        mixed $errorData = null,
-        ?int $statusCode = null,
-        ?string $rawBody = null,
-        array $headers = []
+        private mixed $errorData = null,
+        private readonly ?int $statusCode = null,
+        private readonly ?string $rawBody = null,
+        private array $headers = []
     ) {
         parent::__construct($message, $code, $previous);
-        $this->errorData = $errorData;
-        $this->statusCode = $statusCode;
-        $this->rawBody = $rawBody;
-        $this->headers = $headers;
     }
 
     public function getErrorData(): mixed

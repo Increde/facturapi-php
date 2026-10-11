@@ -15,15 +15,15 @@ use Psr\Http\Message\StreamFactoryInterface;
 
 class FacturapiHttpClient
 {
-    private string $apiKey;
-    private string $apiVersion;
+    private readonly string $apiKey;
+    private readonly string $apiVersion;
     private string $baseUrl = 'https://www.facturapi.io/';
     private string $userAgent = 'facturapi-php';
     private ?int $lastStatus = null;
 
-    private ClientInterface $client;
-    private RequestFactoryInterface $requestFactory;
-    private StreamFactoryInterface $streamFactory;
+    private readonly ClientInterface $client;
+    private readonly RequestFactoryInterface $requestFactory;
+    private readonly StreamFactoryInterface $streamFactory;
 
     /**
      * @param string $apiKey Facturapi API key.
@@ -59,7 +59,7 @@ class FacturapiHttpClient
     public function post(string $endpoint, array $data = [], ?array $query = null): array
     {
         $url = $this->buildUrl($endpoint, $query);
-        $body = empty($data) ? '' : json_encode($data, JSON_THROW_ON_ERROR);
+        $body = $data === [] ? '' : json_encode($data, JSON_THROW_ON_ERROR);
         return $this->executeRequest('POST', $url, ['Content-Type' => 'application/json'], $body);
     }
 
@@ -69,7 +69,7 @@ class FacturapiHttpClient
     public function put(string $endpoint, array $data = [], ?array $query = null): array
     {
         $url = $this->buildUrl($endpoint, $query);
-        $body = empty($data) ? '' : json_encode($data, JSON_THROW_ON_ERROR);
+        $body = $data === [] ? '' : json_encode($data, JSON_THROW_ON_ERROR);
         return $this->executeRequest('PUT', $url, ['Content-Type' => 'application/json'], $body);
     }
 
@@ -142,14 +142,14 @@ class FacturapiHttpClient
     public function postRaw(string $endpoint, array $data = [], ?array $query = null): string
     {
         $url = $this->buildUrl($endpoint, $query);
-        $body = empty($data) ? '' : json_encode($data, JSON_THROW_ON_ERROR);
+        $body = $data === [] ? '' : json_encode($data, JSON_THROW_ON_ERROR);
         return $this->executeRawRequest('POST', $url, ['Content-Type' => 'application/json'], $body);
     }
 
     private function buildUrl(string $endpoint, ?array $params = null): string
     {
         $url = $this->baseUrl . $this->apiVersion . '/' . $endpoint;
-        if ($params !== null && !empty($params)) {
+        if ($params !== null && $params !== []) {
             foreach ($params as $k => $v) {
                 if (is_bool($v)) {
                     $params[$k] = $v ? 'true' : 'false';
