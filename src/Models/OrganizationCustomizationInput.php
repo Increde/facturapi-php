@@ -31,6 +31,6 @@ readonly class OrganizationCustomizationInput
             'next_folio_number' => $this->next_folio_number,
             'next_folio_number_test' => $this->next_folio_number_test,
             'pdf_extra' => $this->pdf_extra
-        ], fn ($v) => $v !== null);
+        ], fn (string|int|array|null $v): bool => $v !== null);
     }
 }

@@ -28,6 +28,6 @@ readonly class CustomerNonEditableProperties
             'edit_link' => $this->edit_link,
             'edit_link_expires_at' => $this->edit_link_expires_at,
             'sat_validated_at' => $this->sat_validated_at
-        ], fn ($v) => $v !== null);
+        ], fn (?string $v): bool => $v !== null);
     }
 }

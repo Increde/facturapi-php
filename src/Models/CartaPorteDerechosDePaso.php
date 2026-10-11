@@ -25,6 +25,6 @@ readonly class CartaPorteDerechosDePaso
         return array_filter([
             'TipoDerechoDePaso' => $this->TipoDerechoDePaso,
             'KilometrajePagado' => $this->KilometrajePagado
-        ], fn ($v) => $v !== null);
+        ], fn (string|float|null $v): bool => $v !== null);
     }
 }

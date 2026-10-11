@@ -9,7 +9,7 @@ readonly class LocalTax
     public function __construct(
         public float $rate,
         public ?float $base = null,
-        public string $type,
+        public string $type = '',
         public ?bool $withholding = null,
     ) {
     }
@@ -31,6 +31,6 @@ readonly class LocalTax
             'base' => $this->base,
             'type' => $this->type,
             'withholding' => $this->withholding
-        ], fn ($v) => $v !== null);
+        ], fn (float|string|bool|null $v): bool => $v !== null);
     }
 }

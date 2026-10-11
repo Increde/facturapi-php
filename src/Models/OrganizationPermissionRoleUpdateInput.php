@@ -31,6 +31,6 @@ readonly class OrganizationPermissionRoleUpdateInput
             'template_code' => $this->template_code,
             'add' => $this->add,
             'remove' => $this->remove
-        ], fn ($v) => $v !== null);
+        ], fn (string|array|null $v): bool => $v !== null);
     }
 }

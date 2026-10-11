@@ -25,6 +25,6 @@ readonly class NominaSubContratacionProperties
         return array_filter([
             'rfc_labora' => $this->rfc_labora,
             'porcentaje_tiempo' => $this->porcentaje_tiempo
-        ], fn ($v) => $v !== null);
+        ], fn (string|float|null $v): bool => $v !== null);
     }
 }

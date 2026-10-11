@@ -11,7 +11,7 @@ readonly class ErrorDetail
         public string $code,
         public ?string $location = null,
         public ?string $path = null,
-        public string $source,
+        public string $source = '',
     ) {
     }
 
@@ -34,6 +34,6 @@ readonly class ErrorDetail
             'location' => $this->location,
             'path' => $this->path,
             'source' => $this->source
-        ], fn ($v) => $v !== null);
+        ], fn (?string $v): bool => $v !== null);
     }
 }

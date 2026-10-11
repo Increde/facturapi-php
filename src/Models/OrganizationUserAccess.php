@@ -46,6 +46,6 @@ readonly class OrganizationUserAccess
             'operations' => $this->operations,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
-        ], fn ($v) => $v !== null);
+        ], fn (string|array|null $v): bool => $v !== null);
     }
 }

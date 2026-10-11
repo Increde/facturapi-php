@@ -13,7 +13,7 @@ readonly class CustomerCreateInput
         public ?string $email = null,
         public ?string $phone = null,
         public ?string $default_invoice_use = null,
-        public mixed $address,
+        public mixed $address = null,
     ) {
     }
 
@@ -40,6 +40,6 @@ readonly class CustomerCreateInput
             'phone' => $this->phone,
             'default_invoice_use' => $this->default_invoice_use,
             'address' => $this->address
-        ], fn ($v) => $v !== null);
+        ], fn ($v): bool => $v !== null);
     }
 }

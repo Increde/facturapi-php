@@ -49,6 +49,6 @@ readonly class OrganizationPermissionRole
             'operations' => $this->operations,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
-        ], fn ($v) => $v !== null);
+        ], fn (int|string|array|null $v): bool => $v !== null);
     }
 }

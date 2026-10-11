@@ -22,6 +22,6 @@ readonly class OrganizationCreateInput
     {
         return array_filter([
             'name' => $this->name
-        ], fn ($v) => $v !== null);
+        ], fn (string $v): true => $v !== null);
     }
 }

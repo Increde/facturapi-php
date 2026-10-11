@@ -25,6 +25,6 @@ readonly class CartaPorteRemolque
         return array_filter([
             'SubTipoRem' => $this->SubTipoRem,
             'Placa' => $this->Placa
-        ], fn ($v) => $v !== null);
+        ], fn (?string $v): bool => $v !== null);
     }
 }

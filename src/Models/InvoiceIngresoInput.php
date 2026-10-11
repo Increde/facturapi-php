@@ -10,10 +10,10 @@ readonly class InvoiceIngresoInput
         public ?string $type = null,
 
         /** @var \Facturapi\Models\LineItemInput[]|null */
-        public array $items,
-        public string $payment_form,
+        public array $items = [],
+        public string $payment_form = '',
         public ?string $payment_method = null,
-        public string $use,
+        public string $use = '',
         public ?string $currency = null,
         public ?float $exchange = null,
         public ?string $conditions = null,
@@ -25,7 +25,7 @@ readonly class InvoiceIngresoInput
 
         /** @var \Facturapi\Models\CartaPorteOrCustomComplementInput[]|null */
         public ?array $complements = null,
-        public mixed $customer,
+        public mixed $customer = null,
         public ?string $status = null,
         public ?string $date = null,
         public mixed $address = null,
@@ -44,17 +44,17 @@ readonly class InvoiceIngresoInput
     {
         return new self(
             $data['type'] ?? null,
-            isset($data['items']) && is_array($data['items']) ? array_map(fn ($i) => is_array($i) ? \Facturapi\Models\LineItemInput::fromArray($i) : $i, $data['items']) : [],
+            isset($data['items']) && is_array($data['items']) ? array_map(fn ($i): mixed => is_array($i) ? \Facturapi\Models\LineItemInput::fromArray($i) : $i, $data['items']) : [],
             $data['payment_form'] ?? '',
             $data['payment_method'] ?? null,
             $data['use'] ?? '',
             $data['currency'] ?? null,
             $data['exchange'] ?? 0,
             $data['conditions'] ?? null,
-            isset($data['related_documents']) && is_array($data['related_documents']) ? array_map(fn ($i) => is_array($i) ? \Facturapi\Models\RelatedDocumentInput::fromArray($i) : $i, $data['related_documents']) : [],
+            isset($data['related_documents']) && is_array($data['related_documents']) ? array_map(fn ($i): mixed => is_array($i) ? \Facturapi\Models\RelatedDocumentInput::fromArray($i) : $i, $data['related_documents']) : [],
             $data['global'] ?? [],
             $data['export'] ?? null,
-            isset($data['complements']) && is_array($data['complements']) ? array_map(fn ($i) => is_array($i) ? \Facturapi\Models\CartaPorteOrCustomComplementInput::fromArray($i) : $i, $data['complements']) : [],
+            isset($data['complements']) && is_array($data['complements']) ? array_map(fn ($i): mixed => is_array($i) ? \Facturapi\Models\CartaPorteOrCustomComplementInput::fromArray($i) : $i, $data['complements']) : [],
             $data['customer'] ?? '',
             $data['status'] ?? null,
             $data['date'] ?? null,
@@ -74,17 +74,17 @@ readonly class InvoiceIngresoInput
     {
         return array_filter([
             'type' => $this->type,
-            'items' => $this->items !== null ? array_map(fn ($i) => $i->toArray(), $this->items) : null,
+            'items' => $this->items !== null ? array_map(fn (\Facturapi\Models\LineItemInput $i): array => $i->toArray(), $this->items) : null,
             'payment_form' => $this->payment_form,
             'payment_method' => $this->payment_method,
             'use' => $this->use,
             'currency' => $this->currency,
             'exchange' => $this->exchange,
             'conditions' => $this->conditions,
-            'related_documents' => $this->related_documents !== null ? array_map(fn ($i) => $i->toArray(), $this->related_documents) : null,
+            'related_documents' => $this->related_documents !== null ? array_map(fn (\Facturapi\Models\RelatedDocumentInput $i): array => $i->toArray(), $this->related_documents) : null,
             'global' => $this->global,
             'export' => $this->export,
-            'complements' => $this->complements !== null ? array_map(fn ($i) => $i->toArray(), $this->complements) : null,
+            'complements' => $this->complements !== null ? array_map(fn (\Facturapi\Models\CartaPorteOrCustomComplementInput $i): array => $i->toArray(), $this->complements) : null,
             'customer' => $this->customer,
             'status' => $this->status,
             'date' => $this->date,
@@ -97,6 +97,6 @@ readonly class InvoiceIngresoInput
             'addenda' => $this->addenda,
             'namespaces' => $this->namespaces,
             'pdf_options' => $this->pdf_options
-        ], fn ($v) => $v !== null);
+        ], fn ($v): bool => $v !== null);
     }
 }

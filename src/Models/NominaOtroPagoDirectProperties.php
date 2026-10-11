@@ -34,6 +34,6 @@ readonly class NominaOtroPagoDirectProperties
             'concepto' => $this->concepto,
             'importe' => $this->importe,
             'subsidio_causado' => $this->subsidio_causado
-        ], fn ($v) => $v !== null);
+        ], fn (string|float|null $v): bool => $v !== null);
     }
 }

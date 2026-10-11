@@ -34,6 +34,6 @@ readonly class NominaPercepcionDirectProperties
             'clave' => $this->clave,
             'importe_gravado' => $this->importe_gravado,
             'importe_exento' => $this->importe_exento
-        ], fn ($v) => $v !== null);
+        ], fn (string|float|null $v): bool => $v !== null);
     }
 }

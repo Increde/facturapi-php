@@ -37,6 +37,6 @@ readonly class CustomerCommonProperties
             'email' => $this->email,
             'phone' => $this->phone,
             'default_invoice_use' => $this->default_invoice_use
-        ], fn ($v) => $v !== null);
+        ], fn (?string $v): bool => $v !== null);
     }
 }

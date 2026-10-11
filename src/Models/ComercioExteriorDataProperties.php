@@ -9,19 +9,19 @@ readonly class ComercioExteriorDataProperties
     public function __construct(
         public ?string $Version = null,
         public ?string $MotivoTraslado = null,
-        public string $ClaveDePedimento,
-        public int $CertificadoOrigen,
+        public string $ClaveDePedimento = '',
+        public int $CertificadoOrigen = 0,
         public ?string $NumCertificadoOrigen = null,
         public ?string $NumeroExportadorConfiable = null,
         public ?string $Incoterm = null,
         public ?string $Observaciones = null,
-        public float $TipoCambioUSD,
-        public float $TotalUSD,
+        public float $TipoCambioUSD = 0.0,
+        public float $TotalUSD = 0.0,
         public mixed $Emisor = null,
         public ?array $Propietario = null,
         public mixed $Receptor = null,
         public ?array $Destinatario = null,
-        public \Facturapi\Models\ComercioExteriorMercancias $Mercancias,
+        public ?\Facturapi\Models\ComercioExteriorMercancias $Mercancias = null,
     ) {
     }
 
@@ -63,7 +63,7 @@ readonly class ComercioExteriorDataProperties
             'Propietario' => $this->Propietario,
             'Receptor' => $this->Receptor,
             'Destinatario' => $this->Destinatario,
-            'Mercancias' => $this->Mercancias !== null ? $this->Mercancias->toArray() : null
-        ], fn ($v) => $v !== null);
+            'Mercancias' => $this->Mercancias?->toArray()
+        ], fn ($v): bool => $v !== null);
     }
 }

@@ -40,6 +40,6 @@ readonly class CommonAddressProperties
             'city' => $this->city,
             'municipality' => $this->municipality,
             'zip' => $this->zip
-        ], fn ($v) => $v !== null);
+        ], fn (?string $v): bool => $v !== null);
     }
 }

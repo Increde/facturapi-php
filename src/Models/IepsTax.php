@@ -37,6 +37,6 @@ readonly class IepsTax
             'factor' => $this->factor,
             'withholding' => $this->withholding,
             'ieps_mode' => $this->ieps_mode
-        ], fn ($v) => $v !== null);
+        ], fn (float|bool|string|null $v): bool => $v !== null);
     }
 }

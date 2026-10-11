@@ -40,6 +40,6 @@ readonly class CartaPorteSeguros
             'AseguraCarga' => $this->AseguraCarga,
             'PolizaCarga' => $this->PolizaCarga,
             'PrimaSeguro' => $this->PrimaSeguro
-        ], fn ($v) => $v !== null);
+        ], fn (string|float|null $v): bool => $v !== null);
     }
 }

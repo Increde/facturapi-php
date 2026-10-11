@@ -43,6 +43,6 @@ readonly class OrganizationAddress
             'municipality' => $this->municipality,
             'zip' => $this->zip,
             'state' => $this->state
-        ], fn ($v) => $v !== null);
+        ], fn (?string $v): bool => $v !== null);
     }
 }

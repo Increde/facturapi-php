@@ -22,6 +22,6 @@ readonly class PagoOrCustomComplementInput
     {
         return array_filter([
             'type' => $this->type
-        ], fn ($v) => $v !== null);
+        ], fn (string $v): true => $v !== null);
     }
 }

@@ -22,6 +22,6 @@ readonly class ReceiptAssignCustomerInput
     {
         return array_filter([
             'customer' => $this->customer
-        ], fn ($v) => $v !== null);
+        ], fn ($v): bool => $v !== null);
     }
 }

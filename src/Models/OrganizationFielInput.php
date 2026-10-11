@@ -28,6 +28,6 @@ readonly class OrganizationFielInput
             'cer' => $this->cer,
             'key' => $this->key,
             'password' => $this->password
-        ], fn ($v) => $v !== null);
+        ], fn (string $v): true => $v !== null);
     }
 }

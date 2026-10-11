@@ -25,6 +25,6 @@ readonly class OrganizationSeriesDefaultInput
         return array_filter([
             'type' => $this->type,
             'series' => $this->series
-        ], fn ($v) => $v !== null);
+        ], fn (string $v): true => $v !== null);
     }
 }

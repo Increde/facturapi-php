@@ -55,6 +55,6 @@ readonly class InvoiceCommonEditInputProperties
             'addenda' => $this->addenda,
             'namespaces' => $this->namespaces,
             'pdf_options' => $this->pdf_options
-        ], fn ($v) => $v !== null);
+        ], fn ($v): bool => $v !== null);
     }
 }

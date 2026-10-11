@@ -15,7 +15,7 @@ readonly class InvoiceZipRequestSearchResult
         public ?bool $totals_are_capped = null,
 
         /** @var \Facturapi\Models\InvoiceZipRequest[]|null */
-        public array $data,
+        public array $data = [],
     ) {
     }
 
@@ -28,7 +28,7 @@ readonly class InvoiceZipRequestSearchResult
             $data['previous_cursor'] ?? null,
             $data['next_cursor'] ?? null,
             $data['totals_are_capped'] ?? false,
-            isset($data['data']) && is_array($data['data']) ? array_map(fn ($i) => is_array($i) ? \Facturapi\Models\InvoiceZipRequest::fromArray($i) : $i, $data['data']) : []
+            isset($data['data']) && is_array($data['data']) ? array_map(fn ($i): mixed => is_array($i) ? \Facturapi\Models\InvoiceZipRequest::fromArray($i) : $i, $data['data']) : []
         );
     }
 
@@ -41,7 +41,7 @@ readonly class InvoiceZipRequestSearchResult
             'previous_cursor' => $this->previous_cursor,
             'next_cursor' => $this->next_cursor,
             'totals_are_capped' => $this->totals_are_capped,
-            'data' => $this->data !== null ? array_map(fn ($i) => $i->toArray(), $this->data) : null
-        ], fn ($v) => $v !== null);
+            'data' => $this->data !== null ? array_map(fn (\Facturapi\Models\InvoiceZipRequest $i): array => $i->toArray(), $this->data) : null
+        ], fn (int|string|bool|array|null $v): bool => $v !== null);
     }
 }

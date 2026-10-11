@@ -17,8 +17,8 @@ readonly class CartaPorteDataProperties
         public ?string $UbicacionPoloOrigen = null,
         public ?string $UbicacionPoloDestino = null,
         public ?array $RegimenesAduaneros = null,
-        public array $Ubicaciones,
-        public \Facturapi\Models\CartaPorteMercancias $Mercancias,
+        public array $Ubicaciones = [],
+        public ?\Facturapi\Models\CartaPorteMercancias $Mercancias = null,
         public ?array $FiguraTransporte = null,
     ) {
     }
@@ -56,8 +56,8 @@ readonly class CartaPorteDataProperties
             'UbicacionPoloDestino' => $this->UbicacionPoloDestino,
             'RegimenesAduaneros' => $this->RegimenesAduaneros,
             'Ubicaciones' => $this->Ubicaciones,
-            'Mercancias' => $this->Mercancias !== null ? $this->Mercancias->toArray() : null,
+            'Mercancias' => $this->Mercancias?->toArray(),
             'FiguraTransporte' => $this->FiguraTransporte
-        ], fn ($v) => $v !== null);
+        ], fn (float|string|array|null $v): bool => $v !== null);
     }
 }

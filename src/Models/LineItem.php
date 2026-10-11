@@ -29,8 +29,8 @@ readonly class LineItem
         return array_filter([
             'quantity' => $this->quantity,
             'discount' => $this->discount,
-            'product' => $this->product !== null ? $this->product->toArray() : null,
-            'parts' => $this->parts !== null ? $this->parts->toArray() : null
-        ], fn ($v) => $v !== null);
+            'product' => $this->product?->toArray(),
+            'parts' => $this->parts?->toArray()
+        ], fn (float|array|null $v): bool => $v !== null);
     }
 }

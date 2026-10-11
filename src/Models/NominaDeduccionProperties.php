@@ -31,6 +31,6 @@ readonly class NominaDeduccionProperties
             'concepto' => $this->concepto,
             'clave' => $this->clave,
             'importe' => $this->importe
-        ], fn ($v) => $v !== null);
+        ], fn (string|float|null $v): bool => $v !== null);
     }
 }

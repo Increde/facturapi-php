@@ -28,6 +28,6 @@ readonly class NamespaceProperties
             'prefix' => $this->prefix,
             'uri' => $this->uri,
             'schema_location' => $this->schema_location
-        ], fn ($v) => $v !== null);
+        ], fn (?string $v): bool => $v !== null);
     }
 }

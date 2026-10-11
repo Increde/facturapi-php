@@ -55,6 +55,6 @@ readonly class CartaPorteTransporteAereo
             'NumRegIdTribEmbarc' => $this->NumRegIdTribEmbarc,
             'ResidenciaFiscalEmbarc' => $this->ResidenciaFiscalEmbarc,
             'NombreEmbarcador' => $this->NombreEmbarcador
-        ], fn ($v) => $v !== null);
+        ], fn (?string $v): bool => $v !== null);
     }
 }

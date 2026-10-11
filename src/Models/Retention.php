@@ -60,7 +60,7 @@ readonly class Retention
             isset($data['complements']) && is_array($data['complements']) ? array_map(fn ($i) => is_array($i) ? \Facturapi\Models\CustomComplementData::fromArray($i) : $i, $data['complements']) : [],
             $data['pdf_custom_section'] ?? null,
             $data['addenda'] ?? null,
-            isset($data['namespaces']) && is_array($data['namespaces']) ? array_map(fn ($i) => is_array($i) ? \Facturapi\Models\NamespaceProperties::fromArray($i) : $i, $data['namespaces']) : []
+            isset($data['namespaces']) && is_array($data['namespaces']) ? array_map(fn ($i): mixed => is_array($i) ? \Facturapi\Models\NamespaceProperties::fromArray($i) : $i, $data['namespaces']) : []
         );
     }
 
@@ -74,8 +74,8 @@ readonly class Retention
             'verification_url' => $this->verification_url,
             'type' => $this->type,
             'uuid' => $this->uuid,
-            'stamp' => $this->stamp !== null ? $this->stamp->toArray() : null,
-            'customer' => $this->customer !== null ? $this->customer->toArray() : null,
+            'stamp' => $this->stamp?->toArray(),
+            'customer' => $this->customer?->toArray(),
             'is_ready_to_stamp' => $this->is_ready_to_stamp,
             'cve_retenc' => $this->cve_retenc,
             'fecha_exp' => $this->fecha_exp,
@@ -85,10 +85,10 @@ readonly class Retention
             'totales' => $this->totales,
             'external_id' => $this->external_id,
             'idempotency_key' => $this->idempotency_key,
-            'complements' => $this->complements !== null ? array_map(fn ($i) => $i->toArray(), $this->complements) : null,
+            'complements' => $this->complements !== null ? array_map(fn (\Facturapi\Models\CustomComplementData $i) => $i->toArray(), $this->complements) : null,
             'pdf_custom_section' => $this->pdf_custom_section,
             'addenda' => $this->addenda,
-            'namespaces' => $this->namespaces !== null ? array_map(fn ($i) => $i->toArray(), $this->namespaces) : null
-        ], fn ($v) => $v !== null);
+            'namespaces' => $this->namespaces !== null ? array_map(fn (\Facturapi\Models\NamespaceProperties $i): array => $i->toArray(), $this->namespaces) : null
+        ], fn (bool|string|array|null $v): bool => $v !== null);
     }
 }

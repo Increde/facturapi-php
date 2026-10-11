@@ -31,6 +31,6 @@ readonly class NominaEmisorProperties
             'registro_patronal' => $this->registro_patronal,
             'rfc_patron_origen' => $this->rfc_patron_origen,
             'entidad_sncf' => $this->entidad_sncf
-        ], fn ($v) => $v !== null);
+        ], fn (string|array|null $v): bool => $v !== null);
     }
 }

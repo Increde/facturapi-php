@@ -58,6 +58,6 @@ readonly class Customer
             'phone' => $this->phone,
             'default_invoice_use' => $this->default_invoice_use,
             'address' => $this->address
-        ], fn ($v) => $v !== null);
+        ], fn ($v): bool => $v !== null);
     }
 }

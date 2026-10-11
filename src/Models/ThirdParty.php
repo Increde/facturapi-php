@@ -31,6 +31,6 @@ readonly class ThirdParty
             'tax_id' => $this->tax_id,
             'tax_system' => $this->tax_system,
             'zip' => $this->zip
-        ], fn ($v) => $v !== null);
+        ], fn (?string $v): bool => $v !== null);
     }
 }

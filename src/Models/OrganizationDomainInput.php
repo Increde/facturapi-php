@@ -21,7 +21,7 @@ readonly class OrganizationDomainInput
     public function toArray(): array
     {
         return array_filter([
-            'domain' => $this->domain !== null ? $this->domain->toArray() : null
-        ], fn ($v) => $v !== null);
+            'domain' => $this->domain?->toArray()
+        ], fn ($v): bool => $v !== null);
     }
 }

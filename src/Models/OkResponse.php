@@ -22,6 +22,6 @@ readonly class OkResponse
     {
         return array_filter([
             'ok' => $this->ok
-        ], fn ($v) => $v !== null);
+        ], fn (bool $v): true => $v !== null);
     }
 }

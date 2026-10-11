@@ -37,6 +37,6 @@ readonly class InvoiceableCommonEditInput
             'addenda' => $this->addenda,
             'namespaces' => $this->namespaces,
             'pdf_options' => $this->pdf_options
-        ], fn ($v) => $v !== null);
+        ], fn (int|string|array|null $v): bool => $v !== null);
     }
 }

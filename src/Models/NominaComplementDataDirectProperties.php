@@ -34,6 +34,6 @@ readonly class NominaComplementDataDirectProperties
             'fecha_inicial_pago' => $this->fecha_inicial_pago,
             'fecha_final_pago' => $this->fecha_final_pago,
             'num_dias_pagados' => $this->num_dias_pagados
-        ], fn ($v) => $v !== null);
+        ], fn (string|float|null $v): bool => $v !== null);
     }
 }

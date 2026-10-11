@@ -74,16 +74,16 @@ readonly class Invoice
             $data['total_payment_amount'] ?? 0,
             $data['total_payment_amount_converted'] ?? 0,
             $data['is_ready_to_stamp'] ?? false,
-            isset($data['items']) && is_array($data['items']) ? array_map(fn ($i) => is_array($i) ? \Facturapi\Models\LineItem::fromArray($i) : $i, $data['items']) : [],
-            isset($data['related_documents']) && is_array($data['related_documents']) ? array_map(fn ($i) => is_array($i) ? \Facturapi\Models\RelatedDocument::fromArray($i) : $i, $data['related_documents']) : [],
+            isset($data['items']) && is_array($data['items']) ? array_map(fn ($i): mixed => is_array($i) ? \Facturapi\Models\LineItem::fromArray($i) : $i, $data['items']) : [],
+            isset($data['related_documents']) && is_array($data['related_documents']) ? array_map(fn ($i): mixed => is_array($i) ? \Facturapi\Models\RelatedDocument::fromArray($i) : $i, $data['related_documents']) : [],
             $data['received_payment_ids'] ?? [],
             $data['target_invoice_ids'] ?? [],
             $data['currency'] ?? null,
             $data['exchange'] ?? 0,
-            isset($data['complements']) && is_array($data['complements']) ? array_map(fn ($i) => is_array($i) ? \Facturapi\Models\NominaOrCustomComplementProperties::fromArray($i) : $i, $data['complements']) : [],
+            isset($data['complements']) && is_array($data['complements']) ? array_map(fn ($i): mixed => is_array($i) ? \Facturapi\Models\NominaOrCustomComplementProperties::fromArray($i) : $i, $data['complements']) : [],
             $data['pdf_custom_section'] ?? null,
             $data['addenda'] ?? null,
-            isset($data['namespaces']) && is_array($data['namespaces']) ? array_map(fn ($i) => is_array($i) ? \Facturapi\Models\NamespaceProperties::fromArray($i) : $i, $data['namespaces']) : [],
+            isset($data['namespaces']) && is_array($data['namespaces']) ? array_map(fn ($i): mixed => is_array($i) ? \Facturapi\Models\NamespaceProperties::fromArray($i) : $i, $data['namespaces']) : [],
             isset($data['stamp']) && is_array($data['stamp']) ? \Facturapi\Models\Stamp::fromArray($data['stamp']) : null
         );
     }
@@ -101,7 +101,7 @@ readonly class Invoice
             'date' => $this->date,
             'address' => $this->address,
             'type' => $this->type,
-            'customer' => $this->customer !== null ? $this->customer->toArray() : null,
+            'customer' => $this->customer?->toArray(),
             'total' => $this->total,
             'uuid' => $this->uuid,
             'folio_number' => $this->folio_number,
@@ -112,17 +112,17 @@ readonly class Invoice
             'total_payment_amount' => $this->total_payment_amount,
             'total_payment_amount_converted' => $this->total_payment_amount_converted,
             'is_ready_to_stamp' => $this->is_ready_to_stamp,
-            'items' => $this->items !== null ? array_map(fn ($i) => $i->toArray(), $this->items) : null,
-            'related_documents' => $this->related_documents !== null ? array_map(fn ($i) => $i->toArray(), $this->related_documents) : null,
+            'items' => $this->items !== null ? array_map(fn (\Facturapi\Models\LineItem $i): array => $i->toArray(), $this->items) : null,
+            'related_documents' => $this->related_documents !== null ? array_map(fn (\Facturapi\Models\RelatedDocument $i): array => $i->toArray(), $this->related_documents) : null,
             'received_payment_ids' => $this->received_payment_ids,
             'target_invoice_ids' => $this->target_invoice_ids,
             'currency' => $this->currency,
             'exchange' => $this->exchange,
-            'complements' => $this->complements !== null ? array_map(fn ($i) => $i->toArray(), $this->complements) : null,
+            'complements' => $this->complements !== null ? array_map(fn (\Facturapi\Models\NominaOrCustomComplementProperties $i): array => $i->toArray(), $this->complements) : null,
             'pdf_custom_section' => $this->pdf_custom_section,
             'addenda' => $this->addenda,
-            'namespaces' => $this->namespaces !== null ? array_map(fn ($i) => $i->toArray(), $this->namespaces) : null,
-            'stamp' => $this->stamp !== null ? $this->stamp->toArray() : null
-        ], fn ($v) => $v !== null);
+            'namespaces' => $this->namespaces !== null ? array_map(fn (\Facturapi\Models\NamespaceProperties $i): array => $i->toArray(), $this->namespaces) : null,
+            'stamp' => $this->stamp?->toArray()
+        ], fn ($v): bool => $v !== null);
     }
 }

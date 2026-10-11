@@ -9,9 +9,9 @@ readonly class CartaPorteMercancia
     public function __construct(
         public string $BienesTransp,
         public ?string $ClaveSTCC = null,
-        public string $Descripcion,
-        public float $Cantidad,
-        public string $ClaveUnidad,
+        public string $Descripcion = '',
+        public float $Cantidad = 0.0,
+        public string $ClaveUnidad = '',
         public ?string $Unidad = null,
         public ?string $Dimensiones = null,
         public ?string $MaterialPeligroso = null,
@@ -38,7 +38,7 @@ readonly class CartaPorteMercancia
         public ?string $DatosFormulador = null,
         public ?string $DatosMaquilador = null,
         public ?string $UsoAutorizado = null,
-        public float $PesoEnKg,
+        public float $PesoEnKg = 0.0,
         public ?float $ValorMercancia = null,
         public ?string $Moneda = null,
         public ?string $FraccionArancelaria = null,
@@ -101,10 +101,10 @@ readonly class CartaPorteMercancia
             $data['UUIDComercioExt'] ?? null,
             $data['TipoMateria'] ?? null,
             $data['DescripcionMateria'] ?? null,
-            isset($data['DocumentacionAduanera']) && is_array($data['DocumentacionAduanera']) ? array_map(fn ($i) => is_array($i) ? \Facturapi\Models\CartaPorteDocumentacionAduanera::fromArray($i) : $i, $data['DocumentacionAduanera']) : [],
-            isset($data['GuiasIdentificacion']) && is_array($data['GuiasIdentificacion']) ? array_map(fn ($i) => is_array($i) ? \Facturapi\Models\CartaPorteGuiaIdentificacion::fromArray($i) : $i, $data['GuiasIdentificacion']) : [],
-            isset($data['CantidadTransporta']) && is_array($data['CantidadTransporta']) ? array_map(fn ($i) => is_array($i) ? \Facturapi\Models\CartaPorteCantidadTransporta::fromArray($i) : $i, $data['CantidadTransporta']) : [],
-            isset($data['DetalleMercancia']) && is_array($data['DetalleMercancia']) ? array_map(fn ($i) => is_array($i) ? \Facturapi\Models\CartaPorteDetalleMercancia::fromArray($i) : $i, $data['DetalleMercancia']) : []
+            isset($data['DocumentacionAduanera']) && is_array($data['DocumentacionAduanera']) ? array_map(fn ($i): mixed => is_array($i) ? \Facturapi\Models\CartaPorteDocumentacionAduanera::fromArray($i) : $i, $data['DocumentacionAduanera']) : [],
+            isset($data['GuiasIdentificacion']) && is_array($data['GuiasIdentificacion']) ? array_map(fn ($i): mixed => is_array($i) ? \Facturapi\Models\CartaPorteGuiaIdentificacion::fromArray($i) : $i, $data['GuiasIdentificacion']) : [],
+            isset($data['CantidadTransporta']) && is_array($data['CantidadTransporta']) ? array_map(fn ($i): mixed => is_array($i) ? \Facturapi\Models\CartaPorteCantidadTransporta::fromArray($i) : $i, $data['CantidadTransporta']) : [],
+            isset($data['DetalleMercancia']) && is_array($data['DetalleMercancia']) ? array_map(fn ($i): mixed => is_array($i) ? \Facturapi\Models\CartaPorteDetalleMercancia::fromArray($i) : $i, $data['DetalleMercancia']) : []
         );
     }
 
@@ -149,10 +149,10 @@ readonly class CartaPorteMercancia
             'UUIDComercioExt' => $this->UUIDComercioExt,
             'TipoMateria' => $this->TipoMateria,
             'DescripcionMateria' => $this->DescripcionMateria,
-            'DocumentacionAduanera' => $this->DocumentacionAduanera !== null ? array_map(fn ($i) => $i->toArray(), $this->DocumentacionAduanera) : null,
-            'GuiasIdentificacion' => $this->GuiasIdentificacion !== null ? array_map(fn ($i) => $i->toArray(), $this->GuiasIdentificacion) : null,
-            'CantidadTransporta' => $this->CantidadTransporta !== null ? array_map(fn ($i) => $i->toArray(), $this->CantidadTransporta) : null,
-            'DetalleMercancia' => $this->DetalleMercancia !== null ? array_map(fn ($i) => $i->toArray(), $this->DetalleMercancia) : null
-        ], fn ($v) => $v !== null);
+            'DocumentacionAduanera' => $this->DocumentacionAduanera !== null ? array_map(fn (\Facturapi\Models\CartaPorteDocumentacionAduanera $i): array => $i->toArray(), $this->DocumentacionAduanera) : null,
+            'GuiasIdentificacion' => $this->GuiasIdentificacion !== null ? array_map(fn (\Facturapi\Models\CartaPorteGuiaIdentificacion $i): array => $i->toArray(), $this->GuiasIdentificacion) : null,
+            'CantidadTransporta' => $this->CantidadTransporta !== null ? array_map(fn (\Facturapi\Models\CartaPorteCantidadTransporta $i): array => $i->toArray(), $this->CantidadTransporta) : null,
+            'DetalleMercancia' => $this->DetalleMercancia !== null ? array_map(fn (\Facturapi\Models\CartaPorteDetalleMercancia $i): array => $i->toArray(), $this->DetalleMercancia) : null
+        ], fn (string|float|array|null $v): bool => $v !== null);
     }
 }

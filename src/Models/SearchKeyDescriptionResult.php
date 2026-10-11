@@ -40,6 +40,6 @@ readonly class SearchKeyDescriptionResult
             'next_cursor' => $this->next_cursor,
             'totals_are_capped' => $this->totals_are_capped,
             'data' => $this->data
-        ], fn ($v) => $v !== null);
+        ], fn (int|string|bool|array|null $v): bool => $v !== null);
     }
 }

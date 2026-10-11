@@ -34,6 +34,6 @@ readonly class NominaSeparacionInput
             'ultimo_sueldo_mens_ord' => $this->ultimo_sueldo_mens_ord,
             'ingreso_acumulable' => $this->ingreso_acumulable,
             'ingreso_no_acumulable' => $this->ingreso_no_acumulable
-        ], fn ($v) => $v !== null);
+        ], fn (int|float $v): true => $v !== null);
     }
 }

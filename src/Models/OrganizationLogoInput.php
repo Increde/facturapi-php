@@ -22,6 +22,6 @@ readonly class OrganizationLogoInput
     {
         return array_filter([
             'file' => $this->file
-        ], fn ($v) => $v !== null);
+        ], fn (string $v): true => $v !== null);
     }
 }

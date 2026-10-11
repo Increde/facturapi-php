@@ -31,6 +31,6 @@ readonly class EventBase
             'created_at' => $this->created_at,
             'livemode' => $this->livemode,
             'organization' => $this->organization
-        ], fn ($v) => $v !== null);
+        ], fn (bool|string|null $v): bool => $v !== null);
     }
 }

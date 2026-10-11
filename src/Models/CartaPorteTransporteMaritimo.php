@@ -60,7 +60,7 @@ readonly class CartaPorteTransporteMaritimo
             $data['NumViaje'] ?? null,
             $data['NumConocEmbarc'] ?? null,
             $data['PermisoTempNavegacion'] ?? null,
-            isset($data['Contenedor']) && is_array($data['Contenedor']) ? array_map(fn ($i) => is_array($i) ? \Facturapi\Models\CartaPorteContenedorMaritimo::fromArray($i) : $i, $data['Contenedor']) : []
+            isset($data['Contenedor']) && is_array($data['Contenedor']) ? array_map(fn ($i): mixed => is_array($i) ? \Facturapi\Models\CartaPorteContenedorMaritimo::fromArray($i) : $i, $data['Contenedor']) : []
         );
     }
 
@@ -89,7 +89,7 @@ readonly class CartaPorteTransporteMaritimo
             'NumViaje' => $this->NumViaje,
             'NumConocEmbarc' => $this->NumConocEmbarc,
             'PermisoTempNavegacion' => $this->PermisoTempNavegacion,
-            'Contenedor' => $this->Contenedor !== null ? array_map(fn ($i) => $i->toArray(), $this->Contenedor) : null
-        ], fn ($v) => $v !== null);
+            'Contenedor' => $this->Contenedor !== null ? array_map(fn (\Facturapi\Models\CartaPorteContenedorMaritimo $i): array => $i->toArray(), $this->Contenedor) : null
+        ], fn (string|float|array|null $v): bool => $v !== null);
     }
 }

@@ -31,6 +31,6 @@ readonly class HidroYPetroComplementInput
             'numero_permiso' => $this->numero_permiso,
             'sub_producto_hyp' => $this->sub_producto_hyp,
             'clave_hyp' => $this->clave_hyp
-        ], fn ($v) => $v !== null);
+        ], fn (?string $v): bool => $v !== null);
     }
 }

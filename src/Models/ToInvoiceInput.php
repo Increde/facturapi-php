@@ -34,6 +34,6 @@ readonly class ToInvoiceInput
             'use' => $this->use,
             'dry_run' => $this->dry_run,
             'payment_form' => $this->payment_form
-        ], fn ($v) => $v !== null);
+        ], fn ($v): bool => $v !== null);
     }
 }

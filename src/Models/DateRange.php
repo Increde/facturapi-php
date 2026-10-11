@@ -31,6 +31,6 @@ readonly class DateRange
             'gte' => $this->gte,
             'lt' => $this->lt,
             'lte' => $this->lte
-        ], fn ($v) => $v !== null);
+        ], fn (?string $v): bool => $v !== null);
     }
 }

@@ -31,6 +31,6 @@ readonly class CartaPorteCantidadTransporta
             'IDOrigen' => $this->IDOrigen,
             'IDDestino' => $this->IDDestino,
             'CvesTransporte' => $this->CvesTransporte
-        ], fn ($v) => $v !== null);
+        ], fn (float|string|null $v): bool => $v !== null);
     }
 }

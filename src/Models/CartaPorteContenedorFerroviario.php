@@ -28,6 +28,6 @@ readonly class CartaPorteContenedorFerroviario
             'TipoContenedor' => $this->TipoContenedor,
             'PesoContenedorVacio' => $this->PesoContenedorVacio,
             'PesoNetoMercancia' => $this->PesoNetoMercancia
-        ], fn ($v) => $v !== null);
+        ], fn (string|float|null $v): bool => $v !== null);
     }
 }

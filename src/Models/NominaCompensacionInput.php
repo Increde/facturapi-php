@@ -28,6 +28,6 @@ readonly class NominaCompensacionInput
             'saldo_a_favor' => $this->saldo_a_favor,
             'ano' => $this->ano,
             'remanente_sal_fav' => $this->remanente_sal_fav
-        ], fn ($v) => $v !== null);
+        ], fn (int|float $v): true => $v !== null);
     }
 }

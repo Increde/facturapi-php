@@ -22,6 +22,6 @@ readonly class OrganizationInviteRespondInput
     {
         return array_filter([
             'accept' => $this->accept
-        ], fn ($v) => $v !== null);
+        ], fn (bool $v): true => $v !== null);
     }
 }

@@ -59,10 +59,10 @@ readonly class RetentionUpdateInput
             'totales' => $this->totales,
             'external_id' => $this->external_id,
             'idempotency_key' => $this->idempotency_key,
-            'complements' => $this->complements !== null ? array_map(fn ($i) => $i->toArray(), $this->complements) : null,
+            'complements' => $this->complements !== null ? array_map(fn (\Facturapi\Models\CustomComplementData $i) => $i->toArray(), $this->complements) : null,
             'pdf_custom_section' => $this->pdf_custom_section,
             'addenda' => $this->addenda,
             'namespaces' => $this->namespaces
-        ], fn ($v) => $v !== null);
+        ], fn ($v): bool => $v !== null);
     }
 }

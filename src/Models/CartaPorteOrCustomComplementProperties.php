@@ -22,6 +22,6 @@ readonly class CartaPorteOrCustomComplementProperties
     {
         return array_filter([
             'type' => $this->type
-        ], fn ($v) => $v !== null);
+        ], fn (?string $v): bool => $v !== null);
     }
 }

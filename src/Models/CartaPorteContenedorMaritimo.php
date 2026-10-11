@@ -40,6 +40,6 @@ readonly class CartaPorteContenedorMaritimo
             'PlacaVMCCP' => $this->PlacaVMCCP,
             'FechaCertificacionCCP' => $this->FechaCertificacionCCP,
             'RemolquesCCP' => $this->RemolquesCCP
-        ], fn ($v) => $v !== null);
+        ], fn (string|array|null $v): bool => $v !== null);
     }
 }

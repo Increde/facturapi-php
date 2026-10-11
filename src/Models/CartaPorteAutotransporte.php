@@ -24,7 +24,7 @@ readonly class CartaPorteAutotransporte
             $data['NumPermisoSCT'] ?? null,
             isset($data['IdentificacionVehicular']) && is_array($data['IdentificacionVehicular']) ? \Facturapi\Models\CartaPorteIdentificacionVehicular::fromArray($data['IdentificacionVehicular']) : null,
             isset($data['Seguros']) && is_array($data['Seguros']) ? \Facturapi\Models\CartaPorteSeguros::fromArray($data['Seguros']) : null,
-            isset($data['Remolques']) && is_array($data['Remolques']) ? array_map(fn ($i) => is_array($i) ? \Facturapi\Models\CartaPorteRemolque::fromArray($i) : $i, $data['Remolques']) : []
+            isset($data['Remolques']) && is_array($data['Remolques']) ? array_map(fn ($i): mixed => is_array($i) ? \Facturapi\Models\CartaPorteRemolque::fromArray($i) : $i, $data['Remolques']) : []
         );
     }
 
@@ -33,9 +33,9 @@ readonly class CartaPorteAutotransporte
         return array_filter([
             'PermSCT' => $this->PermSCT,
             'NumPermisoSCT' => $this->NumPermisoSCT,
-            'IdentificacionVehicular' => $this->IdentificacionVehicular !== null ? $this->IdentificacionVehicular->toArray() : null,
-            'Seguros' => $this->Seguros !== null ? $this->Seguros->toArray() : null,
-            'Remolques' => $this->Remolques !== null ? array_map(fn ($i) => $i->toArray(), $this->Remolques) : null
-        ], fn ($v) => $v !== null);
+            'IdentificacionVehicular' => $this->IdentificacionVehicular?->toArray(),
+            'Seguros' => $this->Seguros?->toArray(),
+            'Remolques' => $this->Remolques !== null ? array_map(fn (\Facturapi\Models\CartaPorteRemolque $i): array => $i->toArray(), $this->Remolques) : null
+        ], fn (string|array|null $v): bool => $v !== null);
     }
 }

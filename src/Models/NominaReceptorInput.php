@@ -11,20 +11,20 @@ readonly class NominaReceptorInput
         public ?string $num_seguridad_social = null,
         public ?string $fecha_inicio_rel_laboral = null,
         public mixed $antiguedad = null,
-        public string $tipo_contrato,
+        public string $tipo_contrato = '',
         public ?bool $sindicalizado = null,
         public ?string $tipo_jornada = null,
-        public string $tipo_regimen,
-        public string $num_empleado,
+        public string $tipo_regimen = '',
+        public string $num_empleado = '',
         public ?string $departamento = null,
         public ?string $puesto = null,
         public ?string $riesgo_puesto = null,
-        public string $periodicidad_pago,
+        public string $periodicidad_pago = '',
         public ?string $banco = null,
         public ?string $cuenta_bancaria = null,
         public ?float $salario_base_cot_apor = null,
         public ?float $salario_diario_integrado = null,
-        public string $clave_ent_fed,
+        public string $clave_ent_fed = '',
         public ?array $sub_contratacion = null,
     ) {
     }
@@ -76,6 +76,6 @@ readonly class NominaReceptorInput
             'salario_diario_integrado' => $this->salario_diario_integrado,
             'clave_ent_fed' => $this->clave_ent_fed,
             'sub_contratacion' => $this->sub_contratacion
-        ], fn ($v) => $v !== null);
+        ], fn ($v): bool => $v !== null);
     }
 }

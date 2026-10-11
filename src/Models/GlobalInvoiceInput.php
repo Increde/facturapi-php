@@ -9,7 +9,7 @@ readonly class GlobalInvoiceInput
     public function __construct(
         public ?string $from = null,
         public ?string $to = null,
-        public string $periodicity,
+        public string $periodicity = '',
         public ?string $months = null,
         public ?int $folio_number = null,
         public ?string $series = null,
@@ -49,6 +49,6 @@ readonly class GlobalInvoiceInput
             'payment_form' => $this->payment_form,
             'receipts' => $this->receipts,
             'limit_to_max_receipts' => $this->limit_to_max_receipts
-        ], fn ($v) => $v !== null);
+        ], fn (int|string|bool|array|null $v): bool => $v !== null);
     }
 }

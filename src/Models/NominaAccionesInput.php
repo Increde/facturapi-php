@@ -25,6 +25,6 @@ readonly class NominaAccionesInput
         return array_filter([
             'valor_mercado' => $this->valor_mercado,
             'precio_al_otorgarse' => $this->precio_al_otorgarse
-        ], fn ($v) => $v !== null);
+        ], fn (float $v): true => $v !== null);
     }
 }

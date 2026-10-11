@@ -28,6 +28,6 @@ readonly class NominaIncapacidadInput
             'dias_incapacidad' => $this->dias_incapacidad,
             'tipo_incapacidad' => $this->tipo_incapacidad,
             'importe_monetario' => $this->importe_monetario
-        ], fn ($v) => $v !== null);
+        ], fn (int|string|float|null $v): bool => $v !== null);
     }
 }

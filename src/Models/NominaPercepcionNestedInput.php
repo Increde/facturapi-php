@@ -18,15 +18,15 @@ readonly class NominaPercepcionNestedInput
     {
         return new self(
             isset($data['acciones_o_titulos']) && is_array($data['acciones_o_titulos']) ? \Facturapi\Models\NominaAccionesInput::fromArray($data['acciones_o_titulos']) : null,
-            isset($data['horas_extra']) && is_array($data['horas_extra']) ? array_map(fn ($i) => is_array($i) ? \Facturapi\Models\NominaHorasExtraInput::fromArray($i) : $i, $data['horas_extra']) : []
+            isset($data['horas_extra']) && is_array($data['horas_extra']) ? array_map(fn ($i): mixed => is_array($i) ? \Facturapi\Models\NominaHorasExtraInput::fromArray($i) : $i, $data['horas_extra']) : []
         );
     }
 
     public function toArray(): array
     {
         return array_filter([
-            'acciones_o_titulos' => $this->acciones_o_titulos !== null ? $this->acciones_o_titulos->toArray() : null,
-            'horas_extra' => $this->horas_extra !== null ? array_map(fn ($i) => $i->toArray(), $this->horas_extra) : null
-        ], fn ($v) => $v !== null);
+            'acciones_o_titulos' => $this->acciones_o_titulos?->toArray(),
+            'horas_extra' => $this->horas_extra !== null ? array_map(fn (\Facturapi\Models\NominaHorasExtraInput $i): array => $i->toArray(), $this->horas_extra) : null
+        ], fn (?array $v): bool => $v !== null);
     }
 }

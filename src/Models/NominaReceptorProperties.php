@@ -52,7 +52,7 @@ readonly class NominaReceptorProperties
             $data['salario_base_cot_apor'] ?? 0,
             $data['salario_diario_integrado'] ?? 0,
             $data['clave_ent_fed'] ?? null,
-            isset($data['sub_contratacion']) && is_array($data['sub_contratacion']) ? array_map(fn ($i) => is_array($i) ? \Facturapi\Models\NominaSubContratacionProperties::fromArray($i) : $i, $data['sub_contratacion']) : []
+            isset($data['sub_contratacion']) && is_array($data['sub_contratacion']) ? array_map(fn ($i): mixed => is_array($i) ? \Facturapi\Models\NominaSubContratacionProperties::fromArray($i) : $i, $data['sub_contratacion']) : []
         );
     }
 
@@ -77,7 +77,7 @@ readonly class NominaReceptorProperties
             'salario_base_cot_apor' => $this->salario_base_cot_apor,
             'salario_diario_integrado' => $this->salario_diario_integrado,
             'clave_ent_fed' => $this->clave_ent_fed,
-            'sub_contratacion' => $this->sub_contratacion !== null ? array_map(fn ($i) => $i->toArray(), $this->sub_contratacion) : null
-        ], fn ($v) => $v !== null);
+            'sub_contratacion' => $this->sub_contratacion !== null ? array_map(fn (\Facturapi\Models\NominaSubContratacionProperties $i): array => $i->toArray(), $this->sub_contratacion) : null
+        ], fn ($v): bool => $v !== null);
     }
 }

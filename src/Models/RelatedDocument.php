@@ -25,6 +25,6 @@ readonly class RelatedDocument
         return array_filter([
             'relationship' => $this->relationship,
             'documents' => $this->documents
-        ], fn ($v) => $v !== null);
+        ], fn (string|array|null $v): bool => $v !== null);
     }
 }

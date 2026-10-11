@@ -10,12 +10,12 @@ readonly class CartaPorteMercancias
         public float $PesoBrutoTotal,
         public string $UnidadPeso,
         public ?float $PesoNetoTotal = null,
-        public float $NumTotalMercancias,
+        public float $NumTotalMercancias = 0.0,
         public ?float $CargoPorTasacion = null,
         public ?string $LogisticaInversaRecoleccionDevolucion = null,
 
         /** @var \Facturapi\Models\CartaPorteMercancia[]|null */
-        public array $Mercancia,
+        public array $Mercancia = [],
         public ?\Facturapi\Models\CartaPorteAutotransporte $Autotransporte = null,
         public ?\Facturapi\Models\CartaPorteTransporteMaritimo $TransporteMaritimo = null,
         public ?\Facturapi\Models\CartaPorteTransporteAereo $TransporteAereo = null,
@@ -32,7 +32,7 @@ readonly class CartaPorteMercancias
             $data['NumTotalMercancias'] ?? 0,
             $data['CargoPorTasacion'] ?? 0,
             $data['LogisticaInversaRecoleccionDevolucion'] ?? null,
-            isset($data['Mercancia']) && is_array($data['Mercancia']) ? array_map(fn ($i) => is_array($i) ? \Facturapi\Models\CartaPorteMercancia::fromArray($i) : $i, $data['Mercancia']) : [],
+            isset($data['Mercancia']) && is_array($data['Mercancia']) ? array_map(fn ($i): mixed => is_array($i) ? \Facturapi\Models\CartaPorteMercancia::fromArray($i) : $i, $data['Mercancia']) : [],
             isset($data['Autotransporte']) && is_array($data['Autotransporte']) ? \Facturapi\Models\CartaPorteAutotransporte::fromArray($data['Autotransporte']) : null,
             isset($data['TransporteMaritimo']) && is_array($data['TransporteMaritimo']) ? \Facturapi\Models\CartaPorteTransporteMaritimo::fromArray($data['TransporteMaritimo']) : null,
             isset($data['TransporteAereo']) && is_array($data['TransporteAereo']) ? \Facturapi\Models\CartaPorteTransporteAereo::fromArray($data['TransporteAereo']) : null,
@@ -49,11 +49,11 @@ readonly class CartaPorteMercancias
             'NumTotalMercancias' => $this->NumTotalMercancias,
             'CargoPorTasacion' => $this->CargoPorTasacion,
             'LogisticaInversaRecoleccionDevolucion' => $this->LogisticaInversaRecoleccionDevolucion,
-            'Mercancia' => $this->Mercancia !== null ? array_map(fn ($i) => $i->toArray(), $this->Mercancia) : null,
-            'Autotransporte' => $this->Autotransporte !== null ? $this->Autotransporte->toArray() : null,
-            'TransporteMaritimo' => $this->TransporteMaritimo !== null ? $this->TransporteMaritimo->toArray() : null,
-            'TransporteAereo' => $this->TransporteAereo !== null ? $this->TransporteAereo->toArray() : null,
-            'TransporteFerroviario' => $this->TransporteFerroviario !== null ? $this->TransporteFerroviario->toArray() : null
-        ], fn ($v) => $v !== null);
+            'Mercancia' => $this->Mercancia !== null ? array_map(fn (\Facturapi\Models\CartaPorteMercancia $i): array => $i->toArray(), $this->Mercancia) : null,
+            'Autotransporte' => $this->Autotransporte?->toArray(),
+            'TransporteMaritimo' => $this->TransporteMaritimo?->toArray(),
+            'TransporteAereo' => $this->TransporteAereo?->toArray(),
+            'TransporteFerroviario' => $this->TransporteFerroviario?->toArray()
+        ], fn (float|string|array|null $v): bool => $v !== null);
     }
 }

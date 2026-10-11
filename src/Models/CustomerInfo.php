@@ -31,6 +31,6 @@ readonly class CustomerInfo
             'legal_name' => $this->legal_name,
             'tax_id' => $this->tax_id,
             'address' => $this->address
-        ], fn ($v) => $v !== null);
+        ], fn (string|array|null $v): bool => $v !== null);
     }
 }

@@ -22,6 +22,6 @@ readonly class NominaReceptorNestedInput
     {
         return array_filter([
             'sub_contratacion' => $this->sub_contratacion
-        ], fn ($v) => $v !== null);
+        ], fn (?array $v): bool => $v !== null);
     }
 }

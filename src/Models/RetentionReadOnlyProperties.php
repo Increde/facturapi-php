@@ -37,9 +37,9 @@ readonly class RetentionReadOnlyProperties
             'verification_url' => $this->verification_url,
             'type' => $this->type,
             'uuid' => $this->uuid,
-            'stamp' => $this->stamp !== null ? $this->stamp->toArray() : null,
-            'customer' => $this->customer !== null ? $this->customer->toArray() : null,
+            'stamp' => $this->stamp?->toArray(),
+            'customer' => $this->customer?->toArray(),
             'is_ready_to_stamp' => $this->is_ready_to_stamp
-        ], fn ($v) => $v !== null);
+        ], fn (string|bool|array|null $v): bool => $v !== null);
     }
 }

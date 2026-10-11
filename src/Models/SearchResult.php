@@ -37,6 +37,6 @@ readonly class SearchResult
             'previous_cursor' => $this->previous_cursor,
             'next_cursor' => $this->next_cursor,
             'totals_are_capped' => $this->totals_are_capped
-        ], fn ($v) => $v !== null);
+        ], fn (int|string|bool|null $v): bool => $v !== null);
     }
 }

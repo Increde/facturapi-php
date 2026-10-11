@@ -28,6 +28,6 @@ readonly class ProductCatalogResult
             'key' => $this->key,
             'description' => $this->description,
             'score' => $this->score
-        ], fn ($v) => $v !== null);
+        ], fn (string|float|null $v): bool => $v !== null);
     }
 }

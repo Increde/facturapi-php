@@ -64,6 +64,6 @@ readonly class PaymentInput
             'certPago' => $this->certPago,
             'cadPago' => $this->cadPago,
             'selloPago' => $this->selloPago
-        ], fn ($v) => $v !== null);
+        ], fn (float|string|array|null $v): bool => $v !== null);
     }
 }

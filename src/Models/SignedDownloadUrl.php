@@ -31,6 +31,6 @@ readonly class SignedDownloadUrl
             'expires_at' => $this->expires_at,
             'content_type' => $this->content_type,
             'filename' => $this->filename
-        ], fn ($v) => $v !== null);
+        ], fn (string $v): true => $v !== null);
     }
 }

@@ -31,6 +31,6 @@ readonly class ComercioExteriorDescripcionesEspecificas
             'Modelo' => $this->Modelo,
             'SubModelo' => $this->SubModelo,
             'NumeroSerie' => $this->NumeroSerie
-        ], fn ($v) => $v !== null);
+        ], fn (?string $v): bool => $v !== null);
     }
 }

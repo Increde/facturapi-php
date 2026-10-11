@@ -9,8 +9,8 @@ readonly class NominaDeduccionInput
     public function __construct(
         public string $tipo_deduccion,
         public ?string $concepto = null,
-        public string $clave,
-        public float $importe,
+        public string $clave = '',
+        public float $importe = 0.0,
     ) {
     }
 
@@ -31,6 +31,6 @@ readonly class NominaDeduccionInput
             'concepto' => $this->concepto,
             'clave' => $this->clave,
             'importe' => $this->importe
-        ], fn ($v) => $v !== null);
+        ], fn (string|float|null $v): bool => $v !== null);
     }
 }

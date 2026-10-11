@@ -31,6 +31,6 @@ readonly class CartaPorteDocumentacionAduanera
             'NumPedimento' => $this->NumPedimento,
             'IdentDocAduanero' => $this->IdentDocAduanero,
             'RFCImpo' => $this->RFCImpo
-        ], fn ($v) => $v !== null);
+        ], fn (?string $v): bool => $v !== null);
     }
 }

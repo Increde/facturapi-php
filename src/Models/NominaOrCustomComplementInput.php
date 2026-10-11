@@ -22,6 +22,6 @@ readonly class NominaOrCustomComplementInput
     {
         return array_filter([
             'type' => $this->type
-        ], fn ($v) => $v !== null);
+        ], fn (string $v): true => $v !== null);
     }
 }

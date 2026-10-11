@@ -34,6 +34,6 @@ readonly class BaseTax
             'type' => $this->type,
             'factor' => $this->factor,
             'withholding' => $this->withholding
-        ], fn ($v) => $v !== null);
+        ], fn (float|string|bool|null $v): bool => $v !== null);
     }
 }

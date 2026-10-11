@@ -23,8 +23,8 @@ readonly class ComercioExteriorReceptor
     public function toArray(): array
     {
         return array_filter([
-            'Domicilio' => $this->Domicilio !== null ? $this->Domicilio->toArray() : null,
+            'Domicilio' => $this->Domicilio?->toArray(),
             'NumRegIdTrib' => $this->NumRegIdTrib
-        ], fn ($v) => $v !== null);
+        ], fn (string|array|null $v): bool => $v !== null);
     }
 }

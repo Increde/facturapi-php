@@ -11,9 +11,9 @@ readonly class ReceiptInput
         public mixed $address = null,
 
         /** @var \Facturapi\Models\LineItemInput[]|null */
-        public array $items,
+        public array $items = [],
         public ?string $date = null,
-        public string $payment_form,
+        public string $payment_form = '',
         public ?int $folio_number = null,
         public ?string $currency = null,
         public ?float $exchange = null,
@@ -28,7 +28,7 @@ readonly class ReceiptInput
         return new self(
             $data['customer'] ?? null,
             $data['address'] ?? null,
-            isset($data['items']) && is_array($data['items']) ? array_map(fn ($i) => is_array($i) ? \Facturapi\Models\LineItemInput::fromArray($i) : $i, $data['items']) : [],
+            isset($data['items']) && is_array($data['items']) ? array_map(fn ($i): mixed => is_array($i) ? \Facturapi\Models\LineItemInput::fromArray($i) : $i, $data['items']) : [],
             $data['date'] ?? null,
             $data['payment_form'] ?? '',
             $data['folio_number'] ?? 0,
@@ -45,7 +45,7 @@ readonly class ReceiptInput
         return array_filter([
             'customer' => $this->customer,
             'address' => $this->address,
-            'items' => $this->items !== null ? array_map(fn ($i) => $i->toArray(), $this->items) : null,
+            'items' => $this->items !== null ? array_map(fn (\Facturapi\Models\LineItemInput $i): array => $i->toArray(), $this->items) : null,
             'date' => $this->date,
             'payment_form' => $this->payment_form,
             'folio_number' => $this->folio_number,
@@ -54,6 +54,6 @@ readonly class ReceiptInput
             'branch' => $this->branch,
             'external_id' => $this->external_id,
             'idempotency_key' => $this->idempotency_key
-        ], fn ($v) => $v !== null);
+        ], fn ($v): bool => $v !== null);
     }
 }

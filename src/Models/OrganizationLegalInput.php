@@ -13,7 +13,7 @@ readonly class OrganizationLegalInput
         public ?string $website = null,
         public ?string $support_email = null,
         public ?string $phone = null,
-        public mixed $address,
+        public mixed $address = null,
     ) {
     }
 
@@ -40,6 +40,6 @@ readonly class OrganizationLegalInput
             'support_email' => $this->support_email,
             'phone' => $this->phone,
             'address' => $this->address
-        ], fn ($v) => $v !== null);
+        ], fn ($v): bool => $v !== null);
     }
 }

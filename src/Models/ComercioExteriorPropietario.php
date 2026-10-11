@@ -25,6 +25,6 @@ readonly class ComercioExteriorPropietario
         return array_filter([
             'NumRegIdTrib' => $this->NumRegIdTrib,
             'ResidenciaFiscal' => $this->ResidenciaFiscal
-        ], fn ($v) => $v !== null);
+        ], fn (string $v): true => $v !== null);
     }
 }

@@ -14,9 +14,9 @@ readonly class CartaPorteDomicilio
         public ?string $Localidad = null,
         public ?string $Referencia = null,
         public ?string $Municipio = null,
-        public string $Estado,
-        public string $Pais,
-        public string $CodigoPostal,
+        public string $Estado = '',
+        public string $Pais = '',
+        public string $CodigoPostal = '',
     ) {
     }
 
@@ -49,6 +49,6 @@ readonly class CartaPorteDomicilio
             'Estado' => $this->Estado,
             'Pais' => $this->Pais,
             'CodigoPostal' => $this->CodigoPostal
-        ], fn ($v) => $v !== null);
+        ], fn (?string $v): bool => $v !== null);
     }
 }

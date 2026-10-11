@@ -45,7 +45,7 @@ readonly class Receipt
             $data['invoice'] ?? null,
             $data['customer'] ?? null,
             $data['key'] ?? null,
-            isset($data['items']) && is_array($data['items']) ? array_map(fn ($i) => is_array($i) ? \Facturapi\Models\LineItem::fromArray($i) : $i, $data['items']) : [],
+            isset($data['items']) && is_array($data['items']) ? array_map(fn ($i): mixed => is_array($i) ? \Facturapi\Models\LineItem::fromArray($i) : $i, $data['items']) : [],
             $data['external_id'] ?? null,
             $data['idempotency_key'] ?? null,
             $data['payment_form'] ?? null,
@@ -70,7 +70,7 @@ readonly class Receipt
             'invoice' => $this->invoice,
             'customer' => $this->customer,
             'key' => $this->key,
-            'items' => $this->items !== null ? array_map(fn ($i) => $i->toArray(), $this->items) : null,
+            'items' => $this->items !== null ? array_map(fn (\Facturapi\Models\LineItem $i): array => $i->toArray(), $this->items) : null,
             'external_id' => $this->external_id,
             'idempotency_key' => $this->idempotency_key,
             'payment_form' => $this->payment_form,
@@ -78,6 +78,6 @@ readonly class Receipt
             'currency' => $this->currency,
             'exchange' => $this->exchange,
             'branch' => $this->branch
-        ], fn ($v) => $v !== null);
+        ], fn (string|bool|float|int|array|null $v): bool => $v !== null);
     }
 }

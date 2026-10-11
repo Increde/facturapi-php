@@ -34,6 +34,6 @@ readonly class NominaJubilacionProperties
             'monto_diario' => $this->monto_diario,
             'ingreso_acumulable' => $this->ingreso_acumulable,
             'ingreso_no_acumulable' => $this->ingreso_no_acumulable
-        ], fn ($v) => $v !== null);
+        ], fn (?float $v): bool => $v !== null);
     }
 }

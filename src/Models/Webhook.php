@@ -40,6 +40,6 @@ readonly class Webhook
             'enabled_events' => $this->enabled_events,
             'url' => $this->url,
             'status' => $this->status
-        ], fn ($v) => $v !== null);
+        ], fn (bool|string|null $v): bool => $v !== null);
     }
 }

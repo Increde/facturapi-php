@@ -34,6 +34,6 @@ readonly class LineItemTrasladoProductInput
             'unit_key' => $this->unit_key,
             'unit_name' => $this->unit_name,
             'sku' => $this->sku
-        ], fn ($v) => $v !== null);
+        ], fn (?string $v): bool => $v !== null);
     }
 }

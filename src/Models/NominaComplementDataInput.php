@@ -9,12 +9,12 @@ readonly class NominaComplementDataInput
     public function __construct(
         public ?string $tipo_nomina = null,
         public ?string $fecha_pago = null,
-        public string $fecha_inicial_pago,
-        public string $fecha_final_pago,
-        public float $num_dias_pagados,
+        public string $fecha_inicial_pago = '',
+        public string $fecha_final_pago = '',
+        public float $num_dias_pagados = 0.0,
         public ?\Facturapi\Models\NominaEmisorProperties $emisor = null,
-        public \Facturapi\Models\NominaReceptorInput $receptor,
-        public \Facturapi\Models\NominaPercepcionesInput $percepciones,
+        public ?\Facturapi\Models\NominaReceptorInput $receptor = null,
+        public ?\Facturapi\Models\NominaPercepcionesInput $percepciones = null,
 
         /** @var \Facturapi\Models\NominaDeduccionInput[]|null */
         public ?array $deducciones = null,
@@ -36,9 +36,9 @@ readonly class NominaComplementDataInput
             isset($data['emisor']) && is_array($data['emisor']) ? \Facturapi\Models\NominaEmisorProperties::fromArray($data['emisor']) : null,
             isset($data['receptor']) && is_array($data['receptor']) ? \Facturapi\Models\NominaReceptorInput::fromArray($data['receptor']) : null,
             isset($data['percepciones']) && is_array($data['percepciones']) ? \Facturapi\Models\NominaPercepcionesInput::fromArray($data['percepciones']) : null,
-            isset($data['deducciones']) && is_array($data['deducciones']) ? array_map(fn ($i) => is_array($i) ? \Facturapi\Models\NominaDeduccionInput::fromArray($i) : $i, $data['deducciones']) : [],
+            isset($data['deducciones']) && is_array($data['deducciones']) ? array_map(fn ($i): mixed => is_array($i) ? \Facturapi\Models\NominaDeduccionInput::fromArray($i) : $i, $data['deducciones']) : [],
             $data['otros_pagos'] ?? [],
-            isset($data['incapacidades']) && is_array($data['incapacidades']) ? array_map(fn ($i) => is_array($i) ? \Facturapi\Models\NominaIncapacidadInput::fromArray($i) : $i, $data['incapacidades']) : []
+            isset($data['incapacidades']) && is_array($data['incapacidades']) ? array_map(fn ($i): mixed => is_array($i) ? \Facturapi\Models\NominaIncapacidadInput::fromArray($i) : $i, $data['incapacidades']) : []
         );
     }
 
@@ -50,12 +50,12 @@ readonly class NominaComplementDataInput
             'fecha_inicial_pago' => $this->fecha_inicial_pago,
             'fecha_final_pago' => $this->fecha_final_pago,
             'num_dias_pagados' => $this->num_dias_pagados,
-            'emisor' => $this->emisor !== null ? $this->emisor->toArray() : null,
-            'receptor' => $this->receptor !== null ? $this->receptor->toArray() : null,
-            'percepciones' => $this->percepciones !== null ? $this->percepciones->toArray() : null,
-            'deducciones' => $this->deducciones !== null ? array_map(fn ($i) => $i->toArray(), $this->deducciones) : null,
+            'emisor' => $this->emisor?->toArray(),
+            'receptor' => $this->receptor?->toArray(),
+            'percepciones' => $this->percepciones?->toArray(),
+            'deducciones' => $this->deducciones !== null ? array_map(fn (\Facturapi\Models\NominaDeduccionInput $i): array => $i->toArray(), $this->deducciones) : null,
             'otros_pagos' => $this->otros_pagos,
-            'incapacidades' => $this->incapacidades !== null ? array_map(fn ($i) => $i->toArray(), $this->incapacidades) : null
-        ], fn ($v) => $v !== null);
+            'incapacidades' => $this->incapacidades !== null ? array_map(fn (\Facturapi\Models\NominaIncapacidadInput $i): array => $i->toArray(), $this->incapacidades) : null
+        ], fn (string|float|array|null $v): bool => $v !== null);
     }
 }

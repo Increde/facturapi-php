@@ -31,6 +31,6 @@ readonly class CartaPorteIdentificacionVehicular
             'PesoBrutoVehicular' => $this->PesoBrutoVehicular,
             'PlacaVM' => $this->PlacaVM,
             'AnioModeloVM' => $this->AnioModeloVM
-        ], fn ($v) => $v !== null);
+        ], fn (float|string|null $v): bool => $v !== null);
     }
 }

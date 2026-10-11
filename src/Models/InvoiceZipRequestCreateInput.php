@@ -32,7 +32,7 @@ readonly class InvoiceZipRequestCreateInput
             'year' => $this->year,
             'month' => $this->month,
             'issuer_type' => $this->issuer_type,
-            'invoice_types' => $this->invoice_types !== null ? array_map(fn ($i) => $i->toArray(), $this->invoice_types) : null
-        ], fn ($v) => $v !== null);
+            'invoice_types' => $this->invoice_types !== null ? array_map(fn (\Facturapi\Models\InvoiceZipRequestInvoiceType $i) => $i->toArray(), $this->invoice_types) : null
+        ], fn ($v): bool => $v !== null);
     }
 }

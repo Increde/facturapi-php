@@ -34,6 +34,6 @@ readonly class CartaPorteDetalleMercancia
             'PesoNeto' => $this->PesoNeto,
             'PesoTara' => $this->PesoTara,
             'NumPiezas' => $this->NumPiezas
-        ], fn ($v) => $v !== null);
+        ], fn (string|float|null $v): bool => $v !== null);
     }
 }

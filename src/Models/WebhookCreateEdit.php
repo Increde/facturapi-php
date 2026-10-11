@@ -8,7 +8,7 @@ readonly class WebhookCreateEdit
 {
     public function __construct(
         public ?string $status = null,
-        public array $enabled_events,
+        public array $enabled_events = [],
     ) {
     }
 
@@ -25,6 +25,6 @@ readonly class WebhookCreateEdit
         return array_filter([
             'status' => $this->status,
             'enabled_events' => $this->enabled_events
-        ], fn ($v) => $v !== null);
+        ], fn (string|array|null $v): bool => $v !== null);
     }
 }

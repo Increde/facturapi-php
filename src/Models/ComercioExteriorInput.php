@@ -24,7 +24,7 @@ readonly class ComercioExteriorInput
     {
         return array_filter([
             'type' => $this->type,
-            'data' => $this->data !== null ? $this->data->toArray() : null
-        ], fn ($v) => $v !== null);
+            'data' => $this->data?->toArray()
+        ], fn (string|array $v): true => $v !== null);
     }
 }

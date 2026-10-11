@@ -55,6 +55,6 @@ readonly class Organization
             'fiel' => $this->fiel,
             'receipts' => $this->receipts,
             'self_invoice' => $this->self_invoice
-        ], fn ($v) => $v !== null);
+        ], fn (string|bool|array|null $v): bool => $v !== null);
     }
 }

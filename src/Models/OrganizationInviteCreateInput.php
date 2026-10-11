@@ -25,6 +25,6 @@ readonly class OrganizationInviteCreateInput
         return array_filter([
             'email' => $this->email,
             'role' => $this->role
-        ], fn ($v) => $v !== null);
+        ], fn (?string $v): bool => $v !== null);
     }
 }

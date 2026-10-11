@@ -8,7 +8,7 @@ readonly class LineItemTrasladoInput
 {
     public function __construct(
         public ?float $quantity = null,
-        public mixed $product,
+        public mixed $product = null,
         public ?array $customs_keys = null,
         public ?string $complement = null,
 
@@ -25,7 +25,7 @@ readonly class LineItemTrasladoInput
             $data['product'] ?? '',
             $data['customs_keys'] ?? [],
             $data['complement'] ?? null,
-            isset($data['parts']) && is_array($data['parts']) ? array_map(fn ($i) => is_array($i) ? \Facturapi\Models\PartInput::fromArray($i) : $i, $data['parts']) : [],
+            isset($data['parts']) && is_array($data['parts']) ? array_map(fn ($i): mixed => is_array($i) ? \Facturapi\Models\PartInput::fromArray($i) : $i, $data['parts']) : [],
             $data['third_party'] ?? []
         );
     }
@@ -37,8 +37,8 @@ readonly class LineItemTrasladoInput
             'product' => $this->product,
             'customs_keys' => $this->customs_keys,
             'complement' => $this->complement,
-            'parts' => $this->parts !== null ? array_map(fn ($i) => $i->toArray(), $this->parts) : null,
+            'parts' => $this->parts !== null ? array_map(fn (\Facturapi\Models\PartInput $i): array => $i->toArray(), $this->parts) : null,
             'third_party' => $this->third_party
-        ], fn ($v) => $v !== null);
+        ], fn ($v): bool => $v !== null);
     }
 }

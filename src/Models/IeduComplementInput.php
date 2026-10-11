@@ -34,6 +34,6 @@ readonly class IeduComplementInput
             'nivelEducativo' => $this->nivelEducativo,
             'autRVOE' => $this->autRVOE,
             'rfcPago' => $this->rfcPago
-        ], fn ($v) => $v !== null);
+        ], fn (?string $v): bool => $v !== null);
     }
 }

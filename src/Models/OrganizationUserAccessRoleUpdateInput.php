@@ -22,6 +22,6 @@ readonly class OrganizationUserAccessRoleUpdateInput
     {
         return array_filter([
             'role' => $this->role
-        ], fn ($v) => $v !== null);
+        ], fn (string $v): true => $v !== null);
     }
 }

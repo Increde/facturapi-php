@@ -10,8 +10,8 @@ readonly class NominaJubilacionInput
         public ?float $total_una_exhibicion = null,
         public ?float $total_parcialidad = null,
         public ?float $monto_diario = null,
-        public float $ingreso_acumulable,
-        public float $ingreso_no_acumulable,
+        public float $ingreso_acumulable = 0.0,
+        public float $ingreso_no_acumulable = 0.0,
     ) {
     }
 
@@ -34,6 +34,6 @@ readonly class NominaJubilacionInput
             'monto_diario' => $this->monto_diario,
             'ingreso_acumulable' => $this->ingreso_acumulable,
             'ingreso_no_acumulable' => $this->ingreso_no_acumulable
-        ], fn ($v) => $v !== null);
+        ], fn (?float $v): bool => $v !== null);
     }
 }

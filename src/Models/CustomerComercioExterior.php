@@ -22,6 +22,6 @@ readonly class CustomerComercioExterior
     {
         return array_filter([
             'id' => $this->id
-        ], fn ($v) => $v !== null);
+        ], fn (?string $v): bool => $v !== null);
     }
 }

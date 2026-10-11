@@ -28,6 +28,6 @@ readonly class CartaPorteGuiaIdentificacion
             'NumeroGuiaIdentificacion' => $this->NumeroGuiaIdentificacion,
             'DescripGuiaIdentificacion' => $this->DescripGuiaIdentificacion,
             'PesoGuiaIdentificacion' => $this->PesoGuiaIdentificacion
-        ], fn ($v) => $v !== null);
+        ], fn (string|float|null $v): bool => $v !== null);
     }
 }

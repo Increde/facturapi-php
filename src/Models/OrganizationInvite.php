@@ -43,6 +43,6 @@ readonly class OrganizationInvite
             'role_name' => $this->role_name,
             'roles' => $this->roles,
             'expires_at' => $this->expires_at
-        ], fn ($v) => $v !== null);
+        ], fn (string|array|null $v): bool => $v !== null);
     }
 }

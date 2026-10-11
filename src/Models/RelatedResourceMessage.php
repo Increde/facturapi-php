@@ -37,6 +37,6 @@ readonly class RelatedResourceMessage
             'severity' => $this->severity,
             'message' => $this->message,
             'created_at' => $this->created_at
-        ], fn ($v) => $v !== null);
+        ], fn (?string $v): bool => $v !== null);
     }
 }

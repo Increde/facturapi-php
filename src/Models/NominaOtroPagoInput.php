@@ -10,7 +10,7 @@ readonly class NominaOtroPagoInput
         public string $tipo_otro_pago,
         public string $clave,
         public ?string $concepto = null,
-        public float $importe,
+        public float $importe = 0.0,
         public ?float $subsidio_causado = null,
         public ?\Facturapi\Models\NominaCompensacionInput $compensacion_saldos_a_favor = null,
     ) {
@@ -36,7 +36,7 @@ readonly class NominaOtroPagoInput
             'concepto' => $this->concepto,
             'importe' => $this->importe,
             'subsidio_causado' => $this->subsidio_causado,
-            'compensacion_saldos_a_favor' => $this->compensacion_saldos_a_favor !== null ? $this->compensacion_saldos_a_favor->toArray() : null
-        ], fn ($v) => $v !== null);
+            'compensacion_saldos_a_favor' => $this->compensacion_saldos_a_favor?->toArray()
+        ], fn (string|float|array|null $v): bool => $v !== null);
     }
 }

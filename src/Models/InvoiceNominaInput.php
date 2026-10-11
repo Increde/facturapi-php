@@ -14,7 +14,7 @@ readonly class InvoiceNominaInput
 
         /** @var \Facturapi\Models\RelatedDocumentInput[]|null */
         public ?array $related_documents = null,
-        public mixed $customer,
+        public mixed $customer = null,
         public ?string $status = null,
         public ?string $date = null,
         public mixed $address = null,
@@ -33,8 +33,8 @@ readonly class InvoiceNominaInput
     {
         return new self(
             $data['type'] ?? '',
-            isset($data['complements']) && is_array($data['complements']) ? array_map(fn ($i) => is_array($i) ? \Facturapi\Models\NominaOrCustomComplementInput::fromArray($i) : $i, $data['complements']) : [],
-            isset($data['related_documents']) && is_array($data['related_documents']) ? array_map(fn ($i) => is_array($i) ? \Facturapi\Models\RelatedDocumentInput::fromArray($i) : $i, $data['related_documents']) : [],
+            isset($data['complements']) && is_array($data['complements']) ? array_map(fn ($i): mixed => is_array($i) ? \Facturapi\Models\NominaOrCustomComplementInput::fromArray($i) : $i, $data['complements']) : [],
+            isset($data['related_documents']) && is_array($data['related_documents']) ? array_map(fn ($i): mixed => is_array($i) ? \Facturapi\Models\RelatedDocumentInput::fromArray($i) : $i, $data['related_documents']) : [],
             $data['customer'] ?? '',
             $data['status'] ?? null,
             $data['date'] ?? null,
@@ -54,8 +54,8 @@ readonly class InvoiceNominaInput
     {
         return array_filter([
             'type' => $this->type,
-            'complements' => $this->complements !== null ? array_map(fn ($i) => $i->toArray(), $this->complements) : null,
-            'related_documents' => $this->related_documents !== null ? array_map(fn ($i) => $i->toArray(), $this->related_documents) : null,
+            'complements' => $this->complements !== null ? array_map(fn (\Facturapi\Models\NominaOrCustomComplementInput $i): array => $i->toArray(), $this->complements) : null,
+            'related_documents' => $this->related_documents !== null ? array_map(fn (\Facturapi\Models\RelatedDocumentInput $i): array => $i->toArray(), $this->related_documents) : null,
             'customer' => $this->customer,
             'status' => $this->status,
             'date' => $this->date,
@@ -68,6 +68,6 @@ readonly class InvoiceNominaInput
             'addenda' => $this->addenda,
             'namespaces' => $this->namespaces,
             'pdf_options' => $this->pdf_options
-        ], fn ($v) => $v !== null);
+        ], fn ($v): bool => $v !== null);
     }
 }

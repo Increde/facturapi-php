@@ -73,6 +73,6 @@ readonly class NominaReceptorDirectProperties
             'salario_base_cot_apor' => $this->salario_base_cot_apor,
             'salario_diario_integrado' => $this->salario_diario_integrado,
             'clave_ent_fed' => $this->clave_ent_fed
-        ], fn ($v) => $v !== null);
+        ], fn ($v): bool => $v !== null);
     }
 }

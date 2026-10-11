@@ -25,6 +25,6 @@ readonly class WebhookCreateInput
         return array_filter([
             'url' => $this->url,
             'enabled_events' => $this->enabled_events
-        ], fn ($v) => $v !== null);
+        ], fn (string|array $v): true => $v !== null);
     }
 }

@@ -28,6 +28,6 @@ readonly class OrganizationPermissionRoleTemplate
             'code' => $this->code,
             'label' => $this->label,
             'operations' => $this->operations
-        ], fn ($v) => $v !== null);
+        ], fn (string|array|null $v): bool => $v !== null);
     }
 }

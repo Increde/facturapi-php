@@ -22,6 +22,6 @@ readonly class LeyendasFiscalesData
     {
         return array_filter([
             'leyendas' => $this->leyendas
-        ], fn ($v) => $v !== null);
+        ], fn (array $v): true => $v !== null);
     }
 }

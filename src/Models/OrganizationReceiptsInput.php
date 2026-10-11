@@ -37,6 +37,6 @@ readonly class OrganizationReceiptsInput
             'next_folio_number_test' => $this->next_folio_number_test,
             'activate_global_invoice' => $this->activate_global_invoice,
             'grouped_items_invoice' => $this->grouped_items_invoice
-        ], fn ($v) => $v !== null);
+        ], fn (string|int|bool|null $v): bool => $v !== null);
     }
 }

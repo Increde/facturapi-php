@@ -25,6 +25,6 @@ readonly class TaxIdValidationResult
         return array_filter([
             'is_valid' => $this->is_valid,
             'efos' => $this->efos
-        ], fn ($v) => $v !== null);
+        ], fn (bool|array|null $v): bool => $v !== null);
     }
 }

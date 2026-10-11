@@ -31,6 +31,6 @@ readonly class NominaHorasExtraProperties
             'tipo_horas' => $this->tipo_horas,
             'horas_extra' => $this->horas_extra,
             'importe_pagado' => $this->importe_pagado
-        ], fn ($v) => $v !== null);
+        ], fn (string|int|float|null $v): bool => $v !== null);
     }
 }

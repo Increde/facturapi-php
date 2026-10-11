@@ -40,6 +40,6 @@ readonly class Parts
             'unit_price' => $this->unit_price,
             'unit_name' => $this->unit_name,
             'customs_keys' => $this->customs_keys
-        ], fn ($v) => $v !== null);
+        ], fn (float|string|array|null $v): bool => $v !== null);
     }
 }

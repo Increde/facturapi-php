@@ -22,6 +22,6 @@ readonly class ErrorMessage
     {
         return array_filter([
             'message' => $this->message
-        ], fn ($v) => $v !== null);
+        ], fn (string $v): true => $v !== null);
     }
 }

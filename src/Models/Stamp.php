@@ -31,6 +31,6 @@ readonly class Stamp
             'date' => $this->date,
             'sat_cert_number' => $this->sat_cert_number,
             'sat_signature' => $this->sat_signature
-        ], fn ($v) => $v !== null);
+        ], fn (?string $v): bool => $v !== null);
     }
 }

@@ -28,6 +28,6 @@ readonly class ToInvoicePreviewInput
             'keys' => $this->keys,
             'customer' => $this->customer,
             'use' => $this->use
-        ], fn ($v) => $v !== null);
+        ], fn ($v): bool => $v !== null);
     }
 }

@@ -28,6 +28,6 @@ readonly class OrganizationSelfInvoiceInput
             'allowed_cfdi_uses' => $this->allowed_cfdi_uses,
             'apply_resico_isr' => $this->apply_resico_isr,
             'support_email' => $this->support_email
-        ], fn ($v) => $v !== null);
+        ], fn (bool|string|array|null $v): bool => $v !== null);
     }
 }

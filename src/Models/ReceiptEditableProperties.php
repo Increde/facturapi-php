@@ -40,6 +40,6 @@ readonly class ReceiptEditableProperties
             'exchange' => $this->exchange,
             'branch' => $this->branch,
             'external_id' => $this->external_id
-        ], fn ($v) => $v !== null);
+        ], fn (int|float|string|null $v): bool => $v !== null);
     }
 }

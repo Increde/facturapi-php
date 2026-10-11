@@ -22,6 +22,6 @@ readonly class OrganizationDeleteCerts
     {
         return array_filter([
             'updated_at' => $this->updated_at
-        ], fn ($v) => $v !== null);
+        ], fn (?string $v): bool => $v !== null);
     }
 }

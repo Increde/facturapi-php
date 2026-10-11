@@ -9,7 +9,7 @@ readonly class LineItemEgresoInput
     public function __construct(
         public ?float $quantity = null,
         public ?float $discount = null,
-        public mixed $product,
+        public mixed $product = null,
 
         /** @var \Facturapi\Models\PartInput[]|null */
         public ?array $parts = null,
@@ -25,7 +25,7 @@ readonly class LineItemEgresoInput
             $data['quantity'] ?? 0,
             $data['discount'] ?? 0,
             $data['product'] ?? '',
-            isset($data['parts']) && is_array($data['parts']) ? array_map(fn ($i) => is_array($i) ? \Facturapi\Models\PartInput::fromArray($i) : $i, $data['parts']) : [],
+            isset($data['parts']) && is_array($data['parts']) ? array_map(fn ($i): mixed => is_array($i) ? \Facturapi\Models\PartInput::fromArray($i) : $i, $data['parts']) : [],
             $data['customs_keys'] ?? [],
             $data['complement'] ?? null,
             $data['third_party'] ?? null
@@ -38,10 +38,10 @@ readonly class LineItemEgresoInput
             'quantity' => $this->quantity,
             'discount' => $this->discount,
             'product' => $this->product,
-            'parts' => $this->parts !== null ? array_map(fn ($i) => $i->toArray(), $this->parts) : null,
+            'parts' => $this->parts !== null ? array_map(fn (\Facturapi\Models\PartInput $i): array => $i->toArray(), $this->parts) : null,
             'customs_keys' => $this->customs_keys,
             'complement' => $this->complement,
             'third_party' => $this->third_party
-        ], fn ($v) => $v !== null);
+        ], fn ($v): bool => $v !== null);
     }
 }

@@ -52,7 +52,7 @@ readonly class InvoiceZipRequest
             'livemode' => $this->livemode,
             'organization' => $this->organization,
             'issuer_type' => $this->issuer_type?->value,
-            'invoice_types' => $this->invoice_types !== null ? array_map(fn ($i) => $i->toArray(), $this->invoice_types) : null,
+            'invoice_types' => $this->invoice_types !== null ? array_map(fn (\Facturapi\Models\InvoiceZipRequestInvoiceType $i) => $i->toArray(), $this->invoice_types) : null,
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
             'status' => $this->status?->value,
@@ -60,6 +60,6 @@ readonly class InvoiceZipRequest
             'processed_document' => $this->processed_document,
             'failed_documents' => $this->failed_documents,
             'scheduled_at' => $this->scheduled_at
-        ], fn ($v) => $v !== null);
+        ], fn (bool|int|string|array|null $v): bool => $v !== null);
     }
 }

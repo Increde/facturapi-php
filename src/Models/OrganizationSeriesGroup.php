@@ -28,6 +28,6 @@ readonly class OrganizationSeriesGroup
             'series' => $this->series,
             'next_folio' => $this->next_folio,
             'next_folio_test' => $this->next_folio_test
-        ], fn ($v) => $v !== null);
+        ], fn (string|int|null $v): bool => $v !== null);
     }
 }

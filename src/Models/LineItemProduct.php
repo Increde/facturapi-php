@@ -8,9 +8,9 @@ readonly class LineItemProduct
 {
     public function __construct(
         public ?string $id = null,
-        public string $description,
-        public string $product_key,
-        public float $price,
+        public string $description = '',
+        public string $product_key = '',
+        public float $price = 0.0,
         public ?bool $tax_included = null,
         public ?string $taxability = null,
 
@@ -19,7 +19,7 @@ readonly class LineItemProduct
 
         /** @var \Facturapi\Models\LocalTax[]|null */
         public ?array $local_taxes = null,
-        public string $unit_key,
+        public string $unit_key = '',
         public ?string $unit_name = null,
         public ?string $sku = null,
     ) {
@@ -34,8 +34,8 @@ readonly class LineItemProduct
             $data['price'] ?? 0,
             $data['tax_included'] ?? false,
             $data['taxability'] ?? null,
-            isset($data['taxes']) && is_array($data['taxes']) ? array_map(fn ($i) => is_array($i) ? \Facturapi\Models\BaseTax::fromArray($i) : $i, $data['taxes']) : [],
-            isset($data['local_taxes']) && is_array($data['local_taxes']) ? array_map(fn ($i) => is_array($i) ? \Facturapi\Models\LocalTax::fromArray($i) : $i, $data['local_taxes']) : [],
+            isset($data['taxes']) && is_array($data['taxes']) ? array_map(fn ($i): mixed => is_array($i) ? \Facturapi\Models\BaseTax::fromArray($i) : $i, $data['taxes']) : [],
+            isset($data['local_taxes']) && is_array($data['local_taxes']) ? array_map(fn ($i): mixed => is_array($i) ? \Facturapi\Models\LocalTax::fromArray($i) : $i, $data['local_taxes']) : [],
             $data['unit_key'] ?? '',
             $data['unit_name'] ?? null,
             $data['sku'] ?? null
@@ -51,11 +51,11 @@ readonly class LineItemProduct
             'price' => $this->price,
             'tax_included' => $this->tax_included,
             'taxability' => $this->taxability,
-            'taxes' => $this->taxes !== null ? array_map(fn ($i) => $i->toArray(), $this->taxes) : null,
-            'local_taxes' => $this->local_taxes !== null ? array_map(fn ($i) => $i->toArray(), $this->local_taxes) : null,
+            'taxes' => $this->taxes !== null ? array_map(fn (\Facturapi\Models\BaseTax $i): array => $i->toArray(), $this->taxes) : null,
+            'local_taxes' => $this->local_taxes !== null ? array_map(fn (\Facturapi\Models\LocalTax $i): array => $i->toArray(), $this->local_taxes) : null,
             'unit_key' => $this->unit_key,
             'unit_name' => $this->unit_name,
             'sku' => $this->sku
-        ], fn ($v) => $v !== null);
+        ], fn (float|bool|string|array|null $v): bool => $v !== null);
     }
 }
