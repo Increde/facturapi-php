@@ -1,13 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Facturapi\Resources;
 
-use Facturapi\Http\BaseClient;
+use Facturapi\Http\FacturapiHttpClient;
 use Facturapi\Exceptions\FacturapiException;
 
-class Receipts extends BaseClient
-{
-	protected string $ENDPOINT = 'receipts';
+class Receipts {
+	public function __construct(private readonly FacturapiHttpClient $client) {}
 
 
 	/**
@@ -18,13 +19,9 @@ class Receipts extends BaseClient
 	 *
 	 * @throws FacturapiException
 	 */
-	public function all($params = null): mixed
+	public function all(?array $params = null): mixed
 	{
-		try {
-			return json_decode($this->executeGetRequest($this->getRequestUrl($params)));
-		} catch (FacturapiException $e) {
-			throw $e;
-		}
+		return $this->client->get('receipts', $params);
 	}
 
 	/**
@@ -37,11 +34,7 @@ class Receipts extends BaseClient
 	 */
 	public function retrieve($id): mixed
 	{
-		try {
-			return json_decode($this->executeGetRequest($this->getRequestUrl($id)));
-		} catch (FacturapiException $e) {
-			throw $e;
-		}
+		return $this->client->get('receipts/' . $id);
 	}
 
 	/**
@@ -54,11 +47,7 @@ class Receipts extends BaseClient
 	 */
 	public function create($params): mixed
 	{
-		try {
-			return json_decode($this->executeJsonPostRequest($this->getRequestUrl(), $params));
-		} catch (FacturapiException $e) {
-			throw $e;
-		}
+		return $this->client->post('receipts', $params);
 	}
 
 
@@ -73,11 +62,7 @@ class Receipts extends BaseClient
 	 */
 	public function invoice($id, $params): mixed
 	{
-		try {
-			return json_decode($this->executeJsonPostRequest($this->getRequestUrl($id) . "/invoice", $params));
-		} catch (FacturapiException $e) {
-			throw $e;
-		}
+		return $this->client->post('receipts/' . $id . "/invoice", $params);
 	}
 
 	/**
@@ -90,11 +75,7 @@ class Receipts extends BaseClient
 	 */
 	public function createGlobalInvoice($params): mixed
 	{
-		try {
-			return json_decode($this->executeJsonPostRequest($this->getRequestUrl() . "/global-invoice", $params));
-		} catch (FacturapiException $e) {
-			throw $e;
-		}
+		return $this->client->post('receipts' . "/global-invoice", $params);
 	}
 
 	/**
@@ -109,7 +90,7 @@ class Receipts extends BaseClient
 	public function toInvoice($data)
 	{
 		try {
-			return json_decode($this->executeJsonPostRequest($this->getRequestUrl() . "/to-invoice", $data));
+			return $this->client->post('receipts' . "/to-invoice", $data);
 		} catch (FacturapiException $e) {
 			throw new FacturapiException('Unable to create invoice: ' . $e->getMessage());
 		}
@@ -127,7 +108,7 @@ class Receipts extends BaseClient
 	public function previewToInvoicePdf($data)
 	{
 		try {
-			return $this->executeJsonPostRequest($this->getRequestUrl() . "/to-invoice/preview", $data);
+			return $this->client->download('receipts' . "/to-invoice/preview");
 		} catch (FacturapiException $e) {
 			throw new FacturapiException('Unable to generate invoice PDF preview: ' . $e->getMessage());
 		}
@@ -143,11 +124,7 @@ class Receipts extends BaseClient
 	 */
 	public function cancel($id): mixed
 	{
-		try {
-			return json_decode($this->executeDeleteRequest($this->getRequestUrl($id), null));
-		} catch (FacturapiException $e) {
-			throw $e;
-		}
+		return $this->client->delete('receipts/' . $id);
 	}
 
 	/**
@@ -159,22 +136,15 @@ class Receipts extends BaseClient
 	 *
 	 * @throws FacturapiException
 	 */
-	public function sendByEmail($id, $email = null): mixed
+	public function sendByEmail($id, ?array $email = null): mixed
 	{
-		try {
-			return json_decode($this->executeJsonPostRequest(
-				$this->getRequestUrl($id) . "/email",
-				$email == null ? null : array("email" => $email)
-			));
-		} catch (FacturapiException $e) {
-			throw $e;
-		}
+		return $this->client->post('receipts/' . $id . "/email", $email === null ? [] : ["email" => $email]);
 	}
 
 	/**
 	 * @deprecated Use sendByEmail() instead. Will be removed in v5.
 	 */
-	public function send_by_email($id, $email = null): mixed
+	public function send_by_email($id, ?array $email = null): mixed
 	{
 		trigger_error('Receipts::send_by_email() is deprecated and will be removed in v5. Use sendByEmail() instead.', E_USER_DEPRECATED);
 		return $this->sendByEmail($id, $email);
@@ -190,11 +160,7 @@ class Receipts extends BaseClient
 	 */
 	public function downloadPdf($id): string
 	{
-		try {
-			return $this->executeGetRequest($this->getRequestUrl($id) . "/pdf");
-		} catch (FacturapiException $e) {
-			throw $e;
-		}
+		return $this->client->download('receipts/' . $id . "/pdf");
 	}
 
 	/**

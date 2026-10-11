@@ -1,13 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Facturapi\Resources;
 
-use Facturapi\Http\BaseClient;
+use Facturapi\Http\FacturapiHttpClient;
 use Facturapi\Exceptions\FacturapiException;
 
-class Tools extends BaseClient
-{
-	protected string $ENDPOINT = 'tools';
+class Tools {
+	public function __construct(private readonly FacturapiHttpClient $client) {}
 
 	/**
 	 * Validates a tax id
@@ -19,14 +20,6 @@ class Tools extends BaseClient
 	 */
 	public function validateTaxId($tax_id): mixed
 	{
-		try {
-			return json_decode(
-				$this->executeGetRequest(
-					$this->getRequestUrl('tax_id_validation', array('tax_id' => $tax_id))
-				)
-			);
-		} catch (FacturapiException $e) {
-			throw $e;
-		}
+		return $this->client->get('tools/tax_id_validation', ['tax_id' => $tax_id]);
 	}
 }

@@ -1,13 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Facturapi\Resources;
 
-use Facturapi\Http\BaseClient;
+use Facturapi\Http\FacturapiHttpClient;
 use Facturapi\Exceptions\FacturapiException;
 
-class Organizations extends BaseClient
-{
-  protected string $ENDPOINT = 'organizations';
+class Organizations {
+	public function __construct(private readonly FacturapiHttpClient $client) {}
 
 
   /**
@@ -18,13 +19,9 @@ class Organizations extends BaseClient
    *
    * @throws FacturapiException
    */
-  public function all($params = null): mixed
+  public function all(?array $params = null): mixed
   {
-    try {
-      return json_decode($this->executeGetRequest($this->getRequestUrl($params)));
-    } catch (FacturapiException $e) {
-      throw $e;
-    }
+    return $this->client->get('organizations', $params);
   }
 
   /**
@@ -37,11 +34,7 @@ class Organizations extends BaseClient
    */
   public function retrieve($id): mixed
   {
-    try {
-      return json_decode($this->executeGetRequest($this->getRequestUrl($id)));
-    } catch (FacturapiException $e) {
-      throw $e;
-    }
+    return $this->client->get('organizations/' . $id);
   }
 
   /**
@@ -54,11 +47,7 @@ class Organizations extends BaseClient
    */
   public function create($params): mixed
   {
-    try {
-      return json_decode($this->executeJsonPostRequest($this->getRequestUrl(), $params));
-    } catch (FacturapiException $e) {
-      throw $e;
-    }
+    return $this->client->post('organizations', $params);
   }
 
   /**
@@ -72,11 +61,7 @@ class Organizations extends BaseClient
    */
   public function updateLegal($id, $params): mixed
   {
-    try {
-      return json_decode($this->executeJsonPutRequest($this->getRequestUrl($id) . "/legal", $params));
-    } catch (FacturapiException $e) {
-      throw $e;
-    }
+    return $this->client->put('organizations/' . $id . "/legal", $params);
   }
 
   /**
@@ -90,11 +75,7 @@ class Organizations extends BaseClient
    */
   public function updateCustomization($id, $params): mixed
   {
-    try {
-      return json_decode($this->executeJsonPutRequest($this->getRequestUrl($id) . "/customization", $params));
-    } catch (FacturapiException $e) {
-      throw $e;
-    }
+    return $this->client->put('organizations/' . $id . "/customization", $params);
   }
 
   /**
@@ -108,11 +89,7 @@ class Organizations extends BaseClient
    */
   public function updateReceiptSettings($id, $params): mixed
   {
-    try {
-      return json_decode($this->executeJsonPutRequest($this->getRequestUrl($id) . "/receipts", $params));
-    } catch (FacturapiException $e) {
-      throw $e;
-    }
+    return $this->client->put('organizations/' . $id . "/receipts", $params);
   }
 
   /**
@@ -126,11 +103,7 @@ class Organizations extends BaseClient
    */
   public function updateDomain($id, $params): mixed
   {
-    try {
-      return json_decode($this->executeJsonPutRequest($this->getRequestUrl($id) . "/domain", $params));
-    } catch (FacturapiException $e) {
-      throw $e;
-    }
+    return $this->client->put('organizations/' . $id . "/domain", $params);
   }
 
   /**
@@ -147,15 +120,7 @@ class Organizations extends BaseClient
       throw new FacturapiException('checkDomainAvailability expects $query to be an array.');
     }
 
-    try {
-      return json_decode(
-        $this->executeGetRequest(
-          $this->getRequestUrl("domain-check", $query)
-        )
-      );
-    } catch (FacturapiException $e) {
-      throw $e;
-    }
+    return $this->client->get('organizations/' . "domain-check");
   }
 
   /**
@@ -167,7 +132,7 @@ class Organizations extends BaseClient
    *
    * @throws FacturapiException
    */
-  public function checkDomainIsAvailable($idOrQuery, $query = null): mixed
+  public function checkDomainIsAvailable($idOrQuery, ?array $query = null): mixed
   {
     trigger_error(
       'Organizations::checkDomainIsAvailable(...) is deprecated and will be removed in v5. Use checkDomainAvailability($query) instead.',
@@ -198,11 +163,7 @@ class Organizations extends BaseClient
    */
   public function uploadLogo($id, $params): mixed
   {
-    try {
-      return json_decode($this->executeDataPutRequest($this->getRequestUrl($id) . "/logo", $params));
-    } catch (FacturapiException $e) {
-      throw $e;
-    }
+    return $this->client->dataput('organizations/' . $id . "/logo", $params);
   }
 
   /**
@@ -216,11 +177,7 @@ class Organizations extends BaseClient
    */
   public function uploadCertificate($id, $params): mixed
   {
-    try {
-      return json_decode($this->executeDataPutRequest($this->getRequestUrl($id) . "/certificate", $params));
-    } catch (FacturapiException $e) {
-      throw $e;
-    }
+    return $this->client->dataput('organizations/' . $id . "/certificate", $params);
   }
 
   /**
@@ -233,11 +190,7 @@ class Organizations extends BaseClient
    */
   public function getTestApiKey($id): mixed
   {
-    try {
-      return json_decode($this->executeGetRequest($this->getRequestUrl($id) . "/apikeys/test"));
-    } catch (FacturapiException $e) {
-      throw $e;
-    }
+    return $this->client->get('organizations/' . $id . "/apikeys/test");
   }
 
   /**
@@ -250,16 +203,7 @@ class Organizations extends BaseClient
    */
   public function renewTestApiKey($id): mixed
   {
-    try {
-      return json_decode(
-        $this->executeJsonPutRequest(
-          $this->getRequestUrl($id) . "/apikeys/test",
-          []
-        )
-      );
-    } catch (FacturapiException $e) {
-      throw $e;
-    }
+    return $this->client->put('organizations/' . $id . '/apikeys/test',  []);
   }
 
   /**
@@ -286,15 +230,7 @@ class Organizations extends BaseClient
    */
   public function listLiveApiKeys($id): mixed
   {
-    try {
-      return json_decode(
-        $this->executeGetRequest(
-          $this->getRequestUrl($id) . "/apikeys/live"
-        )
-      );
-    } catch (FacturapiException $e) {
-      throw $e;
-    }
+    return $this->client->get('organizations/' . $id . '/apikeys/live');
   }
 
   /**
@@ -307,16 +243,7 @@ class Organizations extends BaseClient
    */
   public function renewLiveApiKey($id): mixed
   {
-    try {
-      return json_decode(
-        $this->executeJsonPutRequest(
-          $this->getRequestUrl($id) . "/apikeys/live",
-          []
-        )
-      );
-    } catch (FacturapiException $e) {
-      throw $e;
-    }
+    return $this->client->put('organizations/' . $id . '/apikeys/live',  []);
   }
 
   /**
@@ -330,16 +257,7 @@ class Organizations extends BaseClient
    */
   public function deleteLiveApiKey($organizationId, $apiKeyId): mixed
   {
-    try {
-      return json_decode(
-        $this->executeJsonPutRequest(
-          $this->getRequestUrl($organizationId) . "/apikeys/live" . "/" . $apiKeyId,
-          []
-        )
-      );
-    } catch (FacturapiException $e) {
-      throw $e;
-    }
+    return $this->client->delete('organizations/' . $organizationId . '/apikeys/live/' . $apiKeyId);
   }
 
   /**
@@ -352,11 +270,7 @@ class Organizations extends BaseClient
    */
   public function delete($id): mixed
   {
-    try {
-      return json_decode($this->executeDeleteRequest($this->getRequestUrl($id), null));
-    } catch (FacturapiException $e) {
-      throw $e;
-    }
+    return $this->client->delete('organizations/' . $id);
   }
 
   /**
@@ -369,11 +283,7 @@ class Organizations extends BaseClient
    */
   public function deleteCertificate($id): mixed
   {
-    try {
-      return json_decode($this->executeDeleteRequest($this->getRequestUrl($id) .  "/certificate", null));
-    } catch (FacturapiException $e) {
-      throw $e;
-    }
+    return $this->client->delete('organizations/' . $id . "/certificate");
   }
 
   /**
@@ -386,11 +296,7 @@ class Organizations extends BaseClient
    */
   public function getSeriesGroup($id): mixed
   {
-    try {
-      return json_decode($this->executeGetRequest($this->getRequestUrl($id) . "/series-group"));
-    } catch (FacturapiException $e) {
-      throw $e;
-    }
+    return $this->client->get('organizations/' . $id . "/series-group");
   }
 
   /**
@@ -404,11 +310,7 @@ class Organizations extends BaseClient
    */
   public function createSeriesGroup($id, $params): mixed
   {
-    try {
-      return json_decode($this->executeJsonPostRequest($this->getRequestUrl($id) . "/series-group", $params));
-    } catch (FacturapiException $e) {
-      throw $e;
-    }
+    return $this->client->post('organizations/' . $id . "/series-group", $params);
   }
 
   /**
@@ -423,11 +325,7 @@ class Organizations extends BaseClient
    */
   public function updateSeriesGroup($id, $series_name, $params): mixed
   {
-    try {
-      return json_decode($this->executeJsonPutRequest($this->getRequestUrl($id) . "/series-group" . "/" . $series_name, $params));
-    } catch (FacturapiException $e) {
-      throw $e;
-    }
+    return $this->client->put('organizations/' . $id . "/series-group" . "/", []);
   }
 
   /**
@@ -441,16 +339,7 @@ class Organizations extends BaseClient
    */
   public function updateDefaultSeries($id, $params): mixed
   {
-    try {
-      return json_decode(
-        $this->executeJsonPutRequest(
-          $this->getRequestUrl($id) . "/series-group/default-series",
-          $params
-        )
-      );
-    } catch (FacturapiException $e) {
-      throw $e;
-    }
+    return $this->client->put('organizations/' . $id . '/series-group/default-series',  $params);
   }
 
   /**
@@ -464,11 +353,7 @@ class Organizations extends BaseClient
    */
   public function deleteSeriesGroup($id, $series_name): mixed
   {
-    try {
-      return json_decode($this->executeDeleteRequest($this->getRequestUrl($id) . "/series-group" . "/" . $series_name, null));
-    } catch (FacturapiException $e) {
-      throw $e;
-    }
+    return $this->client->delete('organizations/' . $id . "/series-group" . "/");
   }
 
   /**
@@ -482,11 +367,7 @@ class Organizations extends BaseClient
    */
   public function updateSelfInvoiceSettings($id, $params): mixed
   {
-    try {
-      return json_decode($this->executeJsonPutRequest($this->getRequestUrl($id) . "/self-invoice", $params));
-    } catch (FacturapiException $e) {
-      throw $e;
-    }
+    return $this->client->put('organizations/' . $id . "/self-invoice", $params);
   }
 
   /**
@@ -499,11 +380,7 @@ class Organizations extends BaseClient
    */
   public function listTeamAccess($organizationId): mixed
   {
-    try {
-      return json_decode($this->executeGetRequest($this->getRequestUrl($organizationId) . "/team"));
-    } catch (FacturapiException $e) {
-      throw $e;
-    }
+    return $this->client->get('organizations' . "/team");
   }
 
   /**
@@ -517,11 +394,7 @@ class Organizations extends BaseClient
    */
   public function retrieveTeamAccess($organizationId, $accessId): mixed
   {
-    try {
-      return json_decode($this->executeGetRequest($this->getRequestUrl($organizationId) . "/team/" . $accessId));
-    } catch (FacturapiException $e) {
-      throw $e;
-    }
+    return $this->client->get('organizations' . "/team/");
   }
 
   /**
@@ -536,16 +409,7 @@ class Organizations extends BaseClient
    */
   public function updateTeamAccessRole($organizationId, $accessId, $role): mixed
   {
-    try {
-      return json_decode(
-        $this->executeJsonPutRequest(
-          $this->getRequestUrl($organizationId) . "/team/" . $accessId . "/role",
-          ["role" => $role]
-        )
-      );
-    } catch (FacturapiException $e) {
-      throw $e;
-    }
+    return $this->client->put('organizations/' . $organizationId . '/team/' . $accessId . '/role', ['role' => $role]);
   }
 
   /**
@@ -559,16 +423,7 @@ class Organizations extends BaseClient
    */
   public function removeTeamAccess($organizationId, $accessId): mixed
   {
-    try {
-      return json_decode(
-        $this->executeDeleteRequest(
-          $this->getRequestUrl($organizationId) . "/team/" . $accessId,
-          null
-        )
-      );
-    } catch (FacturapiException $e) {
-      throw $e;
-    }
+    return $this->client->delete('organizations/' . $organizationId . '/team/');
   }
 
   /**
@@ -581,11 +436,7 @@ class Organizations extends BaseClient
    */
   public function listSentTeamInvites($organizationId): mixed
   {
-    try {
-      return json_decode($this->executeGetRequest($this->getRequestUrl($organizationId) . "/team/invites"));
-    } catch (FacturapiException $e) {
-      throw $e;
-    }
+    return $this->client->get('organizations' . "/team/invites");
   }
 
   /**
@@ -599,16 +450,7 @@ class Organizations extends BaseClient
    */
   public function inviteUserToTeam($organizationId, $params): mixed
   {
-    try {
-      return json_decode(
-        $this->executeJsonPostRequest(
-          $this->getRequestUrl($organizationId) . "/team/invites",
-          $params
-        )
-      );
-    } catch (FacturapiException $e) {
-      throw $e;
-    }
+    return $this->client->post('organizations/' . $organizationId . '/team/invites',  $params);
   }
 
   /**
@@ -622,16 +464,7 @@ class Organizations extends BaseClient
    */
   public function cancelTeamInvite($organizationId, $inviteKey): mixed
   {
-    try {
-      return json_decode(
-        $this->executeDeleteRequest(
-          $this->getRequestUrl($organizationId) . "/team/invites/" . $inviteKey,
-          null
-        )
-      );
-    } catch (FacturapiException $e) {
-      throw $e;
-    }
+    return $this->client->delete('organizations/' . $organizationId . '/team/invites/');
   }
 
   /**
@@ -643,11 +476,7 @@ class Organizations extends BaseClient
    */
   public function listReceivedTeamInvites(): mixed
   {
-    try {
-      return json_decode($this->executeGetRequest($this->getRequestUrl("invites/pending")));
-    } catch (FacturapiException $e) {
-      throw $e;
-    }
+    return $this->client->get('organizations/' . "invites/pending");
   }
 
   /**
@@ -661,16 +490,7 @@ class Organizations extends BaseClient
    */
   public function respondTeamInvite($inviteKey, $params): mixed
   {
-    try {
-      return json_decode(
-        $this->executeJsonPostRequest(
-          $this->getRequestUrl("invites/" . $inviteKey . "/response"),
-          $params
-        )
-      );
-    } catch (FacturapiException $e) {
-      throw $e;
-    }
+    return $this->client->post('organizations/' . "invites/" . $inviteKey . "/response",  $params);
   }
 
   /**
@@ -683,11 +503,7 @@ class Organizations extends BaseClient
    */
   public function listTeamRoles($organizationId): mixed
   {
-    try {
-      return json_decode($this->executeGetRequest($this->getRequestUrl($organizationId) . "/team/roles"));
-    } catch (FacturapiException $e) {
-      throw $e;
-    }
+    return $this->client->get('organizations' . "/team/roles");
   }
 
   /**
@@ -700,11 +516,7 @@ class Organizations extends BaseClient
    */
   public function listTeamRoleTemplates($organizationId): mixed
   {
-    try {
-      return json_decode($this->executeGetRequest($this->getRequestUrl($organizationId) . "/team/roles/templates"));
-    } catch (FacturapiException $e) {
-      throw $e;
-    }
+    return $this->client->get('organizations' . "/team/roles/templates");
   }
 
   /**
@@ -717,11 +529,7 @@ class Organizations extends BaseClient
    */
   public function listTeamRoleOperations($organizationId): mixed
   {
-    try {
-      return json_decode($this->executeGetRequest($this->getRequestUrl($organizationId) . "/team/roles/operations"));
-    } catch (FacturapiException $e) {
-      throw $e;
-    }
+    return $this->client->get('organizations' . "/team/roles/operations");
   }
 
   /**
@@ -735,11 +543,7 @@ class Organizations extends BaseClient
    */
   public function retrieveTeamRole($organizationId, $roleId): mixed
   {
-    try {
-      return json_decode($this->executeGetRequest($this->getRequestUrl($organizationId) . "/team/roles/" . $roleId));
-    } catch (FacturapiException $e) {
-      throw $e;
-    }
+    return $this->client->get('organizations' . "/team/roles/");
   }
 
   /**
@@ -753,16 +557,7 @@ class Organizations extends BaseClient
    */
   public function createTeamRole($organizationId, $params): mixed
   {
-    try {
-      return json_decode(
-        $this->executeJsonPostRequest(
-          $this->getRequestUrl($organizationId) . "/team/roles",
-          $params
-        )
-      );
-    } catch (FacturapiException $e) {
-      throw $e;
-    }
+    return $this->client->post('organizations/' . $organizationId . '/team/roles',  $params);
   }
 
   /**
@@ -777,16 +572,7 @@ class Organizations extends BaseClient
    */
   public function updateTeamRole($organizationId, $roleId, $params): mixed
   {
-    try {
-      return json_decode(
-        $this->executeJsonPutRequest(
-          $this->getRequestUrl($organizationId) . "/team/roles/" . $roleId,
-          $params
-        )
-      );
-    } catch (FacturapiException $e) {
-      throw $e;
-    }
+    return $this->client->put('organizations/' . $organizationId . '/team/roles/' . $roleId, $params);
   }
 
   /**
@@ -800,15 +586,6 @@ class Organizations extends BaseClient
    */
   public function deleteTeamRole($organizationId, $roleId): mixed
   {
-    try {
-      return json_decode(
-        $this->executeDeleteRequest(
-          $this->getRequestUrl($organizationId) . "/team/roles/" . $roleId,
-          null
-        )
-      );
-    } catch (FacturapiException $e) {
-      throw $e;
-    }
+    return $this->client->delete('organizations/' . $organizationId . '/team/roles/');
   }
 }

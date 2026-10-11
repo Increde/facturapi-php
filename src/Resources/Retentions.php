@@ -1,13 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Facturapi\Resources;
 
-use Facturapi\Http\BaseClient;
+use Facturapi\Http\FacturapiHttpClient;
 use Facturapi\Exceptions\FacturapiException;
 
-class Retentions extends BaseClient
-{
-	protected string $ENDPOINT = 'retentions';
+class Retentions {
+	public function __construct(private readonly FacturapiHttpClient $client) {}
 
 
 	/**
@@ -18,13 +19,9 @@ class Retentions extends BaseClient
 	 *
 	 * @throws FacturapiException
 	 */
-	public function all($params = null): mixed
+	public function all(?array $params = null): mixed
 	{
-		try {
-			return json_decode($this->executeGetRequest($this->getRequestUrl($params)));
-		} catch (FacturapiException $e) {
-			throw $e;
-		}
+		return $this->client->get('retentions', $params);
 	}
 
 	/**
@@ -37,11 +34,7 @@ class Retentions extends BaseClient
 	 */
 	public function retrieve($id): mixed
 	{
-		try {
-			return json_decode($this->executeGetRequest($this->getRequestUrl($id)));
-		} catch (FacturapiException $e) {
-			throw $e;
-		}
+		return $this->client->get('retentions/' . $id);
 	}
 
 	/**
@@ -54,11 +47,7 @@ class Retentions extends BaseClient
 	 */
 	public function create($params): mixed
 	{
-		try {
-			return json_decode($this->executeJsonPostRequest($this->getRequestUrl(), $params));
-		} catch (FacturapiException $e) {
-			throw $e;
-		}
+		return $this->client->post('retentions', $params);
 	}
 
 
@@ -71,13 +60,9 @@ class Retentions extends BaseClient
 	 *
 	 * @throws FacturapiException
 	 */
-	public function cancel($id, $query = null): mixed
+	public function cancel($id, ?array $query = null): mixed
 	{
-		try {
-			return json_decode($this->executeDeleteRequest($this->getRequestUrl($id, $query), null));
-		} catch (FacturapiException $e) {
-			throw $e;
-		}
+		return $this->client->delete('retentions/' . $id, $query);
 	}
 
 	/**
@@ -91,11 +76,7 @@ class Retentions extends BaseClient
 	 */
 	public function updateDraft($id, $body): mixed
 	{
-		try {
-			return json_decode($this->executeJsonPutRequest($this->getRequestUrl($id), $body));
-		} catch (FacturapiException $e) {
-			throw $e;
-		}
+		return $this->client->put('retentions/' . $id, $body);
 	}
 
 	/**
@@ -117,11 +98,7 @@ class Retentions extends BaseClient
 	 */
 	public function copyToDraft($id): mixed
 	{
-		try {
-			return json_decode($this->executeJsonPostRequest($this->getRequestUrl($id . "/copy"), null));
-		} catch (FacturapiException $e) {
-			throw $e;
-		}
+		return $this->client->post('retentions/' . $id . "/copy", []);
 	}
 
 	/**
@@ -143,11 +120,7 @@ class Retentions extends BaseClient
 	 */
 	public function stampDraft($id): mixed
 	{
-		try {
-			return json_decode($this->executeJsonPostRequest($this->getRequestUrl($id . "/stamp"), null));
-		} catch (FacturapiException $e) {
-			throw $e;
-		}
+		return $this->client->post('retentions/' . $id . "/stamp", []);
 	}
 
 	/**
@@ -168,22 +141,15 @@ class Retentions extends BaseClient
 	 *
 	 * @throws FacturapiException
 	 */
-	public function sendByEmail($id, $email = null): mixed
+	public function sendByEmail($id, ?array $email = null): mixed
 	{
-		try {
-			return json_decode($this->executeJsonPostRequest(
-				$this->getRequestUrl($id) . "/email",
-				array("email" => $email)
-			));
-		} catch (FacturapiException $e) {
-			throw $e;
-		}
+		return $this->client->post('retentions/' . $id . "/email", ["email" => $email]);
 	}
 
 	/**
 	 * @deprecated Use sendByEmail() instead. Will be removed in v5.
 	 */
-	public function send_by_email($id, $email = null): mixed
+	public function send_by_email($id, ?array $email = null): mixed
 	{
 		trigger_error('Retentions::send_by_email() is deprecated and will be removed in v5. Use sendByEmail() instead.', E_USER_DEPRECATED);
 		return $this->sendByEmail($id, $email);
@@ -199,11 +165,7 @@ class Retentions extends BaseClient
 	 */
 	public function downloadZip($id): string
 	{
-		try {
-			return $this->executeGetRequest($this->getRequestUrl($id) . "/zip");
-		} catch (FacturapiException $e) {
-			throw $e;
-		}
+		return $this->client->download('retentions/' . $id . "/zip");
 	}
 
 	/**
@@ -225,11 +187,7 @@ class Retentions extends BaseClient
 	 */
 	public function downloadPdf($id): string
 	{
-		try {
-			return $this->executeGetRequest($this->getRequestUrl($id) . "/pdf");
-		} catch (FacturapiException $e) {
-			throw $e;
-		}
+		return $this->client->download('retentions/' . $id . "/pdf");
 	}
 
 	/**
@@ -251,11 +209,7 @@ class Retentions extends BaseClient
 	 */
 	public function downloadXml($id): string
 	{
-		try {
-			return $this->executeGetRequest($this->getRequestUrl($id) . "/xml");
-		} catch (FacturapiException $e) {
-			throw $e;
-		}
+		return $this->client->download('retentions/' . $id . "/xml");
 	}
 
 	/**

@@ -1,13 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Facturapi\Resources;
 
-use Facturapi\Http\BaseClient;
+use Facturapi\Http\FacturapiHttpClient;
 use Facturapi\Exceptions\FacturapiException;
 
-class Catalogs extends BaseClient
-{
-	protected string $ENDPOINT = 'catalogs';
+class Catalogs {
+	public function __construct(private readonly FacturapiHttpClient $client) {}
 
 	/**
 	 * Search a product key in SAT's catalog
@@ -17,17 +18,9 @@ class Catalogs extends BaseClient
 	 *
 	 * @throws FacturapiException
 	 */
-	public function searchProducts($params = null): mixed
+	public function searchProducts(?array $params = null): mixed
 	{
-		try {
-			return json_decode(
-				$this->executeGetRequest(
-					$this->getRequestUrl("products", $params)
-				)
-			);
-		} catch (FacturapiException $e) {
-			throw $e;
-		}
+		return $this->client->get('catalogs/' . "products");
 	}
 
 	/**
@@ -38,16 +31,8 @@ class Catalogs extends BaseClient
 	 *
 	 * @throws FacturapiException
 	 */
-	public function searchUnits($params = null): mixed
+	public function searchUnits(?array $params = null): mixed
 	{
-		try {
-			return json_decode(
-				$this->executeGetRequest(
-					$this->getRequestUrl("units", $params)
-				)
-			);
-		} catch (FacturapiException $e) {
-			throw $e;
-		}
+		return $this->client->get('catalogs/' . "units");
 	}
 }

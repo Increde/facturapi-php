@@ -1,28 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Facturapi\Resources;
 
-use Facturapi\Http\BaseClient;
+use Facturapi\Http\FacturapiHttpClient;
 use Facturapi\Exceptions\FacturapiException;
 
-class NominaCatalogs extends BaseClient
-{
-    public function searchDeductions($params = null): mixed
+class NominaCatalogs {
+	public function __construct(private readonly FacturapiHttpClient $client) {}
+
+    public function searchDeductions(?array $params = null): mixed
     {
         return $this->search('deductions', $params);
     }
 
-    public function searchPerceptions($params = null): mixed
+    public function searchPerceptions(?array $params = null): mixed
     {
         return $this->search('perceptions', $params);
     }
 
     private function search(string $path, $params): mixed
     {
-        try {
-            return json_decode($this->executeGetRequest($this->getRequestUrl($path, $params)));
-        } catch (FacturapiException $e) {
-            throw $e;
-        }
+        return $this->client->get('unknown', $params);
     }
 }

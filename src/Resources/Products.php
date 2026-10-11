@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Facturapi\Resources;
 
-use Facturapi\Http\BaseClient;
+use Facturapi\Http\FacturapiHttpClient;
 use Facturapi\Exceptions\FacturapiException;
 
-class Products extends BaseClient {
-	protected string $ENDPOINT = 'products';
+class Products {
+	public function __construct(private readonly FacturapiHttpClient $client) {}
 
 
 	/**
@@ -17,12 +19,8 @@ class Products extends BaseClient {
 	 *
 	 * @throws FacturapiException
 	 */
-	public function all( $params = null ): mixed {
-		try {
-			return json_decode( $this->executeGetRequest( $this->getRequestUrl( $params ) ) );
-		} catch ( FacturapiException $e ) {
-			throw $e;
-		}
+	public function all(?array $params = null): mixed {
+		return $this->client->get('products', $params);
 	}
 
 	/**
@@ -34,11 +32,7 @@ class Products extends BaseClient {
 	 * @throws FacturapiException
 	 */
 	public function retrieve( $id ): mixed {
-		try {
-			return json_decode( $this->executeGetRequest( $this->getRequestUrl( $id ) ) );
-		} catch ( FacturapiException $e ) {
-			throw $e;
-		}
+		return $this->client->get('products/' . $id);
 	}
 
 	/**
@@ -50,11 +44,7 @@ class Products extends BaseClient {
 	 * @throws FacturapiException
 	 */
 	public function create( $params ): mixed {
-		try {
-			return json_decode( $this->executeJsonPostRequest( $this->getRequestUrl(), $params ) );
-		} catch ( FacturapiException $e ) {
-			throw $e;
-		}
+		return $this->client->post('products', $params);
 	}
 
 
@@ -68,11 +58,7 @@ class Products extends BaseClient {
 	 * @throws FacturapiException
 	 */
 	public function update( $id, $params ): mixed {
-		try {
-			return json_decode( $this->executeJsonPutRequest( $this->getRequestUrl( $id ), $params ) );
-		} catch ( FacturapiException $e ) {
-			throw $e;
-		}
+		return $this->client->put('products/' . $id, $params);
 	}
 
 	/**
@@ -84,11 +70,7 @@ class Products extends BaseClient {
 	 * @throws FacturapiException
 	 */
 	public function delete( $id ): mixed {
-		try {
-			return json_decode( $this->executeDeleteRequest( $this->getRequestUrl( $id ), null ) );
-		} catch ( FacturapiException $e ) {
-			throw $e;
-		}
+		return $this->client->delete('products/' . $id);
 	}
 
 }

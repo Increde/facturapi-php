@@ -1,13 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Facturapi\Resources;
 
-use Facturapi\Http\BaseClient;
+use Facturapi\Http\FacturapiHttpClient;
 use Facturapi\Exceptions\FacturapiException;
 
-class ComercioExteriorCatalogs extends BaseClient
-{
-    protected string $ENDPOINT = 'catalogs/comercioexterior/2.0';
+class ComercioExteriorCatalogs {
+	public function __construct(private readonly FacturapiHttpClient $client) {}
 
     /**
      * Search tariff fractions (Fracciones Arancelarias).
@@ -16,16 +17,8 @@ class ComercioExteriorCatalogs extends BaseClient
      * @return mixed JSON-decoded response.
      * @throws FacturapiException
      */
-    public function searchTariffFractions($params = null): mixed
+    public function searchTariffFractions(?array $params = null): mixed
     {
-        try {
-            return json_decode(
-                $this->executeGetRequest(
-                    $this->getRequestUrl("tariff-fractions", $params)
-                )
-            );
-        } catch (FacturapiException $e) {
-            throw $e;
-        }
+        return $this->client->get('catalogs/comercio_exterior/' . "tariff-fractions");
     }
 }

@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Facturapi\Resources;
 
-use Facturapi\Http\BaseClient;
+use Facturapi\Http\FacturapiHttpClient;
 use Facturapi\Exceptions\FacturapiException;
 
-class Customers extends BaseClient {
-	protected string $ENDPOINT = 'customers';
+class Customers {
+	public function __construct(private readonly FacturapiHttpClient $client) {}
 
 	/**
 	 * Get all Customers
@@ -16,12 +18,8 @@ class Customers extends BaseClient {
 	 *
 	 * @throws FacturapiException
 	 */
-	public function all( $params = null ): mixed {
-		try {
-			return json_decode( $this->executeGetRequest( $this->getRequestUrl( $params ) ) );
-		} catch ( FacturapiException $e ) {
-			throw $e;
-		}
+	public function all(?array $params = null): mixed {
+		return $this->client->get('customers', $params);
 	}
 
 	/**
@@ -33,11 +31,7 @@ class Customers extends BaseClient {
 	 * @throws FacturapiException
 	 */
 	public function retrieve( $id ): mixed {
-		try {
-			return json_decode( $this->executeGetRequest( $this->getRequestUrl( $id ) ) );
-		} catch ( FacturapiException $e ) {
-			throw $e;
-		}
+		return $this->client->get('customers/' . $id);
 	}
 
 	/**
@@ -49,12 +43,8 @@ class Customers extends BaseClient {
 	 *
 	 * @throws FacturapiException
 	 */
-	public function create( $data, $params = null ): mixed {
-		try {
-			return json_decode( $this->executeJsonPostRequest( $this->getRequestUrl($params), $data ) );
-		} catch ( FacturapiException $e ) {
-			throw $e;
-		}
+	public function create($data, ?array $params = null): mixed {
+		return $this->client->post('customers', $data);
 	}
 
 
@@ -69,11 +59,7 @@ class Customers extends BaseClient {
 	 * @throws FacturapiException
 	 */
 	public function update( $id, $data, $params = null ): mixed {
-		try {
-			return json_decode( $this->executeJsonPutRequest( $this->getRequestUrl( $id, $params ), $data ) );
-		} catch ( FacturapiException $e ) {
-			throw $e;
-		}
+		return $this->client->put('customers/' . $id, $data);
 	}
 
 	/**
@@ -85,11 +71,7 @@ class Customers extends BaseClient {
 	 * @throws FacturapiException
 	 */
 	public function delete( $id ): mixed {
-		try {
-			return json_decode( $this->executeDeleteRequest( $this->getRequestUrl( $id ), null ) );
-		} catch ( FacturapiException $e ) {
-			throw $e;
-		}
+		return $this->client->delete('customers/' . $id);
 	}
 
 	/**
@@ -101,11 +83,7 @@ class Customers extends BaseClient {
 	 * @throws FacturapiException
 	 */
 	public function validateTaxInfo( $id ): mixed {
-		try {
-			return json_decode( $this->executeGetRequest( $this->getRequestUrl( $id ) . "/tax-info-validation" ) );
-		} catch ( FacturapiException $e ) {
-			throw $e;
-		}
+		return $this->client->get('customers/' . $id . "/tax-info-validation");
 	}
 
 }

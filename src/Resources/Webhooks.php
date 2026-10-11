@@ -1,13 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Facturapi\Resources;
 
-use Facturapi\Http\BaseClient;
+use Facturapi\Http\FacturapiHttpClient;
 use Facturapi\Exceptions\FacturapiException;
 
-class Webhooks extends BaseClient
-{
-	protected string $ENDPOINT = 'webhooks';
+class Webhooks {
+	public function __construct(private readonly FacturapiHttpClient $client) {}
 
 	/**
 	 * Get all Webhooks
@@ -17,13 +18,9 @@ class Webhooks extends BaseClient
 	 *
 	 * @throws FacturapiException
 	 */
-	public function all($params = null): mixed
+	public function all(?array $params = null): mixed
 	{
-		try {
-			return json_decode($this->executeGetRequest($this->getRequestUrl($params)));
-		} catch (FacturapiException $e) {
-			throw $e;
-		}
+		return $this->client->get('webhooks', $params);
 	}
 
 	/**
@@ -36,11 +33,7 @@ class Webhooks extends BaseClient
 	 */
 	public function retrieve($id): mixed
 	{
-		try {
-			return json_decode($this->executeGetRequest($this->getRequestUrl($id)));
-		} catch (FacturapiException $e) {
-			throw $e;
-		}
+		return $this->client->get('webhooks/' . $id);
 	}
 
 	/**
@@ -53,11 +46,7 @@ class Webhooks extends BaseClient
 	 */
 	public function create($params): mixed
 	{
-		try {
-			return json_decode($this->executeJsonPostRequest($this->getRequestUrl(), $params));
-		} catch (FacturapiException $e) {
-			throw $e;
-		}
+		return $this->client->post('webhooks', $params);
 	}
 
 
@@ -72,11 +61,7 @@ class Webhooks extends BaseClient
 	 */
 	public function update($id, $params): mixed
 	{
-		try {
-			return json_decode($this->executeJsonPutRequest($this->getRequestUrl($id), $params));
-		} catch (FacturapiException $e) {
-			throw $e;
-		}
+		return $this->client->put('webhooks/' . $id, $params);
 	}
 
 	/**
@@ -89,11 +74,7 @@ class Webhooks extends BaseClient
 	 */
 	public function delete($id): mixed
 	{
-		try {
-			return json_decode($this->executeDeleteRequest($this->getRequestUrl($id), null));
-		} catch (FacturapiException $e) {
-			throw $e;
-		}
+		return $this->client->delete('webhooks/' . $id);
 	}
 
 	/**
@@ -120,11 +101,7 @@ class Webhooks extends BaseClient
 			}
 		}
 
-		try {
-			return json_decode($this->executeJsonPostRequest($this->getRequestUrl() . '/validate-signature', $data));
-		} catch (FacturapiException $e) {
-			throw $e;
-		}
+		return $this->client->post('webhooks', []);
 	}
 
 	/**

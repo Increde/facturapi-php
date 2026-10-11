@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Facturapi\Resources;
 
-use Facturapi\Http\BaseClient;
+use Facturapi\Http\FacturapiHttpClient;
 use Facturapi\Exceptions\FacturapiException;
 
-class Invoices extends BaseClient {
-	protected string $ENDPOINT = 'invoices';
+class Invoices {
+	public function __construct(private readonly FacturapiHttpClient $client) {}
 
 
 	/**
@@ -16,12 +18,8 @@ class Invoices extends BaseClient {
 	 * @return mixed JSON-decoded response.
 	 * @throws FacturapiException
 	 */
-	public function all( $query = null ): mixed {
-		try {
-			return json_decode( $this->executeGetRequest( $this->getRequestUrl( $query ) ) );
-		} catch ( FacturapiException $e ) {
-			throw $e;
-		}
+	public function all(?array $query = null): mixed {
+		return $this->client->get('invoices', $query);
 	}
 
 	/**
@@ -32,11 +30,7 @@ class Invoices extends BaseClient {
 	 * @throws FacturapiException
 	 */
 	public function retrieve( $id ): mixed {
-		try {
-			return json_decode( $this->executeGetRequest( $this->getRequestUrl( $id ) ) );
-		} catch ( FacturapiException $e ) {
-			throw $e;
-		}
+		return $this->client->get('invoices/' . $id);
 	}
 
 	/**
@@ -51,11 +45,7 @@ class Invoices extends BaseClient {
 	 * @throws FacturapiException
 	 */
 	public function paymentSummary( $id, $amount ): mixed {
-		try {
-			return json_decode( $this->executeGetRequest( $this->getRequestUrl( $id . '/payment-summary', array( 'amount' => $amount ) ) ) );
-		} catch ( FacturapiException $e ) {
-			throw $e;
-		}
+		return $this->client->get('invoices/' . $id . '/payment-summary', ['amount' => $amount]);
 	}
 
 	/**
@@ -66,12 +56,8 @@ class Invoices extends BaseClient {
 	 * @return mixed JSON-decoded response.
 	 * @throws FacturapiException
 	 */
-	public function create( $body, $query = null): mixed {
-		try {
-			return json_decode( $this->executeJsonPostRequest( $this->getRequestUrl($query), $body) );
-		} catch ( FacturapiException $e ) {
-			throw $e;
-		}
+	public function create($body, ?array $query = null): mixed {
+		return $this->client->post('invoices', $body);
 	}
 
 
@@ -84,11 +70,7 @@ class Invoices extends BaseClient {
 	 * @throws FacturapiException
 	 */
 	public function cancel( $id, $query ): mixed {
-		try {
-			return json_decode( $this->executeDeleteRequest( $this->getRequestUrl( $id, $query ), null ) );
-		} catch ( FacturapiException $e ) {
-			throw $e;
-		}
+		return $this->client->delete('invoices/' . $id, $query);
 	}
 
 	/**
@@ -99,21 +81,14 @@ class Invoices extends BaseClient {
 	 * @return mixed JSON-decoded response.
 	 * @throws FacturapiException
 	 */
-	public function sendByEmail( $id, $email = null ): mixed {
-		try {
-			return json_decode( $this->executeJsonPostRequest(
-				$this->getRequestUrl($id) . "/email",
-				array("email" => $email)
-			));
-		} catch ( FacturapiException $e ) {
-			throw $e;
-		}
+	public function sendByEmail($id, ?array $email = null): mixed {
+		return $this->client->post('invoices/' . $id . "/email", ["email" => $email]);
 	}
 
 	/**
 	 * @deprecated Use sendByEmail() instead. Will be removed in v5.
 	 */
-	public function send_by_email( $id, $email = null ): mixed {
+	public function send_by_email($id, ?array $email = null): mixed {
 		trigger_error('Invoices::send_by_email() is deprecated and will be removed in v5. Use sendByEmail() instead.', E_USER_DEPRECATED);
 		return $this->sendByEmail( $id, $email );
 	}
@@ -126,11 +101,7 @@ class Invoices extends BaseClient {
 	 * @throws FacturapiException
 	 */
 	public function downloadZip( $id ): string {
-		try {
-			return $this->executeGetRequest( $this->getRequestUrl( $id ) . "/zip" );
-		} catch ( FacturapiException $e ) {
-			throw $e;
-		}
+		return $this->client->download('invoices/' . $id . "/zip");
 	}
 
 	/**
@@ -149,11 +120,7 @@ class Invoices extends BaseClient {
 	 * @throws FacturapiException
 	 */
 	public function createZipRequest( $body ): mixed {
-		try {
-			return json_decode( $this->executeJsonPostRequest( $this->getRequestUrl( "zip-requests" ), $body ) );
-		} catch ( FacturapiException $e ) {
-			throw $e;
-		}
+		return $this->client->post('invoices/' . "zip-requests", $body);
 	}
 
 	/**
@@ -163,12 +130,8 @@ class Invoices extends BaseClient {
 	 * @return mixed JSON-decoded response.
 	 * @throws FacturapiException
 	 */
-	public function listZipRequests( $query = null ): mixed {
-		try {
-			return json_decode( $this->executeGetRequest( $this->getRequestUrl( "zip-requests", $query ) ) );
-		} catch ( FacturapiException $e ) {
-			throw $e;
-		}
+	public function listZipRequests(?array $query = null): mixed {
+		return $this->client->get('invoices/' . "zip-requests", $query);
 	}
 
 	/**
@@ -179,11 +142,7 @@ class Invoices extends BaseClient {
 	 * @throws FacturapiException
 	 */
 	public function retrieveZipRequest( $id ): mixed {
-		try {
-			return json_decode( $this->executeGetRequest( $this->getRequestUrl( "zip-requests/" . $id ) ) );
-		} catch ( FacturapiException $e ) {
-			throw $e;
-		}
+		return $this->client->get('invoices/' . "zip-requests/" . $id);
 	}
 
 	/**
@@ -194,11 +153,7 @@ class Invoices extends BaseClient {
 	 * @throws FacturapiException
 	 */
 	public function downloadZipRequest( $id ): string {
-		try {
-			return $this->executeGetRequest( $this->getRequestUrl( "zip-requests/" . $id . "/zip" ) );
-		} catch ( FacturapiException $e ) {
-			throw $e;
-		}
+		return $this->client->download('invoices/zip-requests/' . $id . '/zip');
 	}
 
 	/**
@@ -209,11 +164,7 @@ class Invoices extends BaseClient {
 	 * @throws FacturapiException
 	 */
 	public function downloadPdf( $id ): string {
-		try {
-			return $this->executeGetRequest( $this->getRequestUrl( $id ) . "/pdf" );
-		} catch ( FacturapiException $e ) {
-			throw $e;
-		}
+		return $this->client->download('invoices/' . $id . "/pdf");
 	}
 
 	/**
@@ -232,11 +183,7 @@ class Invoices extends BaseClient {
 	 * @throws FacturapiException
 	 */
 	public function downloadXml( $id ): string {
-		try {
-			return $this->executeGetRequest( $this->getRequestUrl( $id ) . "/xml" );
-		} catch ( FacturapiException $e ) {
-			throw $e;
-		}
+		return $this->client->download('invoices/' . $id . "/xml");
 	}
 
 	/**
@@ -255,11 +202,7 @@ class Invoices extends BaseClient {
 	 * @throws FacturapiException
 	 */
 	public function downloadCancellationReceiptXml( $id ): string {
-		try {
-			return $this->executeGetRequest( $this->getRequestUrl( $id . "/cancellation_receipt/xml" ) );
-		} catch ( FacturapiException $e ) {
-			throw $e;
-		}
+		return $this->client->download('invoices/' . $id . '/cancellation_receipt/xml');
 	}
 
 	/**
@@ -279,11 +222,7 @@ class Invoices extends BaseClient {
 	 * @throws FacturapiException
 	 */
 	public function downloadCancellationReceiptPdf( $id ): string {
-		try {
-			return $this->executeGetRequest( $this->getRequestUrl( $id ) . "/cancellation_receipt/pdf" );
-		} catch ( FacturapiException $e ) {
-			throw $e;
-		}
+		return $this->client->download('invoices/' . $id . "/cancellation_receipt/pdf");
 	}
 
 	/**
@@ -303,11 +242,7 @@ class Invoices extends BaseClient {
 	 * @throws FacturapiException
 	 */
 	public function updateStatus( $id ): mixed {
-		try {
-			return json_decode( $this->executeJsonPutRequest( $this->getRequestUrl( $id . "/status" ), null ) );
-		} catch ( FacturapiException $e ) {
-			throw $e;
-		}
+		return $this->client->put('invoices/' . $id . "/status", []);
 	}
 
 	/**
@@ -327,11 +262,7 @@ class Invoices extends BaseClient {
 	 * @throws FacturapiException
 	 */
 	public function updateDraft( $id, $body ): mixed {
-		try {
-			return json_decode( $this->executeJsonPutRequest( $this->getRequestUrl( $id ), $body ) );
-		} catch ( FacturapiException $e ) {
-			throw $e;
-		}
+		return $this->client->put('invoices/' . $id, $body);
 	}
 
 	/**
@@ -350,18 +281,14 @@ class Invoices extends BaseClient {
 	 * @return mixed JSON-decoded response.
 	 * @throws FacturapiException
 	 */
-	public function stampDraft( $id, $query = null ): mixed {
-		try {
-			return json_decode( $this->executeJsonPostRequest( $this->getRequestUrl( $id . "/stamp", $query ) ) );
-		} catch ( FacturapiException $e ) {
-			throw $e;
-		}
+	public function stampDraft($id, ?array $query = null): mixed {
+		return $this->client->post('invoices/' . $id . "/stamp", []);
 	}
 
 	/**
 	 * @deprecated Use stampDraft() instead. Will be removed in v5.
 	 */
-	public function stamp_draft( $id, $query = null ): mixed {
+	public function stamp_draft($id, ?array $query = null): mixed {
 		trigger_error('Invoices::stamp_draft() is deprecated and will be removed in v5. Use stampDraft() instead.', E_USER_DEPRECATED);
 		return $this->stampDraft( $id, $query );
 	}
@@ -374,11 +301,7 @@ class Invoices extends BaseClient {
 	 * @throws FacturapiException
 	 */
 	public function copyToDraft( $id ): mixed {
-		try {
-			return json_decode( $this->executeJsonPostRequest( $this->getRequestUrl( $id . "/copy" ), null ) );
-		} catch ( FacturapiException $e ) {
-			throw $e;
-		}
+		return $this->client->post('invoices/' . $id . "/copy", []);
 	}
 
 	/**
@@ -397,11 +320,7 @@ class Invoices extends BaseClient {
 	 * @throws FacturapiException
 	 */
 	public function previewPdf( $body ): string {
-		try {
-			return $this->executeJsonPostRequest( $this->getRequestUrl( "preview/pdf" ), $body );
-		} catch ( FacturapiException $e ) {
-			throw $e;
-		}
+		return $this->client->postRaw('invoices/preview/pdf', $body);
 	}
 
 	/**
