@@ -10,26 +10,24 @@ describe('OrganizationsMultipart', function () {
         $tmpLogo = tempnam(sys_get_temp_dir(), 'logo_');
         file_put_contents($tmpLogo, 'LOGO_BYTES');
 
-        try {
-            mockResponse('{"ok":true}', 200);
+        mockResponse('{"ok":true}', 200);
             $organizations = test()->facturapi->organizations();
 
             $result = $organizations->uploadLogo('org_123', $tmpLogo);
 
-            self::assertTrue($result['ok']);
+            expect($result['ok'])->toBeTrue();
 
             $request = test()->httpClient->requests()[0];
-            self::assertSame('PUT', $request->getMethod());
-            self::assertSame('https://www.facturapi.io/v2/organizations/org_123/logo', (string) $request->getUri());
-            self::assertStringStartsWith('multipart/form-data; boundary=', $request->getHeaderLine('Content-Type'));
+            expect($request->getMethod())->toBe('PUT');
+            expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/organizations/org_123/logo');
+            expect($request->getHeaderLine('Content-Type'))->toStartWith('multipart/form-data; boundary=');
 
             $body = (string) $request->getBody();
-            self::assertStringContainsString('name="file"', $body);
-            self::assertStringContainsString('filename="' . basename($tmpLogo) . '"', $body);
-            self::assertStringContainsString('LOGO_BYTES', $body);
-        } finally {
-            @unlink($tmpLogo);
-        }
+            expect($body)->toContain('name="file"');
+            expect($body)->toContain('filename="' . basename($tmpLogo) . '"');
+            expect($body)->toContain('LOGO_BYTES');
+        
+        @unlink($tmpLogo);
     });
     test('upload certificate builds multipart request with cer key and password', function () {
         $tmpCer = tempnam(sys_get_temp_dir(), 'cer_');
@@ -37,8 +35,7 @@ describe('OrganizationsMultipart', function () {
         file_put_contents($tmpCer, 'CER_BYTES');
         file_put_contents($tmpKey, 'KEY_BYTES');
 
-        try {
-            mockResponse('{"ok":true}', 200);
+        mockResponse('{"ok":true}', 200);
             $organizations = test()->facturapi->organizations();
 
             $result = $organizations->uploadCertificate('org_123', [
@@ -47,43 +44,37 @@ describe('OrganizationsMultipart', function () {
                 'password' => 'secret_password',
             ]);
 
-            self::assertTrue($result['ok']);
+            expect($result['ok'])->toBeTrue();
 
             $request = test()->httpClient->requests()[0];
-            self::assertSame('PUT', $request->getMethod());
-            self::assertSame('https://www.facturapi.io/v2/organizations/org_123/certificate', (string) $request->getUri());
+            expect($request->getMethod())->toBe('PUT');
+            expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/organizations/org_123/certificate');
 
             $body = (string) $request->getBody();
-            self::assertStringContainsString('name="cer"', $body);
-            self::assertStringContainsString('name="key"', $body);
-            self::assertStringContainsString('name="password"', $body);
-            self::assertStringContainsString('CER_BYTES', $body);
-            self::assertStringContainsString('KEY_BYTES', $body);
-            self::assertStringContainsString('secret_password', $body);
-        } finally {
-            @unlink($tmpCer);
-            @unlink($tmpKey);
-        }
+            expect($body)->toContain('name="cer"');
+            expect($body)->toContain('name="key"');
+            expect($body)->toContain('name="password"');
+            expect($body)->toContain('CER_BYTES');
+            expect($body)->toContain('KEY_BYTES');
+            expect($body)->toContain('secret_password');
+        
+        @unlink($tmpCer);
+        @unlink($tmpKey);
     });
     test('upload certificate fails when required fields are missing', function () {
         mockResponse('{"ok":true}', 200);
         $organizations = test()->facturapi->organizations();
 
-        $this->expectException(FacturapiException::class);
-        $this->expectExceptionMessage('Invalid certificate payload. Expected cerFile, keyFile and password.');
-
-        $organizations->uploadCertificate('org_123', [
+        expect(fn () => $organizations->uploadCertificate('org_123', [
             'cerFile' => '/tmp/cert.cer',
-        ]);
+        ]))->toThrow(FacturapiException::class, 'Invalid certificate payload. Expected cerFile, keyFile and password.');
     });
     test('upload logo fails when file cannot be opened', function () {
         mockResponse('{"ok":true}', 200);
         $organizations = test()->facturapi->organizations();
 
-        $this->expectException(FacturapiException::class);
-        $this->expectExceptionMessage('Unable to open file: /tmp/file_that_does_not_exist.pdf');
-
-        $organizations->uploadLogo('org_123', '/tmp/file_that_does_not_exist.pdf');
+        expect(fn () => $organizations->uploadLogo('org_123', '/tmp/file_that_does_not_exist.pdf'))
+            ->toThrow(FacturapiException::class, 'Unable to open file: /tmp/file_that_does_not_exist.pdf');
     });
     test('upload logo throws on non2xx and preserves error shape', function () {
         $tmpLogo = tempnam(sys_get_temp_dir(), 'logo_');
@@ -100,16 +91,14 @@ describe('OrganizationsMultipart', function () {
         mockResponse(json_encode($errorBody), 422, ['Content-Type' => 'application/json']);
         $organizations = test()->facturapi->organizations();
 
-        try {
-            $organizations->uploadLogo('org_123', $tmpLogo);
-            self::fail('Expected FacturapiException to be thrown.');
-        } catch (FacturapiException $exception) {
-            self::assertSame(422, $exception->getStatusCode());
-            self::assertSame('Upload failed', $exception->getMessage());
-            self::assertSame($errorBody, $exception->getErrorData());
-        } finally {
-            @unlink($tmpLogo);
-        }
+        expect(fn () => $organizations->uploadLogo('org_123', $tmpLogo))
+            ->toThrow(function (FacturapiException $exception) use ($errorBody) {
+                expect($exception->getStatusCode())->toBe(422);
+                expect($exception->getMessage())->toBe('Upload failed');
+                expect($exception->getErrorData())->toBe($errorBody);
+            });
+        
+        @unlink($tmpLogo);
     });
 
 });

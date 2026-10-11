@@ -13,30 +13,26 @@ describe('ErrorHandlingNonJsonEdgeCases', function () {
 
         $invoices = test()->facturapi->invoices();
 
-        try {
-            $invoices->create(['customer' => []]);
-            self::fail('Expected FacturapiException to be thrown.');
-        } catch (FacturapiException $exception) {
-            self::assertSame(500, $exception->getStatusCode());
-            self::assertSame($rawBody, $exception->getMessage());
-            self::assertNull($exception->getErrorData());
-            self::assertSame($rawBody, $exception->getRawBody());
-        }
+        expect(fn () => $invoices->create(['customer' => []]))
+            ->toThrow(function (FacturapiException $exception) use ($rawBody) {
+                expect($exception->getStatusCode())->toBe(500);
+                expect($exception->getMessage())->toBe($rawBody);
+                expect($exception->getErrorData())->toBeNull();
+                expect($exception->getRawBody())->toBe($rawBody);
+            });
     });
     test('empty error body is exposed as empty string', function () {
         mockResponse('', 500, ['Content-Type' => 'text/plain']);
 
         $invoices = test()->facturapi->invoices();
 
-        try {
-            $invoices->create(['customer' => []]);
-            self::fail('Expected FacturapiException to be thrown.');
-        } catch (FacturapiException $exception) {
-            self::assertSame(500, $exception->getStatusCode());
-            self::assertSame('', $exception->getMessage());
-            self::assertNull($exception->getErrorData());
-            self::assertSame('', $exception->getRawBody());
-        }
+        expect(fn () => $invoices->create(['customer' => []]))
+            ->toThrow(function (FacturapiException $exception) {
+                expect($exception->getStatusCode())->toBe(500);
+                expect($exception->getMessage())->toBe('');
+                expect($exception->getErrorData())->toBeNull();
+                expect($exception->getRawBody())->toBe('');
+            });
     });
     test('plain text error body is preserved', function () {
         $rawBody = 'gateway overloaded, retry later';
@@ -45,15 +41,13 @@ describe('ErrorHandlingNonJsonEdgeCases', function () {
 
         $invoices = test()->facturapi->invoices();
 
-        try {
-            $invoices->create(['customer' => []]);
-            self::fail('Expected FacturapiException to be thrown.');
-        } catch (FacturapiException $exception) {
-            self::assertSame(503, $exception->getStatusCode());
-            self::assertSame($rawBody, $exception->getMessage());
-            self::assertNull($exception->getErrorData());
-            self::assertSame($rawBody, $exception->getRawBody());
-        }
+        expect(fn () => $invoices->create(['customer' => []]))
+            ->toThrow(function (FacturapiException $exception) use ($rawBody) {
+                expect($exception->getStatusCode())->toBe(503);
+                expect($exception->getMessage())->toBe($rawBody);
+                expect($exception->getErrorData())->toBeNull();
+                expect($exception->getRawBody())->toBe($rawBody);
+            });
     });
 
 });

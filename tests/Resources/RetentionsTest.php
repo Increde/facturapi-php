@@ -15,12 +15,9 @@ describe('Retentions', function () {
         ]);
 
         $request = test()->httpClient->requests()[0];
-        self::assertSame('POST', $request->getMethod());
-        self::assertSame('https://www.facturapi.io/v2/retentions', (string) $request->getUri());
-        self::assertJsonStringEqualsJsonString(
-            '{"status":"draft","customer":null}',
-            (string) $request->getBody()
-        );
+        expect($request->getMethod())->toBe('POST');
+        expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/retentions');
+        expect((string) $request->getBody())->toBeJson()->and(json_decode((string) $request->getBody(), true))->toBe(json_decode('{"status":"draft","customer":null}', true));
     });
     test('update draft uses put on retention id', function () {
         mockResponse('{"id":"ret_123"}', 200);
@@ -31,12 +28,9 @@ describe('Retentions', function () {
         ]);
 
         $request = test()->httpClient->requests()[0];
-        self::assertSame('PUT', $request->getMethod());
-        self::assertSame('https://www.facturapi.io/v2/retentions/ret_123', (string) $request->getUri());
-        self::assertJsonStringEqualsJsonString(
-            '{"folio_int":"R-2026-001"}',
-            (string) $request->getBody()
-        );
+        expect($request->getMethod())->toBe('PUT');
+        expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/retentions/ret_123');
+        expect((string) $request->getBody())->toBeJson()->and(json_decode((string) $request->getBody(), true))->toBe(json_decode('{"folio_int":"R-2026-001"}', true));
     });
     test('copy to draft uses copy endpoint', function () {
         mockResponse('{"id":"ret_draft"}', 200);
@@ -45,9 +39,9 @@ describe('Retentions', function () {
         $retentions->copyToDraft('ret_123');
 
         $request = test()->httpClient->requests()[0];
-        self::assertSame('POST', $request->getMethod());
-        self::assertSame('https://www.facturapi.io/v2/retentions/ret_123/copy', (string) $request->getUri());
-        self::assertSame('', (string) $request->getBody());
+        expect($request->getMethod())->toBe('POST');
+        expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/retentions/ret_123/copy');
+        expect((string) $request->getBody())->toBe('');
     });
     test('stamp draft uses stamp endpoint', function () {
         mockResponse('{"id":"ret_123","status":"valid"}', 200);
@@ -56,9 +50,9 @@ describe('Retentions', function () {
         $retentions->stampDraft('ret_123');
 
         $request = test()->httpClient->requests()[0];
-        self::assertSame('POST', $request->getMethod());
-        self::assertSame('https://www.facturapi.io/v2/retentions/ret_123/stamp', (string) $request->getUri());
-        self::assertSame('', (string) $request->getBody());
+        expect($request->getMethod())->toBe('POST');
+        expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/retentions/ret_123/stamp');
+        expect((string) $request->getBody())->toBe('');
     });
     test('cancel can delete draft without query parameters', function () {
         mockResponse('{"id":"ret_123","deleted":true}', 200);
@@ -67,8 +61,8 @@ describe('Retentions', function () {
         $retentions->cancel('ret_123');
 
         $request = test()->httpClient->requests()[0];
-        self::assertSame('DELETE', $request->getMethod());
-        self::assertSame('https://www.facturapi.io/v2/retentions/ret_123', (string) $request->getUri());
+        expect($request->getMethod())->toBe('DELETE');
+        expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/retentions/ret_123');
     });
     test('all can filter by draft status', function () {
         mockResponse('{"data":[]}', 200);
@@ -79,8 +73,8 @@ describe('Retentions', function () {
         ]);
 
         $request = test()->httpClient->requests()[0];
-        self::assertSame('GET', $request->getMethod());
-        self::assertSame('https://www.facturapi.io/v2/retentions?status=draft', (string) $request->getUri());
+        expect($request->getMethod())->toBe('GET');
+        expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/retentions?status=draft');
     });
 
 });

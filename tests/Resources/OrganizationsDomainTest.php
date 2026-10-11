@@ -14,11 +14,8 @@ describe('OrganizationsDomain', function () {
         ]);
 
         $request = test()->httpClient->requests()[0];
-        self::assertSame('GET', $request->getMethod());
-        self::assertSame(
-            'https://www.facturapi.io/v2/organizations?q=XAXX010101000',
-            (string) $request->getUri()
-        );
+        expect($request->getMethod())->toBe('GET');
+        expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/organizations?q=XAXX010101000');
     });
     test('check domain availability uses expected endpoint', function () {
         mockResponse('{"available":true}', 200);
@@ -29,23 +26,18 @@ describe('OrganizationsDomain', function () {
             'domain' => 'acme.mx',
         ]);
 
-        self::assertTrue($result['available']);
+        expect($result['available'])->toBeTrue();
 
         $request = test()->httpClient->requests()[0];
-        self::assertSame('GET', $request->getMethod());
-        self::assertSame(
-            'https://www.facturapi.io/v2/organizations/domain-check?name=acme&domain=acme.mx',
-            (string) $request->getUri()
-        );
+        expect($request->getMethod())->toBe('GET');
+        expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/organizations/domain-check?name=acme&domain=acme.mx');
     });
     test('check domain availability throws when params are not array', function () {
         mockResponse('{"available":true}', 200);
         $organizations = test()->facturapi->organizations();
 
-        $this->expectException(\Facturapi\Exceptions\FacturapiException::class);
-        $this->expectExceptionMessage('checkDomainAvailability expects $query to be an array.');
-
-        $organizations->checkDomainAvailability('invalid');
+        expect(fn () => $organizations->checkDomainAvailability('invalid'))
+            ->toThrow(\Facturapi\Exceptions\FacturapiException::class, 'checkDomainAvailability expects $query to be an array.');
     });
 
 });

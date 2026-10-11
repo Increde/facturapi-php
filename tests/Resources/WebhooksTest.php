@@ -19,8 +19,8 @@ describe('Webhooks', function () {
             'webhookSecret' => $secret,
         ]);
 
-        self::assertTrue($result['valid']);
-        self::assertCount(0, test()->httpClient->requests());
+        expect($result['valid'])->toBeTrue();
+        expect(test()->httpClient->requests())->toHaveCount(0);
     });
     test('validate signature falls back to api endpoint when local cannot run', function () {
         mockResponse('{"valid":true}', 200);
@@ -34,13 +34,13 @@ describe('Webhooks', function () {
 
         $result = $webhooks->validateSignature($payload);
 
-        self::assertTrue($result['valid']);
+        expect($result['valid'])->toBeTrue();
 
         $request = test()->httpClient->requests()[0];
-        self::assertSame('POST', $request->getMethod());
-        self::assertSame('https://www.facturapi.io/v2/webhooks/validate-signature', (string) $request->getUri());
-        self::assertSame('application/json', $request->getHeaderLine('Content-Type'));
-        self::assertSame(json_encode($payload), (string) $request->getBody());
+        expect($request->getMethod())->toBe('POST');
+        expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/webhooks/validate-signature');
+        expect($request->getHeaderLine('Content-Type'))->toBe('application/json');
+        expect((string) $request->getBody())->toBe(json_encode($payload));
     });
     test('validate signature local supports raw hex and rejects invalid signatures', function () {
         
@@ -61,9 +61,9 @@ describe('Webhooks', function () {
             'secret' => $secret,
         ]);
 
-        self::assertTrue($valid['valid']);
-        self::assertFalse($invalid['valid']);
-        self::assertCount(0, test()->httpClient->requests());
+        expect($valid['valid'])->toBeTrue();
+        expect($invalid['valid'])->toBeFalse();
+        expect(test()->httpClient->requests())->toHaveCount(0);
     });
 
 });
