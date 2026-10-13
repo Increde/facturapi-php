@@ -15,6 +15,7 @@ Welcome to the **Facturapi PHP SDK** project. This file provides critical contex
 - **Strict Typing**: Use strict types always (`declare(strict_types=1);` at the top of every file). All properties, parameters, and returns must be strongly typed.
 - **Style**: Follow PSR-12 standard conventions.
 - **Dependencies**: Managed via Composer (`composer.json`). The SDK must remain completely framework-agnostic.
+- **Static Analysis**: Enforced at **PHPStan Level 9** (`composer run analyze`). Code additions or refactors must pass with 0 errors without introducing artificial `ignoreErrors` in `phpstan.neon`.
 
 ## 3. Important SDK Concepts (Architecture)
 
@@ -29,6 +30,7 @@ Welcome to the **Facturapi PHP SDK** project. This file provides critical contex
 - **DTOs and Enums (Strictly Typed)**:
   - **IMPORTANT**: The SDK v5 migration is COMPLETE. ALL API endpoints now return strictly typed Data Transfer Objects (DTOs) and Enums.
   - Agents MUST NEVER write code assuming associative arrays for resource responses. Always use object property syntax (e.g., `$customer->legal_name`).
+  - **Backward Compatibility via `\ArrayAccess`**: Certain nested DTOs (e.g., `CommonAddressProperties`) intentionally implement `\ArrayAccess` to ensure seamless backward compatibility with legacy array-style access (e.g., `$customer->address['zip']`). Agents must preserve these interfaces and not remove them.
 - **API Endpoints (Methods vs Properties)**: 
   - API interactions are handled through resource classes located in `src/Resources/`. 
   - Resource classes MUST be accessed via **methods** (e.g., `$facturapi->customers()`, `$facturapi->invoices()`).

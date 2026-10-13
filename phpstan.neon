@@ -16,8 +16,6 @@ parameters:
         -
             identifier: return.phpDocType
         -
-            identifier: parameter.phpDocType
-        -
             identifier: missingType.parameter
         -
             identifier: argument.type
