@@ -31,8 +31,8 @@ Welcome to the **Facturapi PHP SDK** project. This file provides critical contex
   - **IMPORTANT**: The SDK v5 migration is COMPLETE. ALL API endpoints now return strictly typed Data Transfer Objects (DTOs) and Enums.
   - Agents MUST NEVER write code assuming associative arrays for resource responses. Always use object property syntax (e.g., `$customer->legal_name`).
   - **Backward Compatibility via `\ArrayAccess`**: Certain nested DTOs (e.g., `CommonAddressProperties`) intentionally implement `\ArrayAccess` to ensure seamless backward compatibility with legacy array-style access (e.g., `$customer->address['zip']`). Agents must preserve these interfaces and not remove them.
-- **API Endpoints (Methods vs Properties)**: 
-  - API interactions are handled through resource classes located in `src/Resources/`. 
+- **API Endpoints (Methods vs Properties)**:
+  - API interactions are handled through resource classes located in `src/Resources/`.
   - Resource classes MUST be accessed via **methods** (e.g., `$facturapi->customers()`, `$facturapi->invoices()`).
   - DO NOT use magic properties (e.g., `$facturapi->Customers`), as this syntax is deprecated and will trigger an undefined property error.
 - **Statelessness (Long-Running Processes)**:
@@ -73,3 +73,7 @@ This project contains customized AI skills to automate repetitive tasks and enfo
 The SDK does NOT store a local `.yaml` file. Whenever you need to read the Facturapi OpenAPI specification, you MUST fetch it directly from the live documentation site:
 `https://docs.facturapi.io/redocusaurus/api-es.yaml`
 Do not attempt to search for `tmp/api-es.yaml` or any local variant.
+
+---
+
+CO-CREATED BY INCREDE < @increde - @macarthuror>
