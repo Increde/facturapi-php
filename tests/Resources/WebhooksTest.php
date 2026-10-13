@@ -83,16 +83,31 @@ describe('Webhooks', function () {
     });
 
     test('update sends json body with updated properties', function () {
-        mockResponse('{"id":"wh_123"}', 200);
+        mockResponse(json_encode([
+            'id' => 'wh_123',
+            'created_at' => '2025-03-01T12:00:00Z',
+            'livemode' => false,
+            'organization' => 'org_123',
+            'url' => 'https://example.com/webhook-updated',
+            'status' => 'active',
+            'enabled_events' => ['invoice.created'],
+        ]), 200);
         $webhooks = test()->facturapi->webhooks();
 
         $payload = [
             'url' => 'https://example.com/webhook-updated',
+            'status' => 'active',
+            'enabled_events' => ['invoice.created'],
         ];
 
         $result = $webhooks->update('wh_123', $payload);
 
         expect($result->id)->toBe('wh_123');
+        expect($result->url)->toBe('https://example.com/webhook-updated');
+        expect($result->status)->toBe('active');
+        expect($result->enabled_events)->toBe(['invoice.created']);
+        expect($result->organization)->toBe('org_123');
+
         $request = test()->httpClient->requests()[0];
         expect($request->getMethod())->toBe('PUT');
         expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/webhooks/wh_123');

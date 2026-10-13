@@ -7,7 +7,16 @@ describe('Invoices', function () {
     });
 
     test('create sends full json body with all required and optional properties', function () {
-        mockResponse('{"id":"inv_123"}', 201);
+        mockResponse(json_encode([
+            'id' => 'inv_123',
+            'created_at' => '2025-03-01T12:00:00Z',
+            'livemode' => false,
+            'status' => 'valid',
+            'payment_method' => 'PUE',
+            'use' => 'G01',
+            'conditions' => 'Inmediato',
+            'currency' => 'MXN',
+        ]), 201);
         $invoices = test()->facturapi->invoices();
 
         $payload = [
@@ -26,12 +35,12 @@ describe('Invoices', function () {
                     ]
                 ]
             ],
-            'use' => 'G03',
+            'use' => 'G01',
             'payment_form' => '01',
             'payment_method' => 'PUE',
             'currency' => 'MXN',
             'exchange' => 1.5,
-            'conditions' => 'Pago a 30 dias',
+            'conditions' => 'Inmediato',
             'related' => [
                 'relation' => '01',
                 'invoices' => ['inv_001', 'inv_002']
@@ -44,10 +53,49 @@ describe('Invoices', function () {
         $result = $invoices->create($payload);
 
         expect($result->id)->toBe('inv_123');
+        expect($result->payment_method)->toBe('PUE');
+        expect($result->use)->toBe('G01');
+        expect($result->conditions)->toBe('Inmediato');
 
         $request = test()->httpClient->requests()[0];
         expect($request->getMethod())->toBe('POST');
         expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/invoices');
+
+        $sentPayload = json_decode((string) $request->getBody(), true);
+        expect($sentPayload)->toBe($payload);
+    });
+
+    test('updateDraft sends json body with CFDI 4.0 standard fields and returns Invoice DTO', function () {
+        mockResponse(json_encode([
+            'id' => 'inv_123',
+            'created_at' => '2025-03-01T12:00:00Z',
+            'livemode' => false,
+            'status' => 'draft',
+            'payment_method' => 'PUE',
+            'use' => 'G01',
+            'conditions' => 'Inmediato',
+            'currency' => 'MXN',
+        ]), 200);
+        $invoices = test()->facturapi->invoices();
+
+        $payload = [
+            'payment_method' => 'PUE',
+            'use' => 'G01',
+            'conditions' => 'Inmediato',
+            'payment_form' => '03',
+            'currency' => 'MXN',
+        ];
+
+        $result = $invoices->updateDraft('inv_123', $payload);
+
+        expect($result->id)->toBe('inv_123');
+        expect($result->payment_method)->toBe('PUE');
+        expect($result->use)->toBe('G01');
+        expect($result->conditions)->toBe('Inmediato');
+
+        $request = test()->httpClient->requests()[0];
+        expect($request->getMethod())->toBe('PUT');
+        expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/invoices/inv_123');
 
         $sentPayload = json_decode((string) $request->getBody(), true);
         expect($sentPayload)->toBe($payload);
@@ -212,4 +260,48 @@ describe('Invoices', function () {
         expect($request->getHeaderLine('Authorization'))->toBe('Basic ' . base64_encode('sk_test_abc123:'));
     });
 
+    test('sendByEmail sends single email string to customer and returns SuccessResponse', function () {
+        mockResponse('{"success":true}', 200);
+        $invoices = test()->facturapi->invoices();
+
+        $result = $invoices->sendByEmail('inv_123', 'customer@example.com');
+
+        expect($result->success)->toBeTrue();
+        expect($result->ok)->toBeTrue();
+
+        $request = test()->httpClient->requests()[0];
+        expect($request->getMethod())->toBe('POST');
+        expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/invoices/inv_123/email');
+        expect(json_decode((string) $request->getBody(), true))->toBe(['email' => ['customer@example.com']]);
+    });
+
+    test('sendByEmail sends email array to customer and returns SuccessResponse', function () {
+        mockResponse('{"success":true}', 200);
+        $invoices = test()->facturapi->invoices();
+
+        $result = $invoices->sendByEmail('inv_123', ['user1@example.com', 'user2@example.com']);
+
+        expect($result->success)->toBeTrue();
+        expect($result->ok)->toBeTrue();
+
+        $request = test()->httpClient->requests()[0];
+        expect($request->getMethod())->toBe('POST');
+        expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/invoices/inv_123/email');
+        expect(json_decode((string) $request->getBody(), true))->toBe(['email' => ['user1@example.com', 'user2@example.com']]);
+    });
+
+    test('sendByEmail sends empty payload when email is null and returns SuccessResponse', function () {
+        mockResponse('{"success":true}', 200);
+        $invoices = test()->facturapi->invoices();
+
+        $result = $invoices->sendByEmail('inv_123');
+
+        expect($result->success)->toBeTrue();
+        expect($result->ok)->toBeTrue();
+
+        $request = test()->httpClient->requests()[0];
+        expect($request->getMethod())->toBe('POST');
+        expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/invoices/inv_123/email');
+        expect((string) $request->getBody())->toBe('');
+    });
 });

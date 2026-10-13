@@ -111,26 +111,47 @@ describe('Receipts', function () {
         mockResponse('{"id":"inv_123"}', 201);
         $receipts = test()->facturapi->receipts();
 
-        $payload = ['receipts' => ['rec_1', 'rec_2'], 'customer' => 'cus_123'];
+        $payload = ['keys' => ['rec_1', 'rec_2'], 'customer' => 'cus_123'];
         $result = $receipts->toInvoice($payload);
 
         expect($result->id)->toBe('inv_123');
         $request = test()->httpClient->requests()[0];
         expect($request->getMethod())->toBe('POST');
         expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/receipts/to-invoice');
+        expect(json_decode((string) $request->getBody(), true))->toBe($payload);
     });
 
     test('previewToInvoicePdf generates a pdf from multiple receipts', function () {
         mockResponse('PDF_BYTES', 200);
         $receipts = test()->facturapi->receipts();
 
-        $payload = ['receipts' => ['rec_1', 'rec_2']];
+        $payload = ['keys' => ['rec_1', 'rec_2']];
         $result = $receipts->previewToInvoicePdf($payload);
 
         expect($result)->toBe('PDF_BYTES');
         $request = test()->httpClient->requests()[0];
         expect($request->getMethod())->toBe('POST');
         expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/receipts/to-invoice/preview');
+        expect(json_decode((string) $request->getBody(), true))->toBe($payload);
+    });
+
+    test('previewToInvoiceDownloadUrl obtains signed download url using keys', function () {
+        mockResponse(json_encode([
+            'url' => 'https://facturapi-signed.s3.amazonaws.com/preview.pdf',
+            'expires_at' => '2025-03-01T12:00:00Z',
+            'content_type' => 'application/pdf',
+            'filename' => 'preview.pdf',
+        ]), 200);
+        $receipts = test()->facturapi->receipts();
+
+        $payload = ['keys' => ['rec_1', 'rec_2']];
+        $result = $receipts->previewToInvoiceDownloadUrl($payload);
+
+        expect($result->url)->toBe('https://facturapi-signed.s3.amazonaws.com/preview.pdf');
+        expect($result->filename)->toBe('preview.pdf');
+        $request = test()->httpClient->requests()[0];
+        expect($request->getMethod())->toBe('POST');
+        expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/receipts/to-invoice/preview/download-url');
         expect(json_decode((string) $request->getBody(), true))->toBe($payload);
     });
 
@@ -146,17 +167,43 @@ describe('Receipts', function () {
         expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/receipts/rec_123');
     });
 
-    test('sendByEmail sends email to customer', function () {
+    test('sendByEmail sends single email string to customer', function () {
         mockResponse('{"success":true}', 200);
         $receipts = test()->facturapi->receipts();
 
-        $result = $receipts->sendByEmail('rec_123', ['user@example.com']);
+        $result = $receipts->sendByEmail('rec_123', 'user@example.com');
 
         expect($result->success)->toBeTrue();
         $request = test()->httpClient->requests()[0];
         expect($request->getMethod())->toBe('POST');
         expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/receipts/rec_123/email');
         expect(json_decode((string) $request->getBody(), true))->toBe(['email' => ['user@example.com']]);
+    });
+
+    test('sendByEmail sends array of emails to customer', function () {
+        mockResponse('{"success":true}', 200);
+        $receipts = test()->facturapi->receipts();
+
+        $result = $receipts->sendByEmail('rec_123', ['user1@example.com', 'user2@example.com']);
+
+        expect($result->success)->toBeTrue();
+        $request = test()->httpClient->requests()[0];
+        expect($request->getMethod())->toBe('POST');
+        expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/receipts/rec_123/email');
+        expect(json_decode((string) $request->getBody(), true))->toBe(['email' => ['user1@example.com', 'user2@example.com']]);
+    });
+
+    test('sendByEmail sends empty payload when email is null', function () {
+        mockResponse('{"success":true}', 200);
+        $receipts = test()->facturapi->receipts();
+
+        $result = $receipts->sendByEmail('rec_123');
+
+        expect($result->success)->toBeTrue();
+        $request = test()->httpClient->requests()[0];
+        expect($request->getMethod())->toBe('POST');
+        expect((string) $request->getUri())->toBe('https://www.facturapi.io/v2/receipts/rec_123/email');
+        expect((string) $request->getBody())->toBe('');
     });
 
     test('downloadPdf downloads pdf bytes', function () {
