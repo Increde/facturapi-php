@@ -4,8 +4,13 @@ declare(strict_types=1);
 
 namespace Facturapi\Resources;
 
-use Facturapi\Http\FacturapiHttpClient;
 use Facturapi\Exceptions\FacturapiException;
+use Facturapi\Http\FacturapiHttpClient;
+use Facturapi\Models\Invoice;
+use Facturapi\Models\Receipt;
+use Facturapi\Models\ReceiptSearchResult;
+use Facturapi\Models\SignedDownloadUrl;
+use Facturapi\Models\SuccessResponse;
 
 class Receipts
 {
@@ -18,39 +23,39 @@ class Receipts
      * Search or list all receipts in your organization
      *
      * @param array|null $params Search parameters.
-     * @return mixed JSON-decoded response.
+     * @return ReceiptSearchResult JSON-decoded response.
      *
      * @throws FacturapiException
      */
-    public function all(?array $params = null): mixed
+    public function all(?array $params = null): ReceiptSearchResult
     {
-        return $this->client->get('receipts', $params);
+        return ReceiptSearchResult::fromArray($this->client->get('receipts', $params));
     }
 
     /**
      * Get a Receipt by ID
      *
      * @param string $id Receipt ID.
-     * @return mixed JSON-decoded response.
+     * @return Receipt JSON-decoded response.
      *
      * @throws FacturapiException
      */
-    public function retrieve($id): mixed
+    public function retrieve(string $id): Receipt
     {
-        return $this->client->get('receipts/' . $id);
+        return Receipt::fromArray($this->client->get('receipts/' . $id));
     }
 
     /**
      * Create a Receipt in your organization
      *
      * @param array $params Receipt payload.
-     * @return mixed JSON-decoded response.
+     * @return Receipt JSON-decoded response.
      *
      * @throws FacturapiException
      */
-    public function create(array $params): mixed
+    public function create(array $params): Receipt
     {
-        return $this->client->post('receipts', $params);
+        return Receipt::fromArray($this->client->post('receipts', $params));
     }
 
 
@@ -59,26 +64,26 @@ class Receipts
      *
      * @param string $id Receipt ID.
      * @param array $params Invoice payload.
-     * @return mixed JSON-decoded response.
+     * @return Invoice JSON-decoded response.
      *
      * @throws FacturapiException
      */
-    public function invoice($id, array $params): mixed
+    public function invoice(string $id, array $params): Invoice
     {
-        return $this->client->post('receipts/' . $id . '/invoice', $params);
+        return Invoice::fromArray($this->client->post('receipts/' . $id . '/invoice', $params));
     }
 
     /**
      * Creates a global invoice from the open receipts in the last completed period
      *
      * @param array $params Global invoice payload.
-     * @return mixed JSON-decoded response.
+     * @return Invoice JSON-decoded response.
      *
      * @throws FacturapiException
      */
-    public function createGlobalInvoice(array $params): mixed
+    public function createGlobalInvoice(array $params): Invoice
     {
-        return $this->client->post('receipts' . '/global-invoice', $params);
+        return Invoice::fromArray($this->client->post('receipts/global-invoice', $params));
     }
 
     /**
@@ -86,14 +91,14 @@ class Receipts
      *
      * @param $data Array of properties and property values for creating an invoice from multiple receipts
      *
-     * @return Response The created invoice object or preview summary when dry_run is enabled
+     * @return Invoice The created invoice object
      *
      * @throws FacturapiException
      */
-    public function toInvoice(array $data): array
+    public function toInvoice(array $data): Invoice
     {
         try {
-            return $this->client->post('receipts' . '/to-invoice', $data);
+            return Invoice::fromArray($this->client->post('receipts/to-invoice', $data));
         } catch (FacturapiException $e) {
             throw new FacturapiException('Unable to create invoice: ' . $e->getMessage(), $e->getCode(), $e);
         }
@@ -110,20 +115,32 @@ class Receipts
      */
     public function previewToInvoicePdf(array $data): string
     {
-        return $this->client->postRaw('receipts' . '/to-invoice/preview', $data);
+        return $this->client->postRaw('receipts/to-invoice/preview', $data);
+    }
+
+    /**
+     * Obtains a signed download URL to preview an invoice for multiple receipts
+     *
+     * @param array $params Payload for invoice preview
+     * @return SignedDownloadUrl
+     * @throws FacturapiException
+     */
+    public function previewToInvoiceDownloadUrl(array $params): SignedDownloadUrl
+    {
+        return SignedDownloadUrl::fromArray($this->client->post('receipts/to-invoice/preview/download-url', $params));
     }
 
     /**
      * Cancel a Receipt
      *
      * @param string $id Receipt ID.
-     * @return mixed JSON-decoded response.
+     * @return Receipt JSON-decoded response.
      *
      * @throws FacturapiException
      */
-    public function cancel($id): mixed
+    public function cancel(string $id): Receipt
     {
-        return $this->client->delete('receipts/' . $id);
+        return Receipt::fromArray($this->client->delete('receipts/' . $id));
     }
 
     /**
@@ -131,19 +148,24 @@ class Receipts
      *
      * @param string $id Receipt ID.
      * @param string|array|null $email Email or list of emails.
-     * @return mixed JSON-decoded response.
+     * @return SuccessResponse JSON-decoded response.
      *
      * @throws FacturapiException
      */
-    public function sendByEmail($id, ?array $email = null): mixed
+    public function sendByEmail(string $id, string|array|null $email = null): SuccessResponse
     {
-        return $this->client->post('receipts/' . $id . '/email', $email === null ? [] : ['email' => $email]);
+        $payload = [];
+        if ($email !== null) {
+            $payload['email'] = is_array($email) ? $email : [$email];
+        }
+
+        return SuccessResponse::fromArray($this->client->post('receipts/' . $id . '/email', $payload));
     }
 
     /**
      * @deprecated Use sendByEmail() instead. Will be removed in v5.
      */
-    public function send_by_email($id, ?array $email = null): mixed
+    public function send_by_email(string $id, string|array|null $email = null): SuccessResponse
     {
         trigger_error('Receipts::send_by_email() is deprecated and will be removed in v5. Use sendByEmail() instead.', E_USER_DEPRECATED);
         return $this->sendByEmail($id, $email);
@@ -157,7 +179,7 @@ class Receipts
      *
      * @throws FacturapiException
      */
-    public function downloadPdf($id): string
+    public function downloadPdf(string $id): string
     {
         return $this->client->download('receipts/' . $id . '/pdf');
     }
@@ -165,7 +187,7 @@ class Receipts
     /**
      * @deprecated Use downloadPdf() instead. Will be removed in v5.
      */
-    public function download_pdf($id): string
+    public function download_pdf(string $id): string
     {
         trigger_error('Receipts::download_pdf() is deprecated and will be removed in v5. Use downloadPdf() instead.', E_USER_DEPRECATED);
         return $this->downloadPdf($id);

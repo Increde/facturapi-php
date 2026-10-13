@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Facturapi\Resources;
 
-use Facturapi\Http\FacturapiHttpClient;
 use Facturapi\Exceptions\FacturapiException;
+use Facturapi\Http\FacturapiHttpClient;
+use Facturapi\Models\OkResponse;
+use Facturapi\Models\TaxIdValidationResult;
 
 class Tools
 {
@@ -17,24 +19,24 @@ class Tools
      * Validates a tax id
      *
      * @param string $tax_id Tax ID (RFC) to validate.
-     * @return mixed JSON-decoded response.
+     * @return TaxIdValidationResult JSON-decoded response.
      *
      * @throws FacturapiException
      */
-    public function validateTaxId($tax_id): mixed
+    public function validateTaxId(string $tax_id): TaxIdValidationResult
     {
-        return $this->client->get('tools/tax_id_validation', ['tax_id' => $tax_id]);
+        return TaxIdValidationResult::fromArray($this->client->get('tools/tax_id_validation', ['tax_id' => $tax_id]));
     }
 
     /**
      * Health check (Pulse)
      *
-     * @return mixed JSON-decoded response.
+     * @return OkResponse JSON-decoded response.
      *
      * @throws FacturapiException
      */
-    public function check(): mixed
+    public function check(): OkResponse
     {
-        return $this->client->get('check');
+        return OkResponse::fromArray($this->client->get('check'));
     }
 }

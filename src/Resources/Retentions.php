@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Facturapi\Resources;
 
-use Facturapi\Http\FacturapiHttpClient;
 use Facturapi\Exceptions\FacturapiException;
+use Facturapi\Http\FacturapiHttpClient;
+use Facturapi\Models\Retention;
+use Facturapi\Models\RetentionSearchResult;
+use Facturapi\Models\SuccessResponse;
 
 class Retentions
 {
@@ -18,39 +21,39 @@ class Retentions
      * Search Retentions
      *
      * @param array|null $params Search parameters.
-     * @return mixed JSON-decoded response.
+     * @return RetentionSearchResult JSON-decoded response.
      *
      * @throws FacturapiException
      */
-    public function all(?array $params = null): mixed
+    public function all(?array $params = null): RetentionSearchResult
     {
-        return $this->client->get('retentions', $params);
+        return RetentionSearchResult::fromArray($this->client->get('retentions', $params));
     }
 
     /**
      * Get a Retention by ID
      *
      * @param string $id Retention ID.
-     * @return mixed JSON-decoded response.
+     * @return Retention JSON-decoded response.
      *
      * @throws FacturapiException
      */
-    public function retrieve($id): mixed
+    public function retrieve(string $id): Retention
     {
-        return $this->client->get('retentions/' . $id);
+        return Retention::fromArray($this->client->get('retentions/' . $id));
     }
 
     /**
      * Creates a Retention for the organization
      *
      * @param array $params Retention payload.
-     * @return mixed JSON-decoded response.
+     * @return Retention JSON-decoded response.
      *
      * @throws FacturapiException
      */
-    public function create(array $params): mixed
+    public function create(array $params): Retention
     {
-        return $this->client->post('retentions', $params);
+        return Retention::fromArray($this->client->post('retentions', $params));
     }
 
 
@@ -59,13 +62,13 @@ class Retentions
      *
      * @param string $id Retention ID.
      * @param array|null $query URL query parameters.
-     * @return mixed JSON-decoded response.
+     * @return Retention JSON-decoded response.
      *
      * @throws FacturapiException
      */
-    public function cancel($id, ?array $query = null): mixed
+    public function cancel(string $id, ?array $query = null): Retention
     {
-        return $this->client->delete('retentions/' . $id, $query);
+        return Retention::fromArray($this->client->delete('retentions/' . $id, $query));
     }
 
     /**
@@ -73,19 +76,19 @@ class Retentions
      *
      * @param string $id Retention ID.
      * @param array $body Draft payload.
-     * @return mixed JSON-decoded response.
+     * @return Retention JSON-decoded response.
      *
      * @throws FacturapiException
      */
-    public function updateDraft($id, array $body): mixed
+    public function updateDraft(string $id, array $body): Retention
     {
-        return $this->client->put('retentions/' . $id, $body);
+        return Retention::fromArray($this->client->put('retentions/' . $id, $body));
     }
 
     /**
      * @deprecated Use updateDraft() instead. Will be removed in v5.
      */
-    public function update_draft($id, $body): mixed
+    public function update_draft(string $id, array $body): Retention
     {
         trigger_error('Retentions::update_draft() is deprecated and will be removed in v5. Use updateDraft() instead.', E_USER_DEPRECATED);
         return $this->updateDraft($id, $body);
@@ -95,19 +98,19 @@ class Retentions
      * Creates a new draft Retention copying the information from the specified Retention
      *
      * @param string $id Retention ID.
-     * @return mixed JSON-decoded response.
+     * @return Retention JSON-decoded response.
      *
      * @throws FacturapiException
      */
-    public function copyToDraft($id): mixed
+    public function copyToDraft(string $id): Retention
     {
-        return $this->client->post('retentions/' . $id . '/copy', []);
+        return Retention::fromArray($this->client->post('retentions/' . $id . '/copy', []));
     }
 
     /**
      * @deprecated Use copyToDraft() instead. Will be removed in v5.
      */
-    public function copy_to_draft($id): mixed
+    public function copy_to_draft(string $id): Retention
     {
         trigger_error('Retentions::copy_to_draft() is deprecated and will be removed in v5. Use copyToDraft() instead.', E_USER_DEPRECATED);
         return $this->copyToDraft($id);
@@ -117,19 +120,19 @@ class Retentions
      * Stamps a draft Retention
      *
      * @param string $id Retention ID.
-     * @return mixed JSON-decoded response.
+     * @return Retention JSON-decoded response.
      *
      * @throws FacturapiException
      */
-    public function stampDraft($id): mixed
+    public function stampDraft(string $id): Retention
     {
-        return $this->client->post('retentions/' . $id . '/stamp', []);
+        return Retention::fromArray($this->client->post('retentions/' . $id . '/stamp', []));
     }
 
     /**
      * @deprecated Use stampDraft() instead. Will be removed in v5.
      */
-    public function stamp_draft($id): mixed
+    public function stamp_draft(string $id): Retention
     {
         trigger_error('Retentions::stamp_draft() is deprecated and will be removed in v5. Use stampDraft() instead.', E_USER_DEPRECATED);
         return $this->stampDraft($id);
@@ -140,19 +143,24 @@ class Retentions
      *
      * @param string $id Retention ID.
      * @param string|array|null $email Email or list of emails.
-     * @return mixed JSON-decoded response.
+     * @return SuccessResponse JSON-decoded response.
      *
      * @throws FacturapiException
      */
-    public function sendByEmail($id, ?array $email = null): mixed
+    public function sendByEmail(string $id, string|array|null $email = null): SuccessResponse
     {
-        return $this->client->post('retentions/' . $id . '/email', $email === null ? [] : ['email' => $email]);
+        $payload = [];
+        if ($email !== null) {
+            $payload['email'] = is_array($email) ? $email : [$email];
+        }
+
+        return SuccessResponse::fromArray($this->client->post('retentions/' . $id . '/email', $payload));
     }
 
     /**
      * @deprecated Use sendByEmail() instead. Will be removed in v5.
      */
-    public function send_by_email($id, ?array $email = null): mixed
+    public function send_by_email(string $id, string|array|null $email = null): SuccessResponse
     {
         trigger_error('Retentions::send_by_email() is deprecated and will be removed in v5. Use sendByEmail() instead.', E_USER_DEPRECATED);
         return $this->sendByEmail($id, $email);
@@ -166,7 +174,7 @@ class Retentions
      *
      * @throws FacturapiException
      */
-    public function downloadZip($id): string
+    public function downloadZip(string $id): string
     {
         return $this->client->download('retentions/' . $id . '/zip');
     }
@@ -174,7 +182,7 @@ class Retentions
     /**
      * @deprecated Use downloadZip() instead. Will be removed in v5.
      */
-    public function download_zip($id): string
+    public function download_zip(string $id): string
     {
         trigger_error('Retentions::download_zip() is deprecated and will be removed in v5. Use downloadZip() instead.', E_USER_DEPRECATED);
         return $this->downloadZip($id);
@@ -188,7 +196,7 @@ class Retentions
      *
      * @throws FacturapiException
      */
-    public function downloadPdf($id): string
+    public function downloadPdf(string $id): string
     {
         return $this->client->download('retentions/' . $id . '/pdf');
     }
@@ -196,7 +204,7 @@ class Retentions
     /**
      * @deprecated Use downloadPdf() instead. Will be removed in v5.
      */
-    public function download_pdf($id): string
+    public function download_pdf(string $id): string
     {
         trigger_error('Retentions::download_pdf() is deprecated and will be removed in v5. Use downloadPdf() instead.', E_USER_DEPRECATED);
         return $this->downloadPdf($id);
@@ -210,7 +218,7 @@ class Retentions
      *
      * @throws FacturapiException
      */
-    public function downloadXml($id): string
+    public function downloadXml(string $id): string
     {
         return $this->client->download('retentions/' . $id . '/xml');
     }
@@ -218,7 +226,7 @@ class Retentions
     /**
      * @deprecated Use downloadXml() instead. Will be removed in v5.
      */
-    public function download_xml($id): string
+    public function download_xml(string $id): string
     {
         trigger_error('Retentions::download_xml() is deprecated and will be removed in v5. Use downloadXml() instead.', E_USER_DEPRECATED);
         return $this->downloadXml($id);

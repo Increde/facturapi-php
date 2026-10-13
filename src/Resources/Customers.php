@@ -8,6 +8,7 @@ use Facturapi\Http\FacturapiHttpClient;
 use Facturapi\Exceptions\FacturapiException;
 use Facturapi\Models\Customer;
 use Facturapi\Models\CustomerSearchResult;
+use Facturapi\Models\OkResponse;
 use Facturapi\Models\TaxIdValidationResult;
 
 class Customers
@@ -102,12 +103,13 @@ class Customers
      * Send an edit link to the customer's email
      *
      * @param string $id Customer ID.
-     * @param array $data Data containing email.
+     * @param array<string, mixed> $data Data containing optional email.
      *
      * @throws FacturapiException
      */
-    public function sendEditLink(string $id, array $data): array
+    public function sendEditLink(string $id, array $data = []): OkResponse
     {
-        return $this->client->post('customers/' . $id . '/email-edit-link', $data);
+        $response = $this->client->post('customers/' . $id . '/email-edit-link', $data);
+        return OkResponse::fromArray($response);
     }
 }

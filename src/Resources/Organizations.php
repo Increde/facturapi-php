@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Facturapi\Resources;
 
-use Facturapi\Http\FacturapiHttpClient;
 use Facturapi\Exceptions\FacturapiException;
+use Facturapi\Http\FacturapiHttpClient;
+use Facturapi\Models\DomainAvailability;
+use Facturapi\Models\Organization;
+use Facturapi\Models\OrganizationSearchResult;
 
 class Organizations
 {
@@ -22,35 +25,35 @@ class Organizations
      *
      * @throws FacturapiException
      */
-    public function all(?array $params = null): mixed
+    public function all(?array $params = null): OrganizationSearchResult
     {
-        return $this->client->get('organizations', $params);
+        return OrganizationSearchResult::fromArray($this->client->get('organizations', $params));
     }
 
     /**
      * Get an Organization by ID.
      *
      * @param string $id Organization ID.
-     * @return mixed JSON-decoded response.
+     * @return Organization JSON-decoded response.
      *
      * @throws FacturapiException
      */
-    public function retrieve($id): mixed
+    public function retrieve(string $id): Organization
     {
-        return $this->client->get('organizations/' . $id);
+        return Organization::fromArray($this->client->get('organizations/' . $id));
     }
 
     /**
      * Create an Organization.
      *
      * @param array $params Organization payload.
-     * @return mixed JSON-decoded response.
+     * @return Organization JSON-decoded response.
      *
      * @throws FacturapiException
      */
-    public function create(array $params): mixed
+    public function create(array $params): Organization
     {
-        return $this->client->post('organizations', $params);
+        return Organization::fromArray($this->client->post('organizations', $params));
     }
 
     /**
@@ -62,9 +65,9 @@ class Organizations
      *
      * @throws FacturapiException
      */
-    public function updateLegal($id, array $params): mixed
+    public function updateLegal(string $id, array $params): Organization
     {
-        return $this->client->put('organizations/' . $id . '/legal', $params);
+        return Organization::fromArray($this->client->put('organizations/' . $id . '/legal', $params));
     }
 
     /**
@@ -72,13 +75,13 @@ class Organizations
      *
      * @param string $id Organization ID.
      * @param array $params Customization payload.
-     * @return mixed JSON-decoded response.
+     * @return Organization JSON-decoded response.
      *
      * @throws FacturapiException
      */
-    public function updateCustomization($id, array $params): mixed
+    public function updateCustomization(string $id, array $params): Organization
     {
-        return $this->client->put('organizations/' . $id . '/customization', $params);
+        return Organization::fromArray($this->client->put('organizations/' . $id . '/customization', $params));
     }
 
     /**
@@ -86,13 +89,13 @@ class Organizations
      *
      * @param string $id Organization ID.
      * @param array $params Receipt settings payload.
-     * @return mixed JSON-decoded response.
+     * @return Organization JSON-decoded response.
      *
      * @throws FacturapiException
      */
-    public function updateReceiptSettings($id, array $params): mixed
+    public function updateReceiptSettings(string $id, array $params): Organization
     {
-        return $this->client->put('organizations/' . $id . '/receipts', $params);
+        return Organization::fromArray($this->client->put('organizations/' . $id . '/receipts', $params));
     }
 
     /**
@@ -100,13 +103,13 @@ class Organizations
      *
      * @param string $id Organization ID.
      * @param array $params Domain payload.
-     * @return mixed JSON-decoded response.
+     * @return Organization JSON-decoded response.
      *
      * @throws FacturapiException
      */
-    public function updateDomain($id, array $params): mixed
+    public function updateDomain(string $id, array $params): Organization
     {
-        return $this->client->put('organizations/' . $id . '/domain', $params);
+        return Organization::fromArray($this->client->put('organizations/' . $id . '/domain', $params));
     }
 
     /**
@@ -117,13 +120,13 @@ class Organizations
      *
      * @throws FacturapiException
      */
-    public function checkDomainAvailability($query): mixed
+    public function checkDomainAvailability($query): DomainAvailability
     {
         if (!is_array($query)) {
             throw new FacturapiException('checkDomainAvailability expects $query to be an array.');
         }
 
-        return $this->client->get('organizations/' . 'domain-check', $query);
+        return DomainAvailability::fromArray($this->client->get('organizations/' . 'domain-check', $query));
     }
 
     /**
@@ -131,11 +134,11 @@ class Organizations
      *
      * @param array|string $idOrQuery Domain check query parameters, or legacy organization ID.
      * @param array|null $query Legacy query parameters when using historical signature.
-     * @return mixed JSON-decoded response.
+     * @return DomainAvailability JSON-decoded response.
      *
      * @throws FacturapiException
      */
-    public function checkDomainIsAvailable($idOrQuery, ?array $query = null): mixed
+    public function checkDomainIsAvailable($idOrQuery, ?array $query = null): DomainAvailability
     {
         trigger_error(
             'Organizations::checkDomainIsAvailable(...) is deprecated and will be removed in v5. Use checkDomainAvailability($query) instead.',
@@ -160,13 +163,13 @@ class Organizations
      *
      * @param string $id Organization ID.
      * @param string $params Logo file path.
-     * @return mixed JSON-decoded response.
+     * @return Organization JSON-decoded response.
      *
      * @throws FacturapiException
      */
-    public function uploadLogo($id, $file): mixed
+    public function uploadLogo(string $id, string $file): Organization
     {
-        return $this->client->multipartRequest('PUT', 'organizations/' . $id . '/logo', ['file' => $file]);
+        return Organization::fromArray($this->client->multipartRequest('PUT', 'organizations/' . $id . '/logo', ['file' => $file]));
     }
 
     /**
@@ -174,11 +177,11 @@ class Organizations
      *
      * @param string $id Organization ID.
      * @param array $params Certificate payload (`cerFile`, `keyFile`, `password`).
-     * @return mixed JSON-decoded response.
+     * @return Organization JSON-decoded response.
      *
      * @throws FacturapiException
      */
-    public function uploadCertificate($id, array $params): mixed
+    public function uploadCertificate(string $id, array $params): Organization
     {
         $files = [];
         $data = [];
@@ -195,7 +198,7 @@ class Organizations
             $data['password'] = $params['password'];
         }
 
-        return $this->client->multipartRequest('PUT', 'organizations/' . $id . '/certificate', $files, $data);
+        return Organization::fromArray($this->client->multipartRequest('PUT', 'organizations/' . $id . '/certificate', $files, $data));
     }
 
     /**
@@ -282,26 +285,26 @@ class Organizations
      * Delete an organization.
      *
      * @param string $id Organization ID.
-     * @return mixed JSON-decoded response.
+     * @return Organization JSON-decoded response.
      *
      * @throws FacturapiException
      */
-    public function delete($id): mixed
+    public function delete(string $id): Organization
     {
-        return $this->client->delete('organizations/' . $id);
+        return Organization::fromArray($this->client->delete('organizations/' . $id));
     }
 
     /**
      * Delete an organization's certificate.
      *
      * @param string $id Organization ID.
-     * @return mixed JSON-decoded response.
+     * @return Organization JSON-decoded response.
      *
      * @throws FacturapiException
      */
-    public function deleteCertificate($id): mixed
+    public function deleteCertificate(string $id): Organization
     {
-        return $this->client->delete('organizations/' . $id . '/certificate');
+        return Organization::fromArray($this->client->delete('organizations/' . $id . '/certificate'));
     }
 
     /**
@@ -341,9 +344,9 @@ class Organizations
      *
      * @throws FacturapiException
      */
-    public function updateSeriesGroup($id, $series_name, $params): mixed
+    public function updateSeriesGroup(string $id, string $series_name, array $params): mixed
     {
-        return $this->client->put('organizations/' . $id . '/series-group' . '/', []);
+        return $this->client->put('organizations/' . $id . '/series-group/' . $series_name, $params);
     }
 
     /**
@@ -369,9 +372,9 @@ class Organizations
      *
      * @throws FacturapiException
      */
-    public function deleteSeriesGroup($id, $series_name): mixed
+    public function deleteSeriesGroup(string $id, string $series_name): mixed
     {
-        return $this->client->delete('organizations/' . $id . '/series-group' . '/');
+        return $this->client->delete('organizations/' . $id . '/series-group/' . $series_name);
     }
 
     /**
@@ -379,13 +382,13 @@ class Organizations
      *
      * @param string $id Organization ID.
      * @param array $params Self-invoice settings payload.
-     * @return mixed JSON-decoded response.
+     * @return Organization JSON-decoded response.
      *
      * @throws FacturapiException
      */
-    public function updateSelfInvoiceSettings($id, array $params): mixed
+    public function updateSelfInvoiceSettings(string $id, array $params): Organization
     {
-        return $this->client->put('organizations/' . $id . '/self-invoice', $params);
+        return Organization::fromArray($this->client->put('organizations/' . $id . '/self-invoice', $params));
     }
 
     /**

@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Facturapi\Resources;
 
-use Facturapi\Http\FacturapiHttpClient;
 use Facturapi\Exceptions\FacturapiException;
+use Facturapi\Http\FacturapiHttpClient;
+use Facturapi\Models\Webhook;
+use Facturapi\Models\WebhookSearchResult;
 
 class Webhooks
 {
@@ -17,39 +19,39 @@ class Webhooks
      * Get all Webhooks
      *
      * @param array|null $params Search parameters.
-     * @return mixed JSON-decoded response.
+     * @return WebhookSearchResult JSON-decoded response.
      *
      * @throws FacturapiException
      */
-    public function all(?array $params = null): mixed
+    public function all(?array $params = null): WebhookSearchResult
     {
-        return $this->client->get('webhooks', $params);
+        return WebhookSearchResult::fromArray($this->client->get('webhooks', $params));
     }
 
     /**
      * Get a Webhook by ID
      *
      * @param string $id Webhook ID.
-     * @return mixed JSON-decoded response.
+     * @return Webhook JSON-decoded response.
      *
      * @throws FacturapiException
      */
-    public function retrieve($id): mixed
+    public function retrieve(string $id): Webhook
     {
-        return $this->client->get('webhooks/' . $id);
+        return Webhook::fromArray($this->client->get('webhooks/' . $id));
     }
 
     /**
      * Create a Webhook in your organization
      *
      * @param array $params Webhook payload.
-     * @return mixed JSON-decoded response.
+     * @return Webhook JSON-decoded response.
      *
      * @throws FacturapiException
      */
-    public function create(array $params): mixed
+    public function create(array $params): Webhook
     {
-        return $this->client->post('webhooks', $params);
+        return Webhook::fromArray($this->client->post('webhooks', $params));
     }
 
 
@@ -58,26 +60,26 @@ class Webhooks
      *
      * @param string $id Webhook ID.
      * @param array $params Webhook payload.
-     * @return mixed JSON-decoded response.
+     * @return Webhook JSON-decoded response.
      *
      * @throws FacturapiException
      */
-    public function update($id, array $params): mixed
+    public function update(string $id, array $params): Webhook
     {
-        return $this->client->put('webhooks/' . $id, $params);
+        return Webhook::fromArray($this->client->put('webhooks/' . $id, $params));
     }
 
     /**
      * Delete a Webhook in your organization
      *
      * @param string $id Webhook ID.
-     * @return mixed JSON-decoded response.
+     * @return Webhook JSON-decoded response.
      *
      * @throws FacturapiException
      */
-    public function delete($id): mixed
+    public function delete(string $id): Webhook
     {
-        return $this->client->delete('webhooks/' . $id);
+        return Webhook::fromArray($this->client->delete('webhooks/' . $id));
     }
 
     /**

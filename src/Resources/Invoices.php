@@ -4,8 +4,14 @@ declare(strict_types=1);
 
 namespace Facturapi\Resources;
 
-use Facturapi\Http\FacturapiHttpClient;
 use Facturapi\Exceptions\FacturapiException;
+use Facturapi\Http\FacturapiHttpClient;
+use Facturapi\Models\Invoice;
+use Facturapi\Models\InvoiceSearchResult;
+use Facturapi\Models\InvoiceZipRequest;
+use Facturapi\Models\InvoiceZipRequestSearchResult;
+use Facturapi\Models\PaymentSummary;
+use Facturapi\Models\SuccessResponse;
 
 class Invoices
 {
@@ -18,24 +24,24 @@ class Invoices
      * Get all Invoices
      *
      * @param array|null $query Query parameters.
-     * @return mixed JSON-decoded response.
+     * @return InvoiceSearchResult JSON-decoded response.
      * @throws FacturapiException
      */
-    public function all(?array $query = null): mixed
+    public function all(?array $query = null): InvoiceSearchResult
     {
-        return $this->client->get('invoices', $query);
+        return InvoiceSearchResult::fromArray($this->client->get('invoices', $query));
     }
 
     /**
      * Get an Invoice by ID
      *
      * @param string $id Invoice ID.
-     * @return mixed JSON-decoded response.
+     * @return Invoice JSON-decoded response.
      * @throws FacturapiException
      */
-    public function retrieve($id): mixed
+    public function retrieve(string $id): Invoice
     {
-        return $this->client->get('invoices/' . $id);
+        return Invoice::fromArray($this->client->get('invoices/' . $id));
     }
 
     /**
@@ -46,12 +52,12 @@ class Invoices
      *
      * @param string $id Invoice ID.
      * @param float $amount Amount being paid, expressed in the invoice currency. Cannot exceed the outstanding balance.
-     * @return mixed JSON-decoded related document summary.
+     * @return PaymentSummary JSON-decoded related document summary.
      * @throws FacturapiException
      */
-    public function paymentSummary($id, $amount): mixed
+    public function paymentSummary(string $id, float $amount): PaymentSummary
     {
-        return $this->client->get('invoices/' . $id . '/payment-summary', ['amount' => $amount]);
+        return PaymentSummary::fromArray($this->client->get('invoices/' . $id . '/payment-summary', ['amount' => $amount]));
     }
 
     /**
@@ -59,12 +65,12 @@ class Invoices
      *
      * @param array $body Invoice payload.
      * @param array|null $query Query parameters.
-     * @return mixed JSON-decoded response.
+     * @return Invoice JSON-decoded response.
      * @throws FacturapiException
      */
-    public function create(array $body, ?array $query = null): mixed
+    public function create(array $body, ?array $query = null): Invoice
     {
-        return $this->client->post('invoices', $body, $query);
+        return Invoice::fromArray($this->client->post('invoices', $body, $query));
     }
 
 
@@ -72,13 +78,13 @@ class Invoices
      * Cancel an Invoice in your organization
      *
      * @param string $id Invoice ID.
-     * @param array $query URL query parameters.
-     * @return mixed JSON-decoded response.
+     * @param array|null $query URL query parameters.
+     * @return Invoice JSON-decoded response.
      * @throws FacturapiException
      */
-    public function cancel($id, ?array $query): mixed
+    public function cancel(string $id, ?array $query = null): Invoice
     {
-        return $this->client->delete('invoices/' . $id, $query);
+        return Invoice::fromArray($this->client->delete('invoices/' . $id, $query));
     }
 
     /**
@@ -86,18 +92,23 @@ class Invoices
      *
      * @param string $id Invoice ID.
      * @param string|array|null $email Email or list of emails.
-     * @return mixed JSON-decoded response.
+     * @return SuccessResponse JSON-decoded response.
      * @throws FacturapiException
      */
-    public function sendByEmail($id, ?array $email = null): mixed
+    public function sendByEmail(string $id, string|array|null $email = null): SuccessResponse
     {
-        return $this->client->post('invoices/' . $id . '/email', ['email' => $email]);
+        $payload = [];
+        if ($email !== null) {
+            $payload['email'] = is_array($email) ? $email : [$email];
+        }
+
+        return SuccessResponse::fromArray($this->client->post('invoices/' . $id . '/email', $payload));
     }
 
     /**
      * @deprecated Use sendByEmail() instead. Will be removed in v5.
      */
-    public function send_by_email($id, ?array $email = null): mixed
+    public function send_by_email(string $id, string|array|null $email = null): SuccessResponse
     {
         trigger_error('Invoices::send_by_email() is deprecated and will be removed in v5. Use sendByEmail() instead.', E_USER_DEPRECATED);
         return $this->sendByEmail($id, $email);
@@ -128,36 +139,36 @@ class Invoices
      * Creates or retrieves an invoice ZIP request
      *
      * @param array $body ZIP request payload.
-     * @return mixed JSON-decoded response.
+     * @return InvoiceZipRequest JSON-decoded response.
      * @throws FacturapiException
      */
-    public function createZipRequest(array $body): mixed
+    public function createZipRequest(array $body): InvoiceZipRequest
     {
-        return $this->client->post('invoices/' . 'zip-requests', $body);
+        return InvoiceZipRequest::fromArray($this->client->post('invoices/zip-requests', $body));
     }
 
     /**
      * Lists invoice ZIP requests
      *
      * @param array|null $query Query parameters.
-     * @return mixed JSON-decoded response.
+     * @return InvoiceZipRequestSearchResult JSON-decoded response.
      * @throws FacturapiException
      */
-    public function listZipRequests(?array $query = null): mixed
+    public function listZipRequests(?array $query = null): InvoiceZipRequestSearchResult
     {
-        return $this->client->get('invoices/' . 'zip-requests', $query);
+        return InvoiceZipRequestSearchResult::fromArray($this->client->get('invoices/zip-requests', $query));
     }
 
     /**
      * Retrieves an invoice ZIP request by ID
      *
      * @param string $id ZIP request ID.
-     * @return mixed JSON-decoded response.
+     * @return InvoiceZipRequest JSON-decoded response.
      * @throws FacturapiException
      */
-    public function retrieveZipRequest($id): mixed
+    public function retrieveZipRequest(string $id): InvoiceZipRequest
     {
-        return $this->client->get('invoices/' . 'zip-requests/' . $id);
+        return InvoiceZipRequest::fromArray($this->client->get('invoices/zip-requests/' . $id));
     }
 
     /**
@@ -262,18 +273,18 @@ class Invoices
      * In Test mode, this method will simulate a status update to a "canceled" status.
      *
      * @param string $id Invoice ID.
-     * @return mixed JSON-decoded response.
+     * @return Invoice JSON-decoded response.
      * @throws FacturapiException
      */
-    public function updateStatus($id): mixed
+    public function updateStatus(string $id): Invoice
     {
-        return $this->client->put('invoices/' . $id . '/status', []);
+        return Invoice::fromArray($this->client->put('invoices/' . $id . '/status', []));
     }
 
     /**
      * @deprecated Use updateStatus() instead. Will be removed in v5.
      */
-    public function update_status($id): mixed
+    public function update_status(string $id): Invoice
     {
         trigger_error('Invoices::update_status() is deprecated and will be removed in v5. Use updateStatus() instead.', E_USER_DEPRECATED);
         return $this->updateStatus($id);
@@ -284,18 +295,18 @@ class Invoices
      *
      * @param string $id Invoice ID.
      * @param array $body Draft payload.
-     * @return mixed JSON-decoded response.
+     * @return Invoice JSON-decoded response.
      * @throws FacturapiException
      */
-    public function updateDraft($id, array $body): mixed
+    public function updateDraft(string $id, array $body): Invoice
     {
-        return $this->client->put('invoices/' . $id, $body);
+        return Invoice::fromArray($this->client->put('invoices/' . $id, $body));
     }
 
     /**
      * @deprecated Use updateDraft() instead. Will be removed in v5.
      */
-    public function update_draft($id, $body): mixed
+    public function update_draft(string $id, array $body): Invoice
     {
         trigger_error('Invoices::update_draft() is deprecated and will be removed in v5. Use updateDraft() instead.', E_USER_DEPRECATED);
         return $this->updateDraft($id, $body);
@@ -306,18 +317,18 @@ class Invoices
      *
      * @param string $id Invoice ID.
      * @param array|null $query URL query parameters.
-     * @return mixed JSON-decoded response.
+     * @return Invoice JSON-decoded response.
      * @throws FacturapiException
      */
-    public function stampDraft($id, ?array $query = null): mixed
+    public function stampDraft(string $id, ?array $query = null): Invoice
     {
-        return $this->client->post('invoices/' . $id . '/stamp', []);
+        return Invoice::fromArray($this->client->post('invoices/' . $id . '/stamp', [], $query));
     }
 
     /**
      * @deprecated Use stampDraft() instead. Will be removed in v5.
      */
-    public function stamp_draft($id, ?array $query = null): mixed
+    public function stamp_draft(string $id, ?array $query = null): Invoice
     {
         trigger_error('Invoices::stamp_draft() is deprecated and will be removed in v5. Use stampDraft() instead.', E_USER_DEPRECATED);
         return $this->stampDraft($id, $query);
@@ -327,18 +338,18 @@ class Invoices
      * Creates a new draft Invoice copying the information from the specified Invoice
      *
      * @param string $id Invoice ID.
-     * @return mixed JSON-decoded response.
+     * @return Invoice JSON-decoded response.
      * @throws FacturapiException
      */
-    public function copyToDraft($id): mixed
+    public function copyToDraft(string $id): Invoice
     {
-        return $this->client->post('invoices/' . $id . '/copy', []);
+        return Invoice::fromArray($this->client->post('invoices/' . $id . '/copy', []));
     }
 
     /**
      * @deprecated Use copyToDraft() instead. Will be removed in v5.
      */
-    public function copy_to_draft($id): mixed
+    public function copy_to_draft(string $id): Invoice
     {
         trigger_error('Invoices::copy_to_draft() is deprecated and will be removed in v5. Use copyToDraft() instead.', E_USER_DEPRECATED);
         return $this->copyToDraft($id);
