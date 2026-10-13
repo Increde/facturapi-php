@@ -30,19 +30,23 @@ readonly class Product
     public static function fromArray(array $data): self
     {
         return new self(
-            $data['id'] ?? '',
-            $data['created_at'] ?? '',
-            $data['livemode'] ?? false,
-            $data['description'] ?? '',
-            $data['product_key'] ?? '',
-            $data['price'] ?? 0,
-            $data['tax_included'] ?? false,
-            $data['taxability'] ?? null,
-            isset($data['taxes']) && is_array($data['taxes']) ? array_map(fn ($i): mixed => is_array($i) ? \Facturapi\Models\BaseTax::fromArray($i) : $i, $data['taxes']) : [],
-            isset($data['local_taxes']) && is_array($data['local_taxes']) ? array_map(fn ($i): mixed => is_array($i) ? \Facturapi\Models\LocalTax::fromArray($i) : $i, $data['local_taxes']) : [],
-            $data['unit_key'] ?? '',
-            $data['unit_name'] ?? null,
-            $data['sku'] ?? null
+            isset($data['id']) ? (string) $data['id'] : '',
+            isset($data['created_at']) ? (string) $data['created_at'] : '',
+            isset($data['livemode']) ? (bool) $data['livemode'] : false,
+            isset($data['description']) ? (string) $data['description'] : '',
+            isset($data['product_key']) ? (string) $data['product_key'] : '',
+            (float) ($data['price'] ?? 0.0),
+            isset($data['tax_included']) ? (bool) $data['tax_included'] : null,
+            isset($data['taxability']) ? (string) $data['taxability'] : null,
+            isset($data['taxes']) && is_array($data['taxes'])
+                ? array_map(fn (mixed $i): \Facturapi\Models\BaseTax => $i instanceof \Facturapi\Models\BaseTax ? $i : \Facturapi\Models\BaseTax::fromArray((array) $i), $data['taxes'])
+                : null,
+            isset($data['local_taxes']) && is_array($data['local_taxes'])
+                ? array_map(fn (mixed $i): \Facturapi\Models\LocalTax => $i instanceof \Facturapi\Models\LocalTax ? $i : \Facturapi\Models\LocalTax::fromArray((array) $i), $data['local_taxes'])
+                : null,
+            isset($data['unit_key']) ? (string) $data['unit_key'] : '',
+            isset($data['unit_name']) ? (string) $data['unit_name'] : null,
+            isset($data['sku']) ? (string) $data['sku'] : null
         );
     }
 
@@ -61,7 +65,7 @@ readonly class Product
             'local_taxes' => $this->local_taxes !== null ? array_map(fn (\Facturapi\Models\LocalTax $i): array => $i->toArray(), $this->local_taxes) : null,
             'unit_key' => $this->unit_key,
             'unit_name' => $this->unit_name,
-            'sku' => $this->sku
-        ], fn (float|bool|string|array|null $v): bool => $v !== null);
+            'sku' => $this->sku,
+        ], fn (int|float|bool|string|array|null $v): bool => $v !== null);
     }
 }

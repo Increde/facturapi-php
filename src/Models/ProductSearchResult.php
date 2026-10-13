@@ -22,13 +22,15 @@ readonly class ProductSearchResult
     public static function fromArray(array $data): self
     {
         return new self(
-            $data['page'] ?? 0,
-            $data['total_pages'] ?? 0,
-            $data['total_results'] ?? 0,
-            $data['previous_cursor'] ?? null,
-            $data['next_cursor'] ?? null,
-            $data['totals_are_capped'] ?? false,
-            isset($data['data']) && is_array($data['data']) ? array_map(fn ($i): mixed => is_array($i) ? \Facturapi\Models\Product::fromArray($i) : $i, $data['data']) : []
+            isset($data['page']) ? (int) $data['page'] : 0,
+            isset($data['total_pages']) ? (int) $data['total_pages'] : 0,
+            isset($data['total_results']) ? (int) $data['total_results'] : 0,
+            isset($data['previous_cursor']) ? (string) $data['previous_cursor'] : null,
+            isset($data['next_cursor']) ? (string) $data['next_cursor'] : null,
+            isset($data['totals_are_capped']) ? (bool) $data['totals_are_capped'] : false,
+            isset($data['data']) && is_array($data['data'])
+                ? array_map(fn (mixed $i): \Facturapi\Models\Product => $i instanceof \Facturapi\Models\Product ? $i : \Facturapi\Models\Product::fromArray((array) $i), $data['data'])
+                : []
         );
     }
 
@@ -41,7 +43,7 @@ readonly class ProductSearchResult
             'previous_cursor' => $this->previous_cursor,
             'next_cursor' => $this->next_cursor,
             'totals_are_capped' => $this->totals_are_capped,
-            'data' => $this->data !== null ? array_map(fn (\Facturapi\Models\Product $i): array => $i->toArray(), $this->data) : null
+            'data' => $this->data !== null ? array_map(fn (\Facturapi\Models\Product $i): array => $i->toArray(), $this->data) : null,
         ], fn (int|string|bool|array|null $v): bool => $v !== null);
     }
 }

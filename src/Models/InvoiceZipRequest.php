@@ -10,17 +10,17 @@ readonly class InvoiceZipRequest
         public string $id,
         public string $created_at,
         public bool $livemode,
-        public string $organization,
-        public \Facturapi\Enums\IssuingType $issuer_type,
+        public string $organization = '',
+        public ?\Facturapi\Enums\IssuingType $issuer_type = null,
 
-        /** @var \Facturapi\Models\InvoiceZipRequestInvoiceType[]|null */
-        public array $invoice_types,
-        public string $start_date,
-        public string $end_date,
-        public \Facturapi\Enums\InvoiceZipRequestStatus $status,
-        public int $document_count,
-        public int $processed_document,
-        public array $failed_documents,
+        /** @var \Facturapi\Enums\InvoiceZipRequestInvoiceType[]|null */
+        public ?array $invoice_types = null,
+        public ?string $start_date = null,
+        public ?string $end_date = null,
+        public ?\Facturapi\Enums\InvoiceZipRequestStatus $status = null,
+        public ?int $document_count = null,
+        public ?int $processed_document = null,
+        public ?array $failed_documents = null,
         public ?string $scheduled_at = null,
     ) {
     }
@@ -32,11 +32,13 @@ readonly class InvoiceZipRequest
             $data['created_at'] ?? '',
             $data['livemode'] ?? false,
             $data['organization'] ?? '',
-            isset($data['issuer_type']) ? \Facturapi\Enums\IssuingType::tryFrom($data['issuer_type']) : null,
-            isset($data['invoice_types']) && is_array($data['invoice_types']) ? array_map(fn ($i) => is_array($i) ? \Facturapi\Models\InvoiceZipRequestInvoiceType::fromArray($i) : $i, $data['invoice_types']) : [],
+            isset($data['issuer_type']) && is_string($data['issuer_type']) ? \Facturapi\Enums\IssuingType::tryFrom($data['issuer_type']) : null,
+            isset($data['invoice_types']) && is_array($data['invoice_types'])
+                ? array_map(fn ($i) => is_string($i) ? (\Facturapi\Enums\InvoiceZipRequestInvoiceType::tryFrom($i) ?? $i) : $i, $data['invoice_types'])
+                : [],
             $data['start_date'] ?? '',
             $data['end_date'] ?? '',
-            isset($data['status']) ? \Facturapi\Enums\InvoiceZipRequestStatus::tryFrom($data['status']) : null,
+            isset($data['status']) && is_string($data['status']) ? \Facturapi\Enums\InvoiceZipRequestStatus::tryFrom($data['status']) : null,
             $data['document_count'] ?? 0,
             $data['processed_document'] ?? 0,
             $data['failed_documents'] ?? [],
@@ -52,7 +54,9 @@ readonly class InvoiceZipRequest
             'livemode' => $this->livemode,
             'organization' => $this->organization,
             'issuer_type' => $this->issuer_type?->value,
-            'invoice_types' => $this->invoice_types !== null ? array_map(fn (\Facturapi\Models\InvoiceZipRequestInvoiceType $i) => $i->toArray(), $this->invoice_types) : null,
+            'invoice_types' => $this->invoice_types !== null
+                ? array_map(fn ($i) => $i instanceof \Facturapi\Enums\InvoiceZipRequestInvoiceType ? $i->value : $i, $this->invoice_types)
+                : null,
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
             'status' => $this->status?->value,
@@ -60,6 +64,6 @@ readonly class InvoiceZipRequest
             'processed_document' => $this->processed_document,
             'failed_documents' => $this->failed_documents,
             'scheduled_at' => $this->scheduled_at
-        ], fn (bool|int|string|array|null $v): bool => $v !== null);
+        ], fn ($v): bool => $v !== null);
     }
 }

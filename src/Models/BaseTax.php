@@ -17,12 +17,16 @@ readonly class BaseTax
 
     public static function fromArray(array $data): self
     {
+        if ((isset($data['type']) && strtoupper((string) $data['type']) === 'IEPS') || isset($data['ieps_mode'])) {
+            return IepsTax::fromArray($data);
+        }
+
         return new self(
-            $data['rate'] ?? 0,
-            $data['base'] ?? 0,
-            $data['type'] ?? null,
-            $data['factor'] ?? null,
-            $data['withholding'] ?? false
+            (float) ($data['rate'] ?? 0.0),
+            isset($data['base']) ? (float) $data['base'] : null,
+            isset($data['type']) ? (string) $data['type'] : null,
+            isset($data['factor']) ? (string) $data['factor'] : null,
+            isset($data['withholding']) ? (bool) $data['withholding'] : null
         );
     }
 
@@ -33,7 +37,7 @@ readonly class BaseTax
             'base' => $this->base,
             'type' => $this->type,
             'factor' => $this->factor,
-            'withholding' => $this->withholding
+            'withholding' => $this->withholding,
         ], fn (float|string|bool|null $v): bool => $v !== null);
     }
 }

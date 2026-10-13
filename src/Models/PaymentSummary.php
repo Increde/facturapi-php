@@ -14,6 +14,8 @@ readonly class PaymentSummary
         public ?string $currency = null,
         public ?float $amount = null,
         public ?array $taxes = null,
+        public ?int $folio_number = null,
+        public ?string $series = null,
     ) {
     }
 
@@ -22,11 +24,13 @@ readonly class PaymentSummary
         return new self(
             $data['uuid'] ?? null,
             $data['installment'] ?? null,
-            (float) ($data['last_balance'] ?? 0),
-            (float) ($data['total'] ?? 0),
+            isset($data['last_balance']) ? (float) $data['last_balance'] : 0.0,
+            isset($data['total']) ? (float) $data['total'] : 0.0,
             $data['currency'] ?? null,
-            (float) ($data['amount'] ?? 0),
-            $data['taxes'] ?? []
+            isset($data['amount']) ? (float) $data['amount'] : 0.0,
+            $data['taxes'] ?? [],
+            $data['folio_number'] ?? null,
+            $data['series'] ?? null
         );
     }
 
@@ -39,7 +43,9 @@ readonly class PaymentSummary
             'total' => $this->total,
             'currency' => $this->currency,
             'amount' => $this->amount,
-            'taxes' => $this->taxes
-        ], fn (int|string|float|array|null $v): bool => $v !== null);
+            'taxes' => $this->taxes,
+            'folio_number' => $this->folio_number,
+            'series' => $this->series,
+        ], fn ($v): bool => $v !== null);
     }
 }

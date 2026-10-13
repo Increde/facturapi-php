@@ -19,6 +19,7 @@ readonly class Organization
         public ?array $fiel = null,
         public ?array $receipts = null,
         public ?array $self_invoice = null,
+        public ?string $name = null,
     ) {
     }
 
@@ -36,7 +37,8 @@ readonly class Organization
             $data['certificate'] ?? [],
             $data['fiel'] ?? [],
             $data['receipts'] ?? [],
-            $data['self_invoice'] ?? []
+            $data['self_invoice'] ?? [],
+            $data['name'] ?? null
         );
     }
 
@@ -44,6 +46,7 @@ readonly class Organization
     {
         return array_filter([
             'id' => $this->id,
+            'name' => $this->name,
             'logo_url' => $this->logo_url,
             'timezone' => $this->timezone,
             'created_at' => $this->created_at,
@@ -55,6 +58,6 @@ readonly class Organization
             'fiel' => $this->fiel,
             'receipts' => $this->receipts,
             'self_invoice' => $this->self_invoice
-        ], fn (string|bool|array|null $v): bool => $v !== null);
+        ], fn ($v): bool => $v !== null);
     }
 }

@@ -17,10 +17,10 @@ readonly class LocalTax
     public static function fromArray(array $data): self
     {
         return new self(
-            $data['rate'] ?? 0,
-            $data['base'] ?? 0,
-            $data['type'] ?? '',
-            $data['withholding'] ?? false
+            (float) ($data['rate'] ?? 0.0),
+            isset($data['base']) ? (float) $data['base'] : null,
+            isset($data['type']) ? (string) $data['type'] : '',
+            isset($data['withholding']) ? (bool) $data['withholding'] : null
         );
     }
 
@@ -30,7 +30,7 @@ readonly class LocalTax
             'rate' => $this->rate,
             'base' => $this->base,
             'type' => $this->type,
-            'withholding' => $this->withholding
+            'withholding' => $this->withholding,
         ], fn (float|string|bool|null $v): bool => $v !== null);
     }
 }

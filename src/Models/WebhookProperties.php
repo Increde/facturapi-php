@@ -9,7 +9,7 @@ readonly class WebhookProperties
     public function __construct(
         public ?string $organization = null,
         public ?bool $livemode = null,
-        public ?string $enabled_events = null,
+        public ?array $enabled_events = null,
         public ?string $url = null,
         public ?string $status = null,
     ) {
@@ -34,6 +34,6 @@ readonly class WebhookProperties
             'enabled_events' => $this->enabled_events,
             'url' => $this->url,
             'status' => $this->status
-        ], fn (bool|string|null $v): bool => $v !== null);
+        ], fn ($v): bool => $v !== null);
     }
 }

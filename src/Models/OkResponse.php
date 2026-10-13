@@ -6,22 +6,29 @@ namespace Facturapi\Models;
 
 readonly class OkResponse
 {
+    public bool $ok;
+    public bool $success;
+
     public function __construct(
-        public bool $ok,
+        bool $ok = false,
+        ?bool $success = null,
     ) {
+        $this->ok = $ok;
+        $this->success = $success ?? $ok;
     }
 
     public static function fromArray(array $data): self
     {
-        return new self(
-            $data['ok'] ?? false
-        );
+        $val = (bool) ($data['ok'] ?? $data['success'] ?? false);
+
+        return new self($val, $val);
     }
 
     public function toArray(): array
     {
-        return array_filter([
-            'ok' => $this->ok
-        ], fn (bool $v): true => $v !== null);
+        return [
+            'ok' => $this->ok,
+            'success' => $this->success,
+        ];
     }
 }

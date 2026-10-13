@@ -4,27 +4,28 @@ declare(strict_types=1);
 
 namespace Facturapi\Models;
 
-readonly class IepsTax
+readonly class IepsTax extends BaseTax
 {
     public function __construct(
-        public float $rate,
-        public ?float $base = null,
-        public ?string $type = null,
-        public ?string $factor = null,
-        public ?bool $withholding = null,
+        float $rate,
+        ?float $base = null,
+        ?string $type = 'IEPS',
+        ?string $factor = null,
+        ?bool $withholding = null,
         public ?string $ieps_mode = null,
     ) {
+        parent::__construct($rate, $base, $type, $factor, $withholding);
     }
 
     public static function fromArray(array $data): self
     {
         return new self(
-            $data['rate'] ?? 0,
-            $data['base'] ?? 0,
-            $data['type'] ?? null,
-            $data['factor'] ?? null,
-            $data['withholding'] ?? false,
-            $data['ieps_mode'] ?? null
+            (float) ($data['rate'] ?? 0.0),
+            isset($data['base']) ? (float) $data['base'] : null,
+            isset($data['type']) ? (string) $data['type'] : 'IEPS',
+            isset($data['factor']) ? (string) $data['factor'] : null,
+            isset($data['withholding']) ? (bool) $data['withholding'] : null,
+            isset($data['ieps_mode']) ? (string) $data['ieps_mode'] : null
         );
     }
 
@@ -36,7 +37,7 @@ readonly class IepsTax
             'type' => $this->type,
             'factor' => $this->factor,
             'withholding' => $this->withholding,
-            'ieps_mode' => $this->ieps_mode
+            'ieps_mode' => $this->ieps_mode,
         ], fn (float|bool|string|null $v): bool => $v !== null);
     }
 }

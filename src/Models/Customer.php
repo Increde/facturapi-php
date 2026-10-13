@@ -19,12 +19,24 @@ readonly class Customer
         public ?string $email = null,
         public ?string $phone = null,
         public ?string $default_invoice_use = null,
-        public mixed $address = null,
+        public ?CommonAddressProperties $address = null,
     ) {
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
     public static function fromArray(array $data): self
     {
+        $address = null;
+        if (isset($data['address'])) {
+            if ($data['address'] instanceof CommonAddressProperties) {
+                $address = $data['address'];
+            } elseif (is_array($data['address'])) {
+                $address = CommonAddressProperties::fromArray($data['address']);
+            }
+        }
+
         return new self(
             $data['id'] ?? '',
             $data['created_at'] ?? '',
@@ -38,10 +50,13 @@ readonly class Customer
             $data['email'] ?? null,
             $data['phone'] ?? null,
             $data['default_invoice_use'] ?? null,
-            $data['address'] ?? null
+            $address
         );
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function toArray(): array
     {
         return array_filter([
@@ -57,7 +72,7 @@ readonly class Customer
             'email' => $this->email,
             'phone' => $this->phone,
             'default_invoice_use' => $this->default_invoice_use,
-            'address' => $this->address
+            'address' => $this->address?->toArray(),
         ], fn ($v): bool => $v !== null);
     }
 }
